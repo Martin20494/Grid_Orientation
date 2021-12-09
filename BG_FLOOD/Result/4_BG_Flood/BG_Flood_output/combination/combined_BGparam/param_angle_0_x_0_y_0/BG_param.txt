@@ -1,9 +1,0 @@
-bathy = S:\MULTIPLE_TILES_Monte_Carlo_BGFLOOD\version_1\3_dem_raster\combined_dem_raster\com_dem_raster\com_ascii\generated_dem_combined_angle_0_x_0_y_0.asc?idw;
-gpudevice = 0;
-mask = 1500.0;
-dx = 10;
-smallnc = 0;
-outputtimestep = 100.0;
-endtime = 7200.0;
-river = RiverDis.txt, 1772824.0, 1772825.0, 5472314.684, 5472315.684;
-outfile = S:\MULTIPLE_TILES_Monte_Carlo_BGFLOOD\version_1\4_BG_Flood\BG_Flood_output\combination\combined_BGoutput\\Output_combined_angle_0_x_0_y_0.nc;

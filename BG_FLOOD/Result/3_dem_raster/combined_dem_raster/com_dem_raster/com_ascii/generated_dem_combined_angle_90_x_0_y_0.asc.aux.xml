@@ -1,9 +1,0 @@
-<PAMDataset>
-  <Metadata>
-    <MDI key="long_name">idw</MDI>
-  </Metadata>
-  <PAMRasterBand band="1">
-    <Description>idw</Description>
-    <NoDataValue le_hex_equiv="000000000000F87F">nan</NoDataValue>
-  </PAMRasterBand>
-</PAMDataset>

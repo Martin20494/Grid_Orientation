@@ -6,14 +6,17 @@ import pathlib                                             # For manipulating th
 import shutil                                              # For copying file/folder
 
 # Packages for transformation
-import numpy as np                                          # For all calculation and data array/matrices manipulation
+import numpy as np                                         # For all calculation and data array/matrices manipulation
 from transformation import wrapping_point_rotation, \
-                           wrapping_point_translation       # For transforming polygon boundaries
+                           wrapping_point_translation      # For transforming polygon boundaries
 
+# Packages for model
+from hydrograph import discharge_data                      # For generating discharge following to resolution
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def parameter_files(transformation_selection, number_simulation,
+def parameter_files(transformation_selection,
+                    resolution_func, number_simulation,
                     angle_func, x_translation_func, y_translation_func,
                     center_x_func, center_y_func):
     """This function is to create parameters files for LISFLOOD-FP model
@@ -30,6 +33,9 @@ def parameter_files(transformation_selection, number_simulation,
                                                 "r" means rotation
                                                 "t" means translation
                                                 "c" means combination
+                resolution_func:
+                (int or float)
+                                            resolution value in meter
                 number_simulation:
                 (int)
                                                 Ordinal number of simulation
@@ -102,15 +108,7 @@ def parameter_files(transformation_selection, number_simulation,
 
     # BDY FILE --------------------------------------------------------------
     # Construct river discharge
-    discharge = [(25, 0),
-                 (40, 300),
-                 (40, 600),
-                 (45, 1200),
-                 (50, 1800),
-                 (55, 2400),
-                 (60, 3000),
-                 (65, 3600)]
-    discharge_array = np.array(discharge)
+    discharge_array = discharge_data(resolution_func)
     row_number = discharge_array.shape[0]
 
     # Write into text file bci format
@@ -133,9 +131,9 @@ def parameter_files(transformation_selection, number_simulation,
     # PAR FILE ---------------------------------------------------------------
     # Construct parameter files
     parameters_list = [('resroot', 'out'),
-                       ('saveint', 300),
+                       ('saveint', 200),
                        ('massint', 100),
-                       ('sim_time', 3600),
+                       ('sim_time', 7200),
                        ('initial_tstep', 2),
                        ('bcifile', fr"{param_dir}\\{transformed}_{number_simulation}.bci"),
                        ('bdyfile', fr"{param_dir}\\{transformed}_{number_simulation}.bdy"),
@@ -157,7 +155,8 @@ def parameter_files(transformation_selection, number_simulation,
                  fr"{param_dir}\\{transformed}_{number_simulation}.par")
 
 
-def run_LISFLOOD(transformation_selection, number_simulation,
+def run_LISFLOOD(transformation_selection,
+                 resolution_func, number_simulation,
                  angle_func, x_translation_func, y_translation_func,
                  center_x_func, center_y_func):
     """This function is to run LISFLOOD-FP model
@@ -174,28 +173,31 @@ def run_LISFLOOD(transformation_selection, number_simulation,
                                             "r" means rotation
                                             "t" means translation
                                             "c" means combination
+                resolution_func:
+                (int or float)
+                                            resolution value in meter
                 number_simulation:
                 (int)
                                             Ordinal number of simulation
                 angle_func:
                 (int or float)
-                                                Angle that is used to transform LiDAR data
+                                            Angle that is used to transform LiDAR data
                 x_translation_func:
                 (int or float)
-                                                x coordinate that is used to transform LiDAR data
+                                            x coordinate that is used to transform LiDAR data
                 y_translation_func:
                 (int or float)
-                                                y coordinate that is used to transform LiDAR data
+                                            y coordinate that is used to transform LiDAR data
                 center_x_func:
                 (float)
-                                                Coordinate value of x center.
-                                                The x center here was used from the center of
-                                                reference DEM without padding
+                                            Coordinate value of x center.
+                                            The x center here was used from the center of
+                                            reference DEM without padding
                 center_y_func:
                 (float)
-                                                Coordinate value of x center.
-                                                The x center here was used from the center of
-                                                reference DEM without padding
+                                            Coordinate value of x center.
+                                            The x center here was used from the center of
+                                            reference DEM without padding
     -----------
 
     -----------
@@ -206,19 +208,22 @@ def run_LISFLOOD(transformation_selection, number_simulation,
     """
     # Set up the path for transformation_selection
     if transformation_selection == "r":
-        parameter_files('r', number_simulation,
+        parameter_files('r',
+                        resolution_func, number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')
         os.system("lisflood_v8.exe -v Waikanae_LISFLOOD_acceleration.par")
     elif transformation_selection == "t":
-        parameter_files('t', number_simulation,
+        parameter_files('t',
+                        resolution_func, number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')
         os.system("lisflood_v8.exe -v Waikanae_LISFLOOD_acceleration.par")
     else:
-        parameter_files('c', number_simulation,
+        parameter_files('c',
+                        resolution_func, number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')

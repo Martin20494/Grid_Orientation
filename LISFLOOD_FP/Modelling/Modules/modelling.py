@@ -17,9 +17,9 @@ num_lidar_file = 0
 transform_selection = "c"
 
 # Construct a list of boundary
-resolution = 2
-number_pixel_x = 16 * 100  # multiple of 16
-number_pixel_y = 16 * 50  # multiple of 16
+resolution = 10
+number_pixel_x = 16 * 20  # multiple of 16
+number_pixel_y = 16 * 10  # multiple of 16
 
 xmin = 1769850
 ymin = 5471830
@@ -30,19 +30,16 @@ ymax = ymin + resolution * number_pixel_y
 boundary_1 = [xmin, ymin, xmax, ymax]
 
 # Padding boundary for DEMs (use this boundary to create padding)
-addition_2 = 16 * 5
+addition_2 = 16 * 3
 boundary_2 = padding_combination(boundary_1, addition_2)
 
 # Boundary for tiles (use this boundary to download LiDAR)
 addition_3 = 16 * 3
 boundary_3 = padding_combination(boundary_2, addition_3)
 
-# Get url list file
-url_list_file = get_url(num_lidar_file)
-
 # Chunks and processors information
-size_of_chunk = 400
-size_of_processor = 6
+size_of_chunk = 100
+size_of_processor = 4
 
 # Extracting flowdepth rate (for flowdepth_extraction() function)
 flowdepth_rate = 0
@@ -75,12 +72,15 @@ center_y = center_point[1]                     # Extract y coordinate of center 
 ran_trans = random_transformation(
     1,
     1,
-    [0, 91, 2],
-    [0, 2, 1],
-    [0, 2, 1],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 1, 1],
     'systematic',
     False
 )
+
+# Get url list file
+url_list_file = get_url(num_lidar_file)
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Transform tiles
@@ -98,7 +98,7 @@ run_dem(ran_trans, transform_selection,
 run_changing_value(ran_trans, transform_selection, center_x, center_y)
 
 # Flood model
-run_flood_model(ran_trans, transform_selection, center_x, center_y)
+run_flood_model(ran_trans, transform_selection, resolution, center_x, center_y)
 
 # Flowdepth extraction
 run_flowdepth_extraction(ran_trans, transform_selection, time_extract)

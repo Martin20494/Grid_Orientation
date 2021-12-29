@@ -309,7 +309,7 @@ def writing_las_file(transformation_selection, point_classification_func, number
                                             An array contains points' information from original tiles
                 number_simulation:
                 (int)
-                                            Ordinal number_simulation of simulation
+                                            Ordinal number of simulation
                 transformed_array:
                 (array)
                                             A transformed array

@@ -1,5 +1,5 @@
 # Prepare packages  ----------------------------------------------------------------------------------------------------
-import numpy as np                                        # For array manipulation
+import numpy as np                                              # For array manipulation
 # ----------------------------------------------------------------------------------------------------------------------
 
 def random_transformation(num_seed=1,
@@ -68,6 +68,7 @@ def random_transformation(num_seed=1,
                 (array)
                                             An array of random angle, x, and y
     -----------
+
     """
     # Set defaults for boundaries of rotation and translations ---------------------------------------------------------
     if rotation_boundaries is None:

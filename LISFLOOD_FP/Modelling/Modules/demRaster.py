@@ -46,7 +46,7 @@ def dem_raster(transformation_selection,
                                             "t" means translation
                                             "c" means combination
                 resolution_func:
-                (int)
+                (int or float)
                                             resolution value in meter
                 chunk_size_func:
                 (int)

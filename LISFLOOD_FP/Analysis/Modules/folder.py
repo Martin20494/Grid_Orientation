@@ -7,7 +7,7 @@ import os  # For manipulating the directory and to execute commands
 # Set up 'header' path -------------------------------------------------------------------------------------------------
 drive = "S"
 main_folder = "LISFLOOD"
-version = "version_2"
+version = "version_1"
 header = fr"{drive}:\\{main_folder}\\{version}"
 
 # Create header path
@@ -168,5 +168,3 @@ necessary_files = [
 for each_folder in necessary_files:
     pathlib.Path(f"{each_folder}").mkdir(parents=True, exist_ok=True)
 # ----------------------------------------------------------------------------------------------------------------------
-
-

@@ -3,11 +3,13 @@ from folder import *                                             # For paths of 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def save_plot(transformation_selection, axis_func, fig_func, plot_name, extension, x_portion, y_portion):
+def save_plot(transformation_selection, fig_func, plot_name, extension, dpi_func):
     """This function is to save the plots
 
     -----------
     References: https://stackoverflow.com/questions/4325733/save-a-subplot-in-matplotlib
+                https://stackoverflow.com/questions/16032389/pad-inches-0-and-bbox-inches-tight-makes-the-plot-smaller-than-declared-figsiz
+                https://stackoverflow.com/questions/10041627/how-to-make-savefig-save-image-for-maximized-window-instead-of-default-size
     -----------
 
     -----------
@@ -29,14 +31,10 @@ def save_plot(transformation_selection, axis_func, fig_func, plot_name, extensio
                 extension:
                 (string)
                                             "png" or "pdf"
-                x_portion:
-                (int)
-                                            Portion of width of plot in the saved filed (%).
-                                            For example, if 20%, input 2
-                y_portion:
-                (int)
-                                            Portion of length of plot in the saved filed (%).
-                                            For example, if 20%, input 2
+                dpi_func:
+                (int or float)
+                                            The resolution in dots per inch. Please visit here for more information
+                                            https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
     -----------
 
     -----------
@@ -52,9 +50,4 @@ def save_plot(transformation_selection, axis_func, fig_func, plot_name, extensio
     else:
         saving_path = plot_combination
 
-    # Create a parameter to control the size of the plot when saving
-    extent = axis_func.get_window_extent().transformed(fig_func.dpi_scale_trans.inverted())
-
-    # Put the parameter to the plot
-    fig_func.savefig(fr"{saving_path}\\{plot_name}.{extension}", bbox_inches=extent.expanded(float(f'1.{x_portion}'),
-                                                                                             float(f'1.{y_portion}')))
+    fig_func.savefig(fr"{saving_path}\\{plot_name}.{extension}", bbox_inches='tight', dpi=dpi_func)

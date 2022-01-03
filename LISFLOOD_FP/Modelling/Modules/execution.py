@@ -189,6 +189,7 @@ def run_dem(set_of_simulation,
 
 def run_changing_value(set_of_simulation,
                        transformation_selection,
+                       resolution_func,
                        center_x_func, center_y_func):
     """This function is to run changing values process
 
@@ -207,6 +208,9 @@ def run_changing_value(set_of_simulation,
                                                 "r" means rotation
                                                 "t" means translation
                                                 "c" means combination
+                resolution_func:
+                (int or float)
+                                                Resolution value in meter
                 center_x_func:
                 (float)
                                                 Coordinate value of x center.
@@ -243,6 +247,7 @@ def run_changing_value(set_of_simulation,
 
         # Create polygon boundaries
         polygon_boundaries(transformation_selection, combination_number,
+                           resolution_func,
                            angle_val, x_val, y_val,
                            center_x_func, center_y_func)
 

@@ -261,6 +261,7 @@ def polygon_generation(polygon_boundary, transformation_selection, number_simula
 
 
 def polygon_boundaries(transformation_selection, number_simulation,
+                       resolution_func,
                        angle_func, x_translation_func, y_translation_func,
                        center_x_func, center_y_func):
     """This function is to create polygon boundaries by using polygon_generation() function.
@@ -280,6 +281,9 @@ def polygon_boundaries(transformation_selection, number_simulation,
                 number_simulation:
                 (int)
                                                 Ordinal number of simulation
+                resolution_func:
+                (int or float)
+                                                Resolution value in meter
                 angle_func:
                 (int or float)
                                                 Angle that is used to transform LiDAR data
@@ -352,10 +356,10 @@ def polygon_boundaries(transformation_selection, number_simulation,
     #     boundary_1_ymax = boundary_1_ymin + 10*10
     #     boundary_1_xmin = no_padding_xmax - 10
 
-    boundary_1_ymin = no_padding_ymin + 10 * 12
+    boundary_1_ymin = no_padding_ymin + resolution_func * (10*12/resolution_func)
     boundary_1_xmax = no_padding_xmax
-    boundary_1_ymax = boundary_1_ymin + 10 * 22
-    boundary_1_xmin = no_padding_xmax - 10
+    boundary_1_ymax = boundary_1_ymin + resolution_func * (10*22/resolution_func)
+    boundary_1_xmin = no_padding_xmax - resolution_func
 
     #     boundary_1_ymin = no_padding_ymin + 10*3
     #     boundary_1_xmax = no_padding_xmax

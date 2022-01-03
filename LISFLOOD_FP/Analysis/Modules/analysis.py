@@ -1,9 +1,10 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
+
+from folder import *                                                # For paths of sub-folders
+
 import pandas as pd                                                 # For dataframe manipulation
 
 import matplotlib.pyplot as plt                                     # For plotting
-
-from folder import *                                                # For paths of sub-folders
 
 from randomisation import random_transformation                     # For collecting transformation values
 
@@ -11,12 +12,20 @@ from rasterPolygon import raster_array_to_shapefile                 # For conver
 
 from depthValue import run_depth_value_extraction                   # For getting depth values of all simulations
 
-from fileWriting import csv_generation, raster_generation           # For writing files into csv and raster
+from fileWriting import csv_generation                              # For writing files into csv and raster
 
-from checkingDiference import get_diff, plot_diff                   # For checking the differences between 0 and 90
+from checkingDifference import get_diff, plot_diff                  # For checking the differences between 0 and 90
 
 from runStatistic import calculation_dict                           # For generating statistical dictionary
 
+from colorSelection import *                                        # For color plotting
+
+from statisticalPlot import plotting_map, \
+                            plotting_histogram, \
+                            plot_area, \
+                            scatter_area_transformation             # For plotting
+
+from savePlot import save_plot                                      # For saving plots
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -33,21 +42,22 @@ resolution = 10
 # Filter rate
 filter_rate = 0.1
 
-# Clip dataset and write out point polygon
-clipped_dataset = raster_array_to_shapefile(transform_selection, "angle_0_x_0_y_0", time_extract)
-
 # Random transformation value
 ran_trans = random_transformation(
     1,
     1,
     [0, 91, 2],
-    [0, 2, 1],
-    [0, 2, 1],
+    [0, 1, 1],
+    [0, 1, 1],
     'systematic',
     False
 )
 # ----------------------------------------------------------------------------------------------------------------------
 
+
+# Clip dataset and write out point polygon -----------------------------------------------------------------------------
+clipped_dataset = raster_array_to_shapefile(transform_selection, "angle_0_x_0_y_0", time_extract)
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 # Depth values extraction and write into csv ---------------------------------------------------------------------------
@@ -56,18 +66,22 @@ clipped_data_coordinate = {"x_coord": clipped_dataset[:, 0],
                            "y_coord": clipped_dataset[:, 1]}
 
 # Get depth data list of all simulations
-data = run_depth_value_extraction(ran_trans,
-                                  clipped_data_coordinate,
-                                  transform_selection,
-                                  time_extract)
+run_depth_value_extraction(ran_trans,
+                           clipped_data_coordinate,
+                           transform_selection,
+                           time_extract)
 
 # Write data into pandas dataframe
-full_data = pd.DataFrame(data=data)
+full_data = pd.DataFrame(data=clipped_data_coordinate)
 
 # Write data into csv file
 csv_generation(transform_selection, full_data)
 # ----------------------------------------------------------------------------------------------------------------------
 
+
+# Call data from csv ---------------------------------------------------------------------------------------------------
+full_data = pd.read_csv(fr"{csv_combination}\un_combined_file_1.csv")
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 # Check differences 0 vs 90 degrees ------------------------------------------------------------------------------------
@@ -81,8 +95,6 @@ plot_diff(diff_list, ax)
 
 
 # Statistical calculation ----------------------------------------------------------------------------------------------
-# In case the data need loading again
-# full_data = pd.read_csv(fr"{csv_combination}\un_combined_file_1.csv")
 
 # Generate calculation dictionary
 statistic_dict = calculation_dict(
@@ -93,3 +105,69 @@ statistic_dict = calculation_dict(
 
 
 
+# Plot -----------------------------------------------------------------------------------------------------------------
+
+# Set up plotting background
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot map
+plotting_map(
+    statistic_dict['mean'],
+    'mean',
+    ax,
+    fig,
+    hex_list9,
+    "horizontal",
+    "max"
+)
+
+# -------------------
+
+# Set up plotting background
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot histogram
+plotting_histogram(
+    statistic_dict['mean'],
+    'mean',
+    ax,
+    hex_list9
+)
+
+# ------------------
+
+# Set up plotting background
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot area
+plot_area(
+    ax,
+    statistic_dict['area'],
+    "y"
+)
+
+# ------------------
+
+# Set up plotting background
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot area
+scatter_area_transformation(
+    transform_selection,
+    ax,
+    statistic_dict['area']
+)
+
+# ------------------
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Save plot
+save_plot(
+    transform_selection,
+    ax,
+    fig,
+    'mean',
+    'png',
+    2,
+    2
+)

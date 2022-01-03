@@ -1,5 +1,7 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
-
+import matplotlib.ticker
+import numpy as np                                              # For data manipulation
+import seaborn as sns                                           # For plotting density and frequency
 # ----------------------------------------------------------------------------------------------------------------------
 
 def get_diff(full_data_func):
@@ -73,13 +75,25 @@ def plot_diff(diff_list_func, axis_func):
     print("Maximum different water depth value:", max(diff_list_func))
 
     # Draw histogram
-    axis_func.hist(diff_list_func, bins=100)
+    sns.distplot(
+        diff_list_func,
+        bins=100,
+        kde=False,
+        ax=axis_func,
+        hist_kws={
+            "histtype": "bar",
+            "linewidth": 2,
+            "alpha": 1,
+            "color": "b",
+            "edgecolor": "black"
+        }
+    )
 
     # Add titles and labels
     axis_func.set_title("Different water depth values of each cell between 0 and 90 degree", pad=20, fontsize=25,
                  fontweight='bold')
-    axis_func.set_xlabel("Different water depth values (m)", labelpad=20, fontsize=20)
-    axis_func.set_ylabel("Frequency", labelpad=20, fontsize=20)
+    axis_func.set_xlabel("Different water depth values (m)", labelpad=38, fontsize=20)
+    axis_func.set_ylabel("Frequency (number of cells)", labelpad=38, fontsize=20)
 
     # Increase figures in axes' labels
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
@@ -87,3 +101,10 @@ def plot_diff(diff_list_func, axis_func):
 
     # Increase the size of ticks
     axis_func.tick_params(direction='out', length=8, pad=10)
+
+    # Remove grid background lines (including x, y lines)
+    axis_func.grid(False)
+    axis_func.spines['top'].set_visible(False)
+    axis_func.spines['right'].set_visible(False)
+    axis_func.spines['bottom'].set_visible(False)
+    axis_func.spines['left'].set_visible(False)

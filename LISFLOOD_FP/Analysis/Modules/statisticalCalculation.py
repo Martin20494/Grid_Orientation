@@ -2,7 +2,7 @@
 import pandas as pd                                                  # For manipulating dataframe
 # ----------------------------------------------------------------------------------------------------------------------
 
-def statistic_calculation(dataset_func, calculation_option, filter_rate):
+def statistic_calculation(dataset_func, calculation_option, filter_rate_func):
     """This function is to do some statistical calculation
 
     -----------
@@ -21,7 +21,7 @@ def statistic_calculation(dataset_func, calculation_option, filter_rate):
                                         "sd" means to calculate standard deviation
                                         "cv" means to calculate coefficient of variation
                                         "cell" means to calculate probability of each pixel being inundated
-                filter_rate:
+                filter_rate_func:
                 (float or int)
                                         The rate at which the depth values will be ignored
     -----------
@@ -43,8 +43,9 @@ def statistic_calculation(dataset_func, calculation_option, filter_rate):
 
     # Copy mean and filter data
     copy_mean_data_func = mean_data_func.copy()
-    copy_mean_data_func.loc[copy_mean_data_func['mean'] < filter_rate, [
-        'mean']] = -999  # Removing pixels having lower than 0.1 m water depth values
+
+    # Removing pixels having lower than 0.1 m water depth values
+    copy_mean_data_func.loc[copy_mean_data_func['mean'] < filter_rate_func, ['mean']] = -999
 
     # Manipulate and calculate necessary information
     if calculation_option == "mean":
@@ -75,7 +76,7 @@ def statistic_calculation(dataset_func, calculation_option, filter_rate):
     else:
         # Calculate probability of each location getting inundated
         cell_data_func = nogeo_data_func.copy()
-        cell_data_func['cell'] = (nogeo_data_func.shape[1] - (nogeo_data_func <= filter_rate).sum(axis=1)) / \
+        cell_data_func['cell'] = (nogeo_data_func.shape[1] - (nogeo_data_func <= filter_rate_func).sum(axis=1)) / \
                                   nogeo_data_func.shape[1] * 100
 
         # Filter data
@@ -92,7 +93,7 @@ def statistic_calculation(dataset_func, calculation_option, filter_rate):
     return new_dataframe
 
 
-def area_calculation(dataset_func, resolution_func, filter_rate):
+def area_calculation(dataset_func, resolution_func, filter_rate_func):
     """This function is to calculate area of each simulation
 
     -----------
@@ -108,7 +109,7 @@ def area_calculation(dataset_func, resolution_func, filter_rate):
                 resolution_func:
                 (int or float)
                                         Resolution value in meter
-                filter_rate:
+                filter_rate_func:
                 (float or int)
                                         The rate at which the depth values will be ignored
     -----------
@@ -133,7 +134,7 @@ def area_calculation(dataset_func, resolution_func, filter_rate):
         column = nogeo_data_func[nogeo_data_func.columns[each_col]]
 
         # Get quantity of flooded cells
-        num_flooded_cell = len(column[column > filter_rate])
+        num_flooded_cell = len(column[column > filter_rate_func])
 
         # Calculate area of each simulation
         area_func = num_flooded_cell * resolution_func ** 2

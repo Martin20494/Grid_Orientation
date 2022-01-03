@@ -7,7 +7,7 @@ import os  # For manipulating the directory and to execute commands
 # Set up 'header' path -------------------------------------------------------------------------------------------------
 drive = "S"
 main_folder = "LISFLOOD"
-version = "version_2"
+version = "version_3"
 header = fr"{drive}:\\{main_folder}\\{version}"
 
 # Create header path

@@ -17,9 +17,9 @@ num_lidar_file = 0
 transform_selection = "c"
 
 # Construct a list of boundary
-resolution = 10
-number_pixel_x = 16 * 20  # multiple of 16
-number_pixel_y = 16 * 10  # multiple of 16
+resolution = 20
+number_pixel_x = 16 * 10  # multiple of 16
+number_pixel_y = 16 * 5  # multiple of 16
 
 xmin = 1769850
 ymin = 5471830
@@ -95,7 +95,7 @@ run_dem(ran_trans, transform_selection,
         boundary_2)
 
 # Values change
-run_changing_value(ran_trans, transform_selection, center_x, center_y)
+run_changing_value(ran_trans, transform_selection, resolution, center_x, center_y)
 
 # Flood model
 run_flood_model(ran_trans, transform_selection, resolution, center_x, center_y)

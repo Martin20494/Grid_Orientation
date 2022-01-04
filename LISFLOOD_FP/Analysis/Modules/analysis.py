@@ -107,67 +107,106 @@ statistic_dict = calculation_dict(
 
 # Plot -----------------------------------------------------------------------------------------------------------------
 
-# Set up plotting background
+# Set up statistical selection and color selection
+statistical_selection = 'mean'
+color_selection = hex_list9
+
+# Set up plotting background -------------------------
 fig, ax = plt.subplots(figsize=(20, 20))
 
-# Plot map
+# Plot map of statistical selection
 plotting_map(
-    statistic_dict['mean'],
-    'mean',
+    statistic_dict[statistical_selection],
+    resolution,
+    statistical_selection,
     ax,
     fig,
-    hex_list9,
+    color_selection,
     "horizontal",
     "max"
 )
 
-# -------------------
-
-# Set up plotting background
-fig, ax = plt.subplots(figsize=(20, 20))
-
-# Plot histogram
-plotting_histogram(
-    statistic_dict['mean'],
-    'mean',
-    ax,
-    hex_list9
-)
-
-# ------------------
-
-# Set up plotting background
-fig, ax = plt.subplots(figsize=(20, 20))
-
-# Plot area
-plot_area(
-    ax,
-    statistic_dict['area'],
-    "y"
-)
-
-# ------------------
-
-# Set up plotting background
-fig, ax = plt.subplots(figsize=(20, 20))
-
-# Plot area
-scatter_area_transformation(
+# Save plot
+save_plot(
     transform_selection,
-    ax,
-    statistic_dict['area']
+    fig,
+    statistical_selection,
+    'png',
+    50
 )
 
-# ------------------
+# ---------------------------------------------------
+
+
+# Set up plotting background ------------------------
 fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot histogram of statistical selection
+plotting_histogram(
+    statistic_dict[statistical_selection],
+    resolution,
+    statistical_selection,
+    plt, ax,
+    color_selection,
+    0,
+    11
+)
 
 # Save plot
 save_plot(
     transform_selection,
-    ax,
     fig,
-    'mean',
+    f"{statistical_selection} histogram",
     'png',
-    2,
-    2
+    50
+)
+
+# ---------------------------------------------------
+
+
+
+
+# Set up plotting background ------------------------
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot area distribution
+plot_area(
+    ax,
+    statistic_dict['area'],
+    resolution,
+    'b'
+)
+
+# Save plot
+save_plot(
+    transform_selection,
+    fig,
+    f"area histogram",
+    'png',
+    50
+)
+
+# ---------------------------------------------------
+
+
+
+
+# Set up plotting background ------------------------
+fig, ax = plt.subplots(figsize=(20, 20))
+
+# Plot area scatterplot
+scatter_area_transformation(
+    transform_selection,
+    resolution,
+    ax,
+    statistic_dict['area']
+)
+
+# Save plot
+save_plot(
+    transform_selection,
+    fig,
+    f"area scatterplot",
+    'png',
+    50
 )

@@ -114,7 +114,7 @@ def plotting_map(filtered_data_func,
     if calculation_option == 'cell':
         # Title for colorbar
         name_map = "Proportion of simulations"
-        name_map += f"\nof each cell is inundated,\nresolution = {resolution_func} meters"
+        name_map += f"\nof each cell being inundated,\nresolution = {resolution_func} meters"
 
         # Title for contour map
         axis_func.set_title(name_map, pad=25, fontsize=25, fontweight='bold')
@@ -320,7 +320,7 @@ def plotting_histogram(filtered_data_func,
     if calculation_option == 'cell':
         # Title for contour map and x label
         name_hist = "Histogram of proportion of simulations"
-        name_hist += f"\nof each cell is inundated,\nresolution = {resolution_func} meters"
+        name_hist += f"\nof each cell being inundated,\nresolution = {resolution_func} meters"
         axis_func.set_xlabel("Proportion (%)", fontsize=20, labelpad=38)
 
     elif calculation_option == "cv":
@@ -465,7 +465,7 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y'):
         # https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes
         # Get lims of first axis - Frequency
         len_axis1 = axis_func.get_ylim()
-
+        print(len_axis1)
         # Get lims of second axis - Density
         len_axis2 = axis_density.get_ylim()
 

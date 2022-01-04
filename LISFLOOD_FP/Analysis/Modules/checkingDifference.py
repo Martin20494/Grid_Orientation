@@ -1,6 +1,4 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
-import matplotlib.ticker
-import numpy as np                                              # For data manipulation
 import seaborn as sns                                           # For plotting density and frequency
 # ----------------------------------------------------------------------------------------------------------------------
 

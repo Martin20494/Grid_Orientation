@@ -44,7 +44,7 @@ def statistic_calculation(dataset_func, calculation_option, filter_rate_func):
     # Copy mean and filter data
     copy_mean_data_func = mean_data_func.copy()
 
-    # Removing pixels having lower than 0.1 m water depth values
+    # Removing pixels having lower than 'filter_rate_func' m water depth values
     copy_mean_data_func.loc[copy_mean_data_func['mean'] < filter_rate_func, ['mean']] = -999
 
     # Manipulate and calculate necessary information

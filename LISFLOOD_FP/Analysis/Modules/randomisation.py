@@ -108,9 +108,9 @@ def random_transformation(num_seed=1,
         # Generate random angle, x, and y under uniform randomization
         for i in range(num_simulation):
             while True:
-                angle_uni = rng.integers(low=rotation_boundaries[0], high=rotation_boundaries[1], size=1)[0]
-                x_uni = rng.integers(low=translation_boundaries_x[0], high=translation_boundaries_x[1], size=1)[0]
-                y_uni = rng.integers(low=translation_boundaries_y[0], high=translation_boundaries_y[1], size=1)[0]
+                angle_uni = rng.uniform(low=rotation_boundaries[0], high=rotation_boundaries[1], size=1)[0]
+                x_uni = rng.uniform(low=translation_boundaries_x[0], high=translation_boundaries_x[1], size=1)[0]
+                y_uni = rng.uniform(low=translation_boundaries_y[0], high=translation_boundaries_y[1], size=1)[0]
                 new_uni = [angle_uni, x_uni, y_uni]
 
                 # Set up 'not replacement' if replacement == False

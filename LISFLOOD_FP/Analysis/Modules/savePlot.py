@@ -3,7 +3,7 @@ from folder import *                                             # For paths of 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def save_plot(transformation_selection, fig_func, plot_name, extension, dpi_func):
+def save_plot(transformation_selection, fig_func, plot_name, extension, dpi_func, addition_path=""):
     """This function is to save the plots
 
     -----------
@@ -35,6 +35,9 @@ def save_plot(transformation_selection, fig_func, plot_name, extension, dpi_func
                 (int or float)
                                             The resolution in dots per inch. Please visit here for more information
                                             https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html
+                addition_path:
+                (string)
+                                            Path for saving plots
     -----------
 
     -----------
@@ -47,7 +50,9 @@ def save_plot(transformation_selection, fig_func, plot_name, extension, dpi_func
         saving_path = plot_rotation
     elif transformation_selection == "t":
         saving_path = plot_translation
-    else:
+    elif transformation_selection == "c":
         saving_path = plot_combination
+    else:
+        saving_path = addition_path
 
     fig_func.savefig(fr"{saving_path}\\{plot_name}.{extension}", bbox_inches='tight', dpi=dpi_func)

@@ -82,9 +82,9 @@ def parameter_files(transformation_selection,
 
     # BCI FILE --------------------------------------------------------------
     # Get the point source
-    #     point_source = np.array([(1772787.2, 5472314.7)]).astype('float64')
+    # point_source = np.array([(1773704.959, 5472333.515)]).astype('float64') # larger area
 
-    point_source = np.array([(1773016.362, 5472061.027)]).astype('float64')
+    point_source = np.array([(1773016.362, 5472061.027)]).astype('float64') # smaller area
 
     # Transform the point source
     rotated_point_source = wrapping_point_rotation(point_source, angle_func, center_x_func, center_y_func, 0)

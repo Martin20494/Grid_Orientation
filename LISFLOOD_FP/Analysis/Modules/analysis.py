@@ -14,7 +14,8 @@ from depthValue import run_depth_value_extraction                   # For gettin
 
 from fileWriting import csv_generation                              # For writing files into csv and raster
 
-from checkingDifference import get_diff, plot_diff                  # For checking the differences between 0 and 90
+from checkingDifference import get_diff, plot_diff, \
+                               difference_information               # For checking the differences between 0 and 90
 
 from runStatistic import calculation_dict                           # For generating statistical dictionary
 
@@ -91,6 +92,13 @@ diff_list = get_diff(full_data)
 # Draw histogram
 fig, ax = plt.subplots(figsize=(15, 15))
 plot_diff(diff_list, ax)
+
+# Get difference information
+difference_information(
+    full_data,
+    diff_list
+)
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -210,3 +218,5 @@ save_plot(
     'png',
     50
 )
+
+# ----------------------------------------------------------------------------------------------------------------------

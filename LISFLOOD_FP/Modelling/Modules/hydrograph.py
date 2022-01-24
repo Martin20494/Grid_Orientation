@@ -67,6 +67,47 @@ def discharge_data(resolution_func):
         0
     ])
 
+    # discharge = np.array([
+    #     0,
+    #     50,
+    #     300,
+    #     400,
+    #     500,
+    #     700,
+    #     450,
+    #     400,
+    #     350,
+    #     400,
+    #     650,
+    #     750,
+    #     850,
+    #     900,
+    #     1100,
+    #     1230,
+    #     1450,
+    #     1750,
+    #     2200,
+    #     2350,
+    #     2050,
+    #     1850,
+    #     1900,
+    #     1550,
+    #     1250,
+    #     1230,
+    #     1150,
+    #     1150,
+    #     700,
+    #     550,
+    #     350,
+    #     300,
+    #     200,
+    #     50,
+    #     30,
+    #     10,
+    #     0
+    # ])
+
+
     # Change discharge following to resolution
     discharge_res = discharge / resolution_func
 
@@ -109,7 +150,6 @@ def discharge_data(resolution_func):
         6800,
         7000,
         7200
-
     ])
 
     # Combine discharge_res and time into 2D array

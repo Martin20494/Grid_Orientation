@@ -190,9 +190,9 @@ def array_creation(data_array, value):
                 new_array[i, j] = arr_x[i]
 
     else:
-        for j in range(arr_y.shape[0]):
-            for i in range(arr_x.shape[0]):
-                new_array[i, j] = arr_y[j]
+        for i in range(arr_y.shape[0]):
+            for j in range(arr_x.shape[0]):
+                new_array[j, i] = arr_y[i]
 
 
     return new_array
@@ -379,7 +379,18 @@ interpolated_before = new_interpolation_data(point_1m_before_coord)
 
 # END DEVELOP FUNCTION FOR 2D INTERPOLATION WITH CUBIC -----------------------------------------------------------------
 
+import matplotlib.pyplot as plt
 
+fig, ax = plt.subplots(figsize=(20, 20))
+
+ax.scatter(
+    full_data[:1000000][:, 0],
+    full_data[:1000000][:, 1],
+    c=full_data[:1000000][:, 2],
+    cmap="Blues"
+)
+
+plt.show()
 
 
 

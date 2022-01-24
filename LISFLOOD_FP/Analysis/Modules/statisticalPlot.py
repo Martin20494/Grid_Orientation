@@ -41,7 +41,9 @@ def plotting_map(filtered_data_func,
                  resolution_func, calculation_option,
                  axis_func, fig_func,
                  hex_list_func, colorbar_position,
-                 extend_colorbar=None):
+                 extend_colorbar=None,
+                 color_range=None,
+                 add_title="",):
     """This function is to plot water depth on basemap
 
     -----------
@@ -102,6 +104,12 @@ def plotting_map(filtered_data_func,
                                             Selections are "neither", "both", "min", "max".
                                             For more information, please visit
                                             https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.tricontourf.html
+                color_range:
+                (list)
+                                            A list includes min and max to be displayed on the color scale
+                add_title:
+                (string)
+                                            Add more words into title
     -----------
 
     -----------
@@ -113,8 +121,9 @@ def plotting_map(filtered_data_func,
     # Titles and labels:
     if calculation_option == 'cell':
         # Title for colorbar
-        name_map = "Proportion of simulations"
-        name_map += f"\nof each cell being inundated,\nresolution = {resolution_func} meters"
+        name_map = "Proportion of each cell being inundated"
+        name_map += f"\nin this set of simulations,\nresolution = {resolution_func} meters"
+        name_map += add_title
 
         # Title for contour map
         axis_func.set_title(name_map, pad=25, fontsize=25, fontweight='bold')
@@ -122,18 +131,26 @@ def plotting_map(filtered_data_func,
         axis_func.set_ylabel("NZTM, north (m)", fontsize=20, labelpad=38, rotation=-270)
 
         # Max level
-        min_map_level = 0
-        max_map_level = 102
-        map_level = np.arange(min_map_level, max_map_level, 1)
+        if color_range is None:
+            min_map_level = 0
+            max_map_level = 102
+            map_level = np.arange(min_map_level, max_map_level, 1)
+        else:
+            min_map_level = color_range[0]
+            max_map_level = color_range[1]
+            map_level = np.arange(min_map_level, max_map_level, color_range[2])
 
     else:
         # Title for colorbar
         if calculation_option == 'sd':
             name_map = f"Standard deviation of water depth,\nresolution = {resolution_func} meters"
+            name_map += add_title
         elif calculation_option == 'cv':
             name_map = f"Coefficient of variation of water depth,\nresolution = {resolution_func} meters"
+            name_map += add_title
         else:
             name_map = f"Mean of water depth,\nresolution = {resolution_func} meters"
+            name_map += add_title
 
         # Title for contour map
         axis_func.set_title(f"{name_map}", pad=25, fontsize=25, fontweight='bold')
@@ -141,11 +158,16 @@ def plotting_map(filtered_data_func,
         axis_func.set_ylabel("NZTM, north (m)", fontsize=20, labelpad=38, rotation=-270)
 
         # Level information
-        min_map_level = round_down(
-            np.min(filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]), 3)
-        max_map_level = np.max(
-            filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]) + 0.000001
-        map_level = np.arange(min_map_level, max_map_level, 0.1)
+        if color_range is None:
+            min_map_level = round_down(
+                np.min(filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]), 3)
+            max_map_level = np.max(
+                filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]) + 0.000001
+            map_level = np.arange(min_map_level, max_map_level, 0.1)
+        else:
+            min_map_level = color_range[0]
+            max_map_level = color_range[1]
+            map_level = np.arange(min_map_level, max_map_level, color_range[2])
 
     # x, y, z coordinates information
     x_func = filtered_data_func['x']
@@ -237,7 +259,10 @@ def plotting_map(filtered_data_func,
 def plotting_histogram(filtered_data_func,
                        resolution_func, calculation_option,
                        plt_func, axis_func, hex_list_func,
-                       min_range, step):
+                       color_range,
+                       num_bin_func,
+                       x_limit="",
+                       add_title=""):
     """This function is to plot histogram of information regarding water depth
 
     -----------
@@ -271,13 +296,18 @@ def plotting_histogram(filtered_data_func,
 
                 The two parameters below are for designing the range for histogram
 
-                min_range:
-                (float or int)
-                                        The minimum value of the histogram range
-                step:
-                (int or float)
-                                        Spacing between values. For more information please visit
-                                        https://numpy.org/doc/stable/reference/generated/numpy.arange.html
+                color_range:
+                (list)
+                                        A list includes min and max to be displayed on the color scale
+                num_bin_func:
+                (array or list)
+                                        An array/ a list contains the range of bins
+                x_limit:
+                (string)
+                                        Additional information for x tick labels
+                add_title:
+                (string)
+                                        Add more words into title
     -----------
 
     -----------
@@ -293,9 +323,24 @@ def plotting_histogram(filtered_data_func,
     # Assign data into a variable
     data_func = z_func[z_func != -999]
 
+    # Design the range of histogram
+    # Get max values
+    if color_range[1] is None:
+        max_map_level = np.max(
+            filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]) + 0.000001
+    else:
+        max_map_level = color_range[1]
+    # Develop the range for x axis
+    axis_func.set_xticks(np.arange(color_range[0], max_map_level, color_range[2]))
+
     # Get values of n, bins, and patches. Please visit here for more information
     # https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html#matplotlib.axes.Axes.hist
-    n, bins, patches = axis_func.hist(data_func, 50, density=False)
+    # Besides, to find out how to collect all values for one bin representing only one value,
+    # please visit https://stackoverflow.com/questions/26218704/matplotlib-histogram-with-collection-bin-for-high-values
+    n, bins, patches = axis_func.hist(np.clip(data_func, num_bin_func[0], num_bin_func[-1]),
+                                      bins=num_bin_func,
+                                      density=False)
+
 
     # Get values of columns (scale values to interval [0,1])
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
@@ -309,6 +354,28 @@ def plotting_histogram(filtered_data_func,
     for c, p in zip(col, patches):
         plt_func.setp(p, 'facecolor', gradient_color(c))
 
+    # Set x label, for more information, please visit
+    # https://stackoverflow.com/questions/26218704/matplotlib-histogram-with-collection-bin-for-high-values
+    # For dtype: https://numpy.org/doc/stable/reference/arrays.dtypes.html
+    x_range = np.arange(color_range[0], color_range[1], color_range[2])
+    xlabel_arr = np.array(np.round(x_range[:], 2), dtype='str')
+    xlabel_arr[-1] = f'{xlabel_arr[-1]}{x_limit}'
+    axis_func.set_xticklabels(xlabel_arr)
+    
+
+    # # Get another y axis - for 'Density'
+    # axis_density = axis_func.twinx()
+    #
+    # # # Density plot
+    # sns.kdeplot(data_func, ax=axis_density, color="r", linewidth=2)
+    #
+    # axis_density.set_xlim(color_range[0], color_range[1])
+
+    # # Design ticks and x figures for 'Density'
+    # axis_density.tick_params(direction='out', length=8, pad=10)
+    # for item in (axis_density.get_xticklabels() + axis_density.get_yticklabels()):  # For x, y ticks' labels
+    #     item.set_fontsize(15)
+
     # Remove grid background lines (including x, y lines)
     axis_func.grid(False)
     axis_func.spines['top'].set_visible(False)
@@ -319,26 +386,30 @@ def plotting_histogram(filtered_data_func,
     # Set titles and labels
     if calculation_option == 'cell':
         # Title for contour map and x label
-        name_hist = "Histogram of proportion of simulations"
-        name_hist += f"\nof each cell being inundated,\nresolution = {resolution_func} meters"
+        name_hist = "Histogram of proportion of each cell being inundated"
+        name_hist += f"\nin this set of simulations,\nresolution = {resolution_func} meters"
+        name_hist += add_title
         axis_func.set_xlabel("Proportion (%)", fontsize=20, labelpad=38)
 
     elif calculation_option == "cv":
         # Title for contour map and x label
         name_hist = "Histogram of coefficient of variation of water depth,"
         name_hist += f"\nresolution = {resolution_func} meters"
+        name_hist += add_title
         axis_func.set_xlabel('Coefficient of variation (%)', fontsize=20, labelpad=38)
 
     elif calculation_option == "sd":
         # Title for contour map and x label
         name_hist = "Histogram of standard deviation of water depth,"
         name_hist += f"\nresolution = {resolution_func} meters"
+        name_hist += add_title
         axis_func.set_xlabel('Standard deviation (m)', fontsize=20, labelpad=38)
 
     else:
         # Title for contour map
         name_hist = f"Histogram of {calculation_option} of water depth,"
         name_hist += f"\nresolution = {resolution_func} meters"
+        name_hist += add_title
         axis_func.set_xlabel(f"{calculation_option.capitalize()} (m)", fontsize=20, labelpad=38)
 
     # Ticks, title, and y label
@@ -349,13 +420,9 @@ def plotting_histogram(filtered_data_func,
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(15)
 
-    # Design the range of histogram
-    # Get max values
-    max_map_level = np.max(
-        filtered_data_func[f'{calculation_option}'][filtered_data_func[f'{calculation_option}'] != -999]) + 0.000001
+    
 
-    # Develop the range for x axis
-    axis_func.set_xticks(np.arange(min_range, max_map_level, step))
+
 
 
 # END STATISTICAL PLOT #################################################################################################
@@ -363,11 +430,7 @@ def plotting_histogram(filtered_data_func,
 
 
 # AREA PLOT ############################################################################################################
-def altspace(start, step, count, endpoint=False, **kwargs):
-    stop = start+(step*count)
-    return np.linspace(start, stop, count, endpoint=endpoint, **kwargs)
-
-def plot_area(axis_func, area_dataframe_func, resolution_func, density='y'):
+def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_title=""):
     """This function is to plot histogram of areas of simulations
 
     -----------
@@ -387,6 +450,7 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y'):
 
                 https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes (best
                 answer for align two axis)
+                https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib
     -----------
 
     -----------
@@ -400,6 +464,9 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y'):
                 resolution_func:
                 (int or float)
                                         Resolution value in meter
+                add_title:
+                (string)
+                                        Add more words into title
                 density:
                 (string)
                                         Performing "density" of "frequency"
@@ -463,27 +530,36 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y'):
 
         # Approximately align with the first y axis. Please visit here for more information
         # https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes
+        # https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib (for
+        # changing interval in ylim
         # Get lims of first axis - Frequency
+        # len_axis1 = axis_func.get_ylim()
+
+        start, end = axis_func.get_ylim()
+        axis_func.yaxis.set_ticks(np.arange(start, end, 1))
+
         len_axis1 = axis_func.get_ylim()
-        print(len_axis1)
+
         # Get lims of second axis - Density
         len_axis2 = axis_density.get_ylim()
 
         # Develop a function to get the general ticks for both x and y
         f = lambda x: len_axis2[0] + (x - len_axis1[0]) / (len_axis1[1] - len_axis1[0]) * (len_axis2[1] - len_axis2[0])
 
-        # Get number of ticks =
+        # Get number of ticks
         num_ticks = f(axis_func.get_yticks())
 
         # Set the ticks for second y axis
         axis_density.yaxis.set_major_locator(matplotlib.ticker.FixedLocator(num_ticks))
 
-
+    # Area title
+    title = f"Distribution of area values,\nresolution = {resolution_func} meters"
+    title += add_title
 
     # Ticks, title, and y label
     axis_func.tick_params(direction='out', length=8, pad=10)
     axis_func.set_xlabel(fr'Areas (x{unit} $m^{2}$)', fontsize=20, labelpad=38)
-    axis_func.set_title(f"Distribution of area values,\nresolution = {resolution_func} meters", fontsize=25, pad=25,
+    axis_func.set_title(title, fontsize=25, pad=25,
                         fontweight='bold')
 
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
@@ -533,7 +609,7 @@ def find_nth(strings, value, n):
 
 def scatter_area_transformation(transformation_selection,
                                 resolution_func,
-                                axis_func, area_dataframe_func):
+                                axis_func, area_dataframe_func, add_title=""):
     """This function is to draw scatter plot between transformation and areas
 
     -----------
@@ -559,6 +635,9 @@ def scatter_area_transformation(transformation_selection,
                 area_dataframe_func:
                 (pandas dataframe)
                                             Dataframe of simulations' areas
+                add_title:
+                (string)
+                                            Add more words into title
     -----------
 
     -----------
@@ -578,8 +657,7 @@ def scatter_area_transformation(transformation_selection,
 
         # Set information for scatter plot
         title = "Areas when transforming the grid - rotation"
-        x_label = "Rotated angles (degree)"
-        y_label = r'Areas ($m^{2}$)'
+        title += add_title
 
 
     # Get list of translation x
@@ -592,6 +670,7 @@ def scatter_area_transformation(transformation_selection,
 
         # Set information for scatter plot
         title = "Areas when transforming the grid - East translation,\nresolution = {resolution_func} meters"
+        title += add_title
 
     # Get list of translation y
     elif transformation_selection == "ty":
@@ -603,6 +682,7 @@ def scatter_area_transformation(transformation_selection,
 
         # Set information for scatter plot
         title = "Areas when transforming the grid - North translation,\nresolution = {resolution_func} meters"
+        title += add_title
 
     # Get list of combination
     else:
@@ -612,12 +692,14 @@ def scatter_area_transformation(transformation_selection,
 
         # Set information for scatter plot
         title = f"Areas when transforming the grid,\nresolution = {resolution_func} meters"
-
-    x_label = "Transformed simulations"
-    y_label = r'Areas (x100 $m^{2}$)'
+        title += add_title
 
     # Get unit of area
     unit = np.power(resolution_func, 2)
+
+    # x, y labels
+    x_label = "Transformed simulations"
+    y_label = fr'Areas (x{unit} $m^{2}$)'
 
     # Draw scatter plot
     axis_func.scatter(return_list, areas_func/unit, s=80, edgecolors="darkblue")

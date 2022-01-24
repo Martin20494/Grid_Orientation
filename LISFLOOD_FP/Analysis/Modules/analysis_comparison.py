@@ -3,6 +3,7 @@
 import seaborn as sns                           # For plotting
 import pandas as pd                             # For reading data
 import numpy as np                              # For handling data (using clip function)
+import shutil                                   # For file handling
 
 from runStatistic import calculation_dict       # For generating statistical dictionary
 
@@ -402,5 +403,48 @@ def kdeplots(statistic_df_dictionary,
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(15)
     axis_func.tick_params(direction='out', length=8, pad=10)
+
+
+def graph_folder(oldpath,
+                 plotname,
+                 newpath,
+                 newname):
+    """This function is to copy files from a folder to another folder. Mainly used for graphs
+
+    -----------
+    References:
+                None.
+
+    -----------
+
+    -----------
+    Arguments:
+                oldpath:
+                (string)
+                                Old directory
+                plotname:
+                (string)
+                                Name of plot including extension
+                newpath:
+                (string)
+                                New directory
+                newname:
+                (string)
+                                New name for the plot
+    -----------
+
+    -----------
+    Returns:
+                None.
+    -----------
+
+    """
+    # Copy graph
+    shutil.copy2(f"{oldpath}/{plotname}", f"{newpath}/{newname}")
+
+
+
+    
+    
     
 

@@ -351,15 +351,24 @@ def polygon_boundaries(transformation_selection, number_simulation,
 
     # BOUNDARY 1 ---------------------------------------------------------------------------------------------
     # Get extent information for first boundary
+
+    # Boundary for test case
+    boundary_1_ymin = no_padding_ymin + resolution_func*2
+    boundary_1_xmax = no_padding_xmax
+    boundary_1_ymax = boundary_1_ymin + 10*7
+    boundary_1_xmin = no_padding_xmax - resolution_func
+
+    # Boundary for large area
     # boundary_1_ymin = no_padding_ymin + 10*59
     # boundary_1_xmax = no_padding_xmax
     # boundary_1_ymax = boundary_1_ymin + 10*10
     # boundary_1_xmin = no_padding_xmax - 10
 
-    boundary_1_ymin = no_padding_ymin + resolution_func * (10*12/resolution_func)
-    boundary_1_xmax = no_padding_xmax
-    boundary_1_ymax = boundary_1_ymin + resolution_func * (10*22/resolution_func)
-    boundary_1_xmin = no_padding_xmax - resolution_func
+    # Boundary for small area
+    # boundary_1_ymin = no_padding_ymin + resolution_func * (10*12/resolution_func)
+    # boundary_1_xmax = no_padding_xmax
+    # boundary_1_ymax = boundary_1_ymin + resolution_func * (10*22/resolution_func)
+    # boundary_1_xmin = no_padding_xmax - resolution_func
 
     #     boundary_1_ymin = no_padding_ymin + 10*3
     #     boundary_1_xmax = no_padding_xmax

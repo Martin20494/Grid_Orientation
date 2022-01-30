@@ -84,7 +84,9 @@ def parameter_files(transformation_selection,
     # Get the point source
     # point_source = np.array([(1773704.959, 5472333.515)]).astype('float64') # larger area
 
-    point_source = np.array([(1773016.362, 5472061.027)]).astype('float64') # smaller area
+    # point_source = np.array([(1773016.362, 5472061.027)]).astype('float64') # smaller area
+
+    point_source = np.array([(1769951.132, 5472908.887)]).astype('float64')  # test case
 
     # Transform the point source
     rotated_point_source = wrapping_point_rotation(point_source, angle_func, center_x_func, center_y_func, 0)
@@ -131,9 +133,9 @@ def parameter_files(transformation_selection,
     # PAR FILE ---------------------------------------------------------------
     # Construct parameter files
     parameters_list = [('resroot', 'out'),
-                       ('saveint', 200),
-                       ('massint', 100),
-                       ('sim_time', 7200),
+                       ('saveint', 10),       #for normal saveint = 200 if sim_time = 7200
+                       ('massint', 10),       #for normal saveint = 100 if sim_time = 7200
+                       ('sim_time', 120),     #for normal sim_time = 7200
                        ('initial_tstep', 2),
                        ('bcifile', fr"{param_dir}\\{transformed}_{number_simulation}.bci"),
                        ('bdyfile', fr"{param_dir}\\{transformed}_{number_simulation}.bdy"),

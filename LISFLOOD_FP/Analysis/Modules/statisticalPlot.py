@@ -121,8 +121,8 @@ def plotting_map(filtered_data_func,
     # Titles and labels:
     if calculation_option == 'cell':
         # Title for colorbar
-        name_map = "Proportion of each cell being inundated"
-        name_map += f"\nin this set of simulations,\nresolution = {resolution_func} meters"
+        name_map = "Proportion of simulations\nof each area being inundated,"
+        name_map += f"\nresolution = {resolution_func} meters"
         name_map += add_title
 
         # Title for contour map
@@ -386,8 +386,8 @@ def plotting_histogram(filtered_data_func,
     # Set titles and labels
     if calculation_option == 'cell':
         # Title for contour map and x label
-        name_hist = "Histogram of proportion of each cell being inundated"
-        name_hist += f"\nin this set of simulations,\nresolution = {resolution_func} meters"
+        name_hist = "Histogram of proportion of simulations\nof each area being inundated,"
+        name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel("Proportion (%)", fontsize=20, labelpad=38)
 

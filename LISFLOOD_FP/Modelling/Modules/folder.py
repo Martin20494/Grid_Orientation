@@ -7,7 +7,7 @@ import os  # For manipulating the directory and to execute commands
 # Set up 'header' path -------------------------------------------------------------------------------------------------
 drive = "S"
 main_folder = "LISFLOOD"
-version = "version_25"
+version = "version_34"
 header = fr"{drive}:\\{main_folder}\\{version}"
 
 # Create header path
@@ -81,18 +81,21 @@ uncombined_path = f"{header}\\6_un_transformation\\un_combination"
 csv_rotation = f"{header}\\7_results\\un_rotation\\unrot_csv"
 raster_rotation = f"{header}\\7_results\\un_rotation\\unrot_raster"
 polygon_rotation = f"{header}\\7_results\\un_rotation\\unrot_polygon"
+one_polygon_rotation = f"{header}\\7_results\\un_rotation\\unrot_one_polygon"
 plot_rotation = f"{header}\\7_results\\un_rotation\\unrot_plot"
 
 # Un_translation
 csv_translation = f"{header}\\7_results\\un_translation\\untra_csv"
 raster_translation = f"{header}\\7_results\\un_translation\\untra_raster"
 polygon_translation = f"{header}\\7_results\\un_translation\\untra_polygon"
+one_polygon_translation = f"{header}\\7_results\\un_translation\\untra_one_polygon"
 plot_translation = f"{header}\\7_results\\un_translation\\untra_plot"
 
 # Un_combination
 csv_combination = f"{header}\\7_results\\un_combination\\uncom_csv"
 raster_combination = f"{header}\\7_results\\un_combination\\uncom_raster"
 polygon_combination = f"{header}\\7_results\\un_combination\\uncom_polygon"
+one_polygon_combination = f"{header}\\7_results\\un_combination\\uncom_one_polygon"
 plot_combination = f"{header}\\7_results\\un_combination\\uncom_plot"
 
 # Ending path creation #################################################################################################
@@ -147,18 +150,21 @@ necessary_files = [
     csv_rotation,
     raster_rotation,
     polygon_rotation,
+    one_polygon_rotation,
     plot_rotation,
 
     # Untranslation
     csv_translation,
     raster_translation,
     polygon_translation,
+    one_polygon_translation,
     plot_translation,
 
     # Uncombination
     csv_combination,
     raster_combination,
     polygon_combination,
+    one_polygon_combination,
     plot_combination
 ]
 # ----------------------------------------------------------------------------------------------------------------------

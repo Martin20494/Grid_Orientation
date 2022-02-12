@@ -1,5 +1,12 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
-import pandas as pd                                                  # For manipulating dataframe
+from folder import *                                # For paths of sub-folders
+
+import glob                                         # For getting all files' names in a certain path
+import pathlib                                      # For manipulating the directory path
+
+import geopandas as gpd                             # For manipulating geopandas dataframe
+import pandas as pd                                 # For manipulating dataframe
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 def statistic_calculation(dataset_func, calculation_option, filter_rate_func):
@@ -136,13 +143,101 @@ def area_calculation(dataset_func, resolution_func, filter_rate_func):
         # Get quantity of flooded cells
         num_flooded_cell = len(column[column > filter_rate_func])
 
+        # Get area of each cell
+        area_each_cell = resolution_func**2
+
         # Calculate area of each simulation
-        area_func = num_flooded_cell * resolution_func ** 2
+        area_func = num_flooded_cell * area_each_cell
 
         # Add each area to area dictionary
         area_dict[f"{nogeo_data_func.columns[each_col]}"] = area_func
-
+                           
     # Write dictionary into dataframe
     area_dataframe = pd.DataFrame(data=area_dict, index=[0])
 
     return area_dataframe
+
+
+def building_calculation(transformation_selection, dataset_func, building_path, dif_path=None):
+    """This function is to calculate number of buildings being inundated
+    
+    -----------
+    References: https://shapely.readthedocs.io/en/stable/manual.html
+                https://stackoverflow.com/questions/40385782/make-a-union-of-polygons-in-geopandas-or-shapely-into-a-single-geometry
+                https://shapely.readthedocs.io/en/stable/manual.html#shapely.ops.cascaded_union
+                https://gis.stackexchange.com/questions/224496/creating-spatial-join-between-points-and-polygons-in-geopandas
+                https://stackoverflow.com/questions/15943769/how-do-i-get-the-row-count-of-a-pandas-dataframe
+                https://gis.stackexchange.com/questions/52705/how-to-write-shapely-geometries-to-shapefiles
+
+                https://data.linz.govt.nz/layer/53353-nz-street-address/
+    -----------
+
+    -----------
+    Arguments:
+                transformation_selection:
+                (string)
+                                                "r" means rotation
+                                                "t" means translation
+                                                "c" means combination
+                dataset_func:
+                (pandas dataframe)
+                                                A full dataset including necessary information
+                building_path:
+                (string)
+                                                Path of file containing building polygons
+                dif_path:
+                (string)
+                                                None if dif_path is not specified
+                                                Different path for different file version
+    -----------
+
+    -----------
+    Returns:
+                building_dataframe:
+                (pandas dataframe)
+                                                Dataframe of simulations' flooded buildings
+    -----------
+
+
+    """
+    # Set up the path for transformation_selection
+    if transformation_selection == 'r':
+        transformed = "rotated"
+        one_poly_path = one_polygon_rotation
+    elif transformation_selection == 't':
+        transformed = "translated"
+        one_poly_path = one_polygon_translation
+    else:
+        transformed = "combined"
+        one_poly_path = one_polygon_combination
+
+    # Get dictionary of number of buildings being inundated
+    building_dict = {}
+
+    # Get building polygons dataframe
+    building_gpf = gpd.GeoDataFrame.from_file(building_path)
+
+    # Remove geometry data (x, y coordinates)
+    nogeo_data_func = dataset_func.drop(['x_coord', 'y_coord'], axis=1)
+
+    # Get area of each simulation
+    for each_col in range(len(nogeo_data_func.columns)):
+        # Get column num of each simulation
+        column = nogeo_data_func.columns[each_col]
+
+        # Get one flooded polygon dataframe
+        if dif_path is None:
+            one_flood_polygon = gpd.read_file(fr"{one_poly_path}\\onePoly\\onepoly_un{transformed}_{column}.geojson")
+        else:
+            one_flood_polygon = gpd.read_file(fr"{dif_path}\\onePoly\\onepoly_un{transformed}_{column}.geojson")
+
+        # Get number of buildings being inundated
+        building_in_polygon = gpd.sjoin(building_gpf, one_flood_polygon, predicate='within')
+
+        # Add that number to dictionary of buildings being inundated
+        building_dict[f"{column}"] = len(building_in_polygon.index)
+
+    # Write dictionary into dataframe
+    building_dataframe = pd.DataFrame(data=building_dict, index=[0])
+
+    return building_dataframe

@@ -25,7 +25,7 @@ warnings.simplefilter('ignore', category=NumbaWarning)
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def array_creation(data_array, value, shape_x, shape_y):
+def array_creation(data_array, value):
     """This function is to create an array of a coordinate
 
     -----------
@@ -58,22 +58,26 @@ def array_creation(data_array, value, shape_x, shape_y):
     -----------
 
     """
-    # Create zero array
-    new_array = np.zeros((shape_x, shape_y))
-
     # Read x, y values into arrays
     arr_x = data_array.x.values
     arr_y = data_array.y.values
 
-    # Get full number of x or y values
-    for i in range(new_array.shape[0]):
-        for j in range(new_array.shape[0]):
-            if value == 'x':
-                new_array[j, i] = arr_x[i]
-            else:
-                new_array[i, j] = arr_y[i]
+    # Create zero array
+    new_array = np.zeros((arr_x.shape[0], arr_y.shape[0]))
 
-    return new_array
+    # Get full number of x or y values
+    if value == "x":
+        for i in range(arr_x.shape[0]):
+            for j in range(arr_y.shape[0]):
+                new_array[j, i] = arr_x[i]
+        return new_array
+
+    else:
+
+        for i in range(arr_x.shape[0]):
+            for j in range(arr_y.shape[0]):
+                new_array[j, i] = arr_y[j]
+        return new_array
 
 
 def xyz_array(transformation_selection, number_simulation, time_extract_func):
@@ -123,8 +127,8 @@ def xyz_array(transformation_selection, number_simulation, time_extract_func):
     dataset_rioxarray = rioxarray.open_rasterio(path)
 
     # Create full number of values of x, y, z coordinates
-    array_x = array_creation(dataset_rioxarray, 'x', dataset_rioxarray.shape[1], dataset_rioxarray.shape[2])
-    array_y = array_creation(dataset_rioxarray, 'y', dataset_rioxarray.shape[1], dataset_rioxarray.shape[2])
+    array_x = array_creation(dataset_rioxarray, 'x')
+    array_y = array_creation(dataset_rioxarray, 'y')
     array_z = dataset_rioxarray.isel(band=0).values
 
     # Flatten x, y, z arrays

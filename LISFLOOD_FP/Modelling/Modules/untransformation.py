@@ -11,6 +11,7 @@ from transformation import center_calculation     # For center calculation
 # Packages for unrotating and untranslating
 import rasterio.features                          # For vectorising features in array
 from shapely.geometry import shape                # For manipulating spatial information (geometry) under GeoJSON format
+from shapely.ops import unary_union               # For combining all polygons into one
 import geopandas as gpd                           # For manipulating shape files
 from pyogrio import write_dataframe               # For writing out shape file (twice faster than geopandas)
 
@@ -132,3 +133,5 @@ def polygons_untransformation(transformation_selection, number_simulation, angle
     write_dataframe(uncombined_raster_poly_gdf,
                     fr"{untransformed_path}\\shapefile_{number_simulation}\\flowdepth_un{transformed}_{number_simulation}_at_{time_extract_func}.geojson",
                     driver="GeoJSON")
+
+

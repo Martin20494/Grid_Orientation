@@ -169,7 +169,7 @@ def padding_combination(coordinates_func, addition):
 
 def dem_raster_reference(transformation_selection,
                          resolution_func, chunk_size_func, processor_func,
-                         filename_lidar_opentopo, padding_func, padding=True):
+                         filename_lidar_opentopo, padding_func, lidar_dataset_name, padding=True):
     """ This function is to create a raster file from a las/laz file
 
     -----------
@@ -198,6 +198,9 @@ def dem_raster_reference(transformation_selection,
                 padding_func:
                 (list)
                                             A list of x min, x max, y min and y max
+                lidar_dataset_name:
+                (string)
+                                            LiDAR name
                 padding:
                 (boolean)
                                             if True, padding, else, no padding. Default is True
@@ -278,7 +281,7 @@ def dem_raster_reference(transformation_selection,
             },
             "apis": {
                 "open_topography": {
-                    "Wellington_2013": {
+                    f"{lidar_dataset_name}": {
                         "crs": {
                             "horizontal": h_crs,
                             "vertical": v_crs

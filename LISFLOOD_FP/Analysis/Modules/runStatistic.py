@@ -1,14 +1,16 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
 
 from statisticalCalculation import statistic_calculation, \
-                                   area_calculation                     # For statistical calculation
+                                   area_calculation, \
+                                   building_calculation                 # For statistical calculation
 
 from fileWriting import raster_generation                               # For raster generation
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def calculation_dict(transformation_selection, dataset_func, resolution_func, filter_rate):
+def calculation_dict(transformation_selection, dataset_func,
+                     resolution_func, filter_rate, building_path, dif_path=None):
     """
 
     -----------
@@ -32,13 +34,20 @@ def calculation_dict(transformation_selection, dataset_func, resolution_func, fi
                 filter_rate:
                 (float or int)
                                                 The rate at which the depth values will be ignored
+                building_path:
+                (string)
+                                                Path of file containing building polygons
+                dif_path:
+                (string)
+                                                None if dif_path is not specified
+                                                Different path for different file version
     -----------
 
     -----------
     Returns:
                 calculation_dict_set:
                 (dictionary)
-                                        A dictionary contains all statistical results
+                                                A dictionary contains all statistical results
     -----------
 
     """
@@ -65,5 +74,9 @@ def calculation_dict(transformation_selection, dataset_func, resolution_func, fi
 
     # Add area result
     calculation_dict_set['area'] = area_calculation(dataset_func, resolution_func, filter_rate)
+
+    # Add building result
+    calculation_dict_set['building'] = building_calculation(transformation_selection,
+                                                            dataset_func, building_path, dif_path)
 
     return calculation_dict_set

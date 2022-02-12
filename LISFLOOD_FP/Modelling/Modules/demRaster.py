@@ -31,7 +31,7 @@ import rasterio                                             # For reading and ma
 # LIDAR-DERIVED DEMS ###################################################################################################
 def dem_raster(transformation_selection,
                resolution_func, chunk_size_func, processor_func,
-               number_simulation, padding_func):
+               number_simulation, padding_func, lidar_dataset_name):
     """ This function is to create a raster file from a las/laz file
 
     -----------
@@ -57,6 +57,9 @@ def dem_raster(transformation_selection,
                 number_simulation:
                 (int)
                                             Ordinal number of simulation
+                lidar_dataset_name:
+                (string)
+                                            LiDAR name
                 padding_func:
                 (list)
                                             A list of x min, x max, y min and y max
@@ -131,7 +134,7 @@ def dem_raster(transformation_selection,
             },
             "apis": {
                 "open_topography": {
-                    "Wellington_2013": {
+                    f"{lidar_dataset_name}": {
                         "crs": {
                             "horizontal": h_crs,
                             "vertical": v_crs
@@ -352,28 +355,35 @@ def polygon_boundaries(transformation_selection, number_simulation,
     # BOUNDARY 1 ---------------------------------------------------------------------------------------------
     # Get extent information for first boundary
 
-    # Boundary for test case
-    boundary_1_ymin = no_padding_ymin + resolution_func*2
-    boundary_1_xmax = no_padding_xmax
-    boundary_1_ymax = boundary_1_ymin + 10*7
-    boundary_1_xmin = no_padding_xmax - resolution_func
+    # # Boundary for test case 1
+    # boundary_1_ymin = no_padding_ymin + resolution_func*2
+    # boundary_1_xmax = no_padding_xmax
+    # boundary_1_ymax = boundary_1_ymin + 10*7
+    # boundary_1_xmin = no_padding_xmax - resolution_func
 
-    # Boundary for large area
+    # # Boundary for test case 2
+    # boundary_1_ymin = no_padding_ymin + resolution_func*1
+    # boundary_1_xmax = no_padding_xmax
+    # boundary_1_ymax = boundary_1_ymin + 10*3
+    # boundary_1_xmin = no_padding_xmax - resolution_func
+
+    # # Boundary for large area
     # boundary_1_ymin = no_padding_ymin + 10*59
     # boundary_1_xmax = no_padding_xmax
     # boundary_1_ymax = boundary_1_ymin + 10*10
     # boundary_1_xmin = no_padding_xmax - 10
 
     # Boundary for small area
-    # boundary_1_ymin = no_padding_ymin + resolution_func * (10*12/resolution_func)
-    # boundary_1_xmax = no_padding_xmax
-    # boundary_1_ymax = boundary_1_ymin + resolution_func * (10*22/resolution_func)
-    # boundary_1_xmin = no_padding_xmax - resolution_func
+    boundary_1_ymin = no_padding_ymin + resolution_func * (10*12/resolution_func)
+    boundary_1_xmax = no_padding_xmax
+    boundary_1_ymax = boundary_1_ymin + resolution_func * (10*22/resolution_func)
+    boundary_1_xmin = no_padding_xmax - resolution_func
 
-    #     boundary_1_ymin = no_padding_ymin + 10*3
-    #     boundary_1_xmax = no_padding_xmax
-    #     boundary_1_ymax = boundary_1_ymin + 10*10
-    #     boundary_1_xmin = no_padding_xmax - 10
+    # # Boundary for Buller
+    # boundary_1_ymin = no_padding_ymin
+    # boundary_1_ymax = no_padding_ymin + resolution_func
+    # boundary_1_xmin = no_padding_xmin + resolution_func * (750/resolution_func)
+    # boundary_1_xmax = boundary_1_xmin + resolution_func * (560/resolution_func)
 
     # Write into a list
     polygon_boundary_1 = [(boundary_1_xmax, boundary_1_ymax),

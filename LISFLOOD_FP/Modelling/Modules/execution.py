@@ -15,7 +15,7 @@ import time                                                        # For timing 
 def run_simulation(set_of_simulation,
                    transformation_selection, lidar_number,
                    center_x_func, center_y_func,
-                   tile_url_list):
+                   tile_url_list, lidar_dataset_name):
     """This function is to run transformation process with given information simulations
 
     -----------
@@ -49,6 +49,9 @@ def run_simulation(set_of_simulation,
                 tile_url_list:
                 (list)
                                                 A list of url
+                lidar_dataset_name:
+                (string)
+                                                LiDAR name
     -----------
 
     -----------
@@ -58,8 +61,8 @@ def run_simulation(set_of_simulation,
 
     """
     # Get dictionaries of classification and coordinates
-    point_classification = get_dictionary(lidar_number, "classification")
-    point_coordinate = get_dictionary(lidar_number, "coordinate")
+    point_classification = get_dictionary(lidar_number, "classification", lidar_dataset_name)
+    point_coordinate = get_dictionary(lidar_number, "coordinate", lidar_dataset_name)
 
     # Iterate each simulation
     for order_number in set_of_simulation:
@@ -83,7 +86,7 @@ def run_simulation(set_of_simulation,
             center_x_func, center_y_func,
             tile_url_list,
             point_classification, point_coordinate,
-            combination_number
+            combination_number, lidar_dataset_name
         )
         # End timing generating DEM process ------------------------------------------------------------
         end_transform_tiles = time.time()
@@ -109,7 +112,7 @@ def run_simulation(set_of_simulation,
 def run_dem(set_of_simulation,
             transformation_selection,
             resolution_func, chunk_size_func, processor_func,
-            dem_boundary):
+            dem_boundary, lidar_dataset_name):
     """This function is to run dem generating process
 
     -----------
@@ -139,6 +142,9 @@ def run_dem(set_of_simulation,
                 dem_boundary:
                 (list)
                                                 A list of boundary (xmin, ymin, xmax, ymax)
+                lidar_dataset_name:
+                (string)
+                                                LiDAR dataset name
     -----------
 
     -----------
@@ -165,7 +171,7 @@ def run_dem(set_of_simulation,
         # Generate DEM
         dem_raster(transformation_selection,
                    resolution_func, chunk_size_func, processor_func,
-                   combination_number, dem_boundary)
+                   combination_number, dem_boundary, lidar_dataset_name)
         # Start timing generating DEM process -----------------------------------------------------------
         end_dem = time.time()
 
@@ -490,6 +496,85 @@ def run_untransformation(set_of_simulation,
         polygons_untransformation(transformation_selection, combination_number,
                                   angle_val, x_raster, y_raster,
                                   time_extract_func)
+
+        # End timing the whole un-rotation process -------------------------------------------------------
+        end_untransform = time.time()
+
+        # PRINT -----------------------------------------------------------------------------------------
+        # Get the running time
+        untransform_time = end_untransform - start_untransform
+
+        # Convert second to minute
+        untransform_minute = untransform_time / 60
+
+        # Get the name
+        untransform_name = "* Running time of untransformation:"
+
+        # Print
+        print('{0:<60}{1:>10}'.format(untransform_name, untransform_minute))
+
+        # Print separator
+        print("-" * 90)
+        print("\n")
+
+def run_one_polygon(set_of_simulation,
+                    transformation_selection,
+                    time_extract_func, filter_rate_func):
+    """This function is to run un-transformation process
+
+    -----------
+    References:
+                None.
+    -----------
+
+    -----------
+    Arguments:
+                set_of_simulation:
+                (array)
+                                                An 3D array of simulations (angle, x, y)
+                transformation_selection:
+                (string)
+                                                "r" means rotation
+                                                "t" means translation
+                                                "c" means combination
+                time_extract_func:
+                (int)
+                                                Predicted time for running flood model
+                filter_rate_func:
+                (float or int)
+                                                The rate at which the depth values will be ignored
+    -----------
+
+    -----------
+    Returns:
+                None.
+    -----------
+
+    """
+    # Iterate each simulation
+    for order_number in set_of_simulation:
+        # Get values
+        angle_val = order_number[0]
+        x_val = order_number[1]
+        y_val = order_number[2]
+
+        # Set the name of each transformation
+        combination_number = f"angle_{angle_val}_x_{x_val}_y_{y_val}"
+
+        # Print the header of the first running
+        print("{0} angle: {1} and x: {2} and y: {3} {0}".format("-" * 30, angle_val, x_val, y_val))
+
+        # Translated values for raster
+        x_raster = x_val / 10 * (-1)
+        y_raster = y_val / 10
+
+        # Start timing the whole un-combination process --------------------------------------------------
+        start_untransform = time.time()
+
+        # Un-combination
+        one_polygon_untransformation(transformation_selection, combination_number,
+                                     angle_val, x_raster, y_raster,
+                                     time_extract_func, filter_rate_func)
 
         # End timing the whole un-rotation process -------------------------------------------------------
         end_untransform = time.time()

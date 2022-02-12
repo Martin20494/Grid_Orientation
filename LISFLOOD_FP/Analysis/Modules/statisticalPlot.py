@@ -261,7 +261,9 @@ def plotting_histogram(filtered_data_func,
                        plt_func, axis_func, hex_list_func,
                        color_range,
                        num_bin_func,
-                       x_limit="",
+                       text_box_loc,
+                       x_limit_sign="",
+                       y_limit=None,
                        add_title=""):
     """This function is to plot histogram of information regarding water depth
 
@@ -269,6 +271,11 @@ def plotting_histogram(filtered_data_func,
     References: https://stackoverflow.com/questions/23061657/plot-histogram-with-colors-taken-from-colormap (first)
                 https://stdworkflow.com/67/attributeerror-rectangle-object-has-no-property-normed-solution
                 https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib
+                https://stackoverflow.com/questions/63723514/userwarning-fixedformatter-should-only-be-used-together-with-fixedlocator
+                https://stackoverflow.com/questions/38667728/matplotlib-histogram-scale-y-axis-by-a-constant-factor
+                https://stackoverflow.com/questions/7559242/matplotlib-strings-as-labels-on-x-axis
+
+                https://www.kite.com/python/answers/how-to-change-font-of-a-plot-using-matplotlib-in-python
     -----------
 
     -----------
@@ -302,9 +309,15 @@ def plotting_histogram(filtered_data_func,
                 num_bin_func:
                 (array or list)
                                         An array/ a list contains the range of bins
-                x_limit:
+                text_box_loc:
+                (list)
+                                        A list of text box coordinates [x, y]
+                x_limit_sign:
                 (string)
                                         Additional information for x tick labels
+                y_limit:
+                (string)
+                                        New limit of y range
                 add_title:
                 (string)
                                         Add more words into title
@@ -316,7 +329,6 @@ def plotting_histogram(filtered_data_func,
     -----------
 
     """
-
     # Get z values
     z_func = filtered_data_func[f'{calculation_option}']
 
@@ -359,22 +371,8 @@ def plotting_histogram(filtered_data_func,
     # For dtype: https://numpy.org/doc/stable/reference/arrays.dtypes.html
     x_range = np.arange(color_range[0], color_range[1], color_range[2])
     xlabel_arr = np.array(np.round(x_range[:], 2), dtype='str')
-    xlabel_arr[-1] = f'{xlabel_arr[-1]}{x_limit}'
+    xlabel_arr[-1] = f'{x_limit_sign}{xlabel_arr[-1]}'
     axis_func.set_xticklabels(xlabel_arr)
-    
-
-    # # Get another y axis - for 'Density'
-    # axis_density = axis_func.twinx()
-    #
-    # # # Density plot
-    # sns.kdeplot(data_func, ax=axis_density, color="r", linewidth=2)
-    #
-    # axis_density.set_xlim(color_range[0], color_range[1])
-
-    # # Design ticks and x figures for 'Density'
-    # axis_density.tick_params(direction='out', length=8, pad=10)
-    # for item in (axis_density.get_xticklabels() + axis_density.get_yticklabels()):  # For x, y ticks' labels
-    #     item.set_fontsize(15)
 
     # Remove grid background lines (including x, y lines)
     axis_func.grid(False)
@@ -391,12 +389,32 @@ def plotting_histogram(filtered_data_func,
         name_hist += add_title
         axis_func.set_xlabel("Proportion (%)", fontsize=20, labelpad=38)
 
+
+        # Set up new y tick axis
+        # Refer here for more information
+        # https://stackoverflow.com/questions/63723514/userwarning-fixedformatter-should-only-be-used-together-with-fixedlocator
+        # https://stackoverflow.com/questions/38667728/matplotlib-histogram-scale-y-axis-by-a-constant-factor
+        # https://stackoverflow.com/questions/7559242/matplotlib-strings-as-labels-on-x-axis
+
+        axis_func.set_ylim(0, y_limit)                                              # Set up new range
+        num_tick = axis_func.get_yticks().tolist()                                  # Convert new range into list
+        num_tick_label = [str(int(val * (resolution_func**2) / 100)) for val in num_tick] # Convert cells into areas
+        num_tick_label[-2] = f'{num_tick_label[-2]}+'                               # Add upper limit (by adding +)
+        axis_func.set_yticks(num_tick[:-1])                                         # Set up new tick sign
+        axis_func.set_yticklabels(num_tick_label[:-1])                              # Set up new tick label
+
     elif calculation_option == "cv":
         # Title for contour map and x label
         name_hist = "Histogram of coefficient of variation of water depth,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel('Coefficient of variation (%)', fontsize=20, labelpad=38)
+
+        # Set new y tick axis
+        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+        axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
+        axis_func.set_yticklabels(num_tick_label)                                      # Set up new tick label
 
     elif calculation_option == "sd":
         # Title for contour map and x label
@@ -405,32 +423,54 @@ def plotting_histogram(filtered_data_func,
         name_hist += add_title
         axis_func.set_xlabel('Standard deviation (m)', fontsize=20, labelpad=38)
 
+        # Set new y tick axis
+        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+        axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
+        axis_func.set_yticklabels(num_tick_label)                                      # Set up new tick label
+
     else:
         # Title for contour map
         name_hist = f"Histogram of {calculation_option} of water depth,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel(f"{calculation_option.capitalize()} (m)", fontsize=20, labelpad=38)
+        
+        # Set new y tick axis
+        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+        axis_func.set_yticks(num_tick[:-1])                                            # Set up new tick sign
+        axis_func.set_yticklabels(num_tick_label[:-1])                                 # Set up new tick label
 
     # Ticks, title, and y label
     axis_func.tick_params(direction='out', length=8, pad=10)
     axis_func.set_title(name_hist, pad=25, fontsize=25, fontweight='bold')
-    axis_func.set_ylabel('Frequency (number of cells)', fontsize=20, labelpad=38)
+    axis_func.set_ylabel(r'Areas (x100 $\mathrm{m}^2$)', fontsize=20, labelpad=38)
 
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(15)
 
-    
+    # Create text string
+    textstr = "mean = {0:.3f}".format(data_func.mean(axis=0))
+    textstr += "\nstdev = {0:.3f}".format(data_func.std(axis=0))
 
-
-
+    # place a text box in upper left in axes coords
+    # Refer here for more information
+    # https://stackoverflow.com/questions/50869424/increase-line-separation-in-matplotlib-annotation-text/50888491
+    axis_func.text(text_box_loc[0], text_box_loc[1], textstr, transform=axis_func.transAxes, fontsize=13,
+                   linespacing=1.5,
+                   fontweight='normal',
+                   fontstyle='italic',
+                   horizontalalignment='left',
+                   verticalalignment='top')
 
 # END STATISTICAL PLOT #################################################################################################
 
 
 
 # AREA PLOT ############################################################################################################
-def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_title=""):
+def plot_area(axis_func, area_dataframe_func, resolution_func, text_box_loc,
+              density='y', add_title=""):
     """This function is to plot histogram of areas of simulations
 
     -----------
@@ -464,6 +504,9 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_
                 resolution_func:
                 (int or float)
                                         Resolution value in meter
+                text_box_loc:
+                (list)
+                                        A list of text box coordinates [x, y]
                 add_title:
                 (string)
                                         Add more words into title
@@ -481,8 +524,8 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_
     # Get areas' values under array format
     area_values = area_dataframe_func.iloc[0].to_numpy()
 
-    # Get unit of area
-    unit = np.power(resolution_func, 2)
+    # # Get unit of area
+    # unit = np.power(resolution_func, 2)
 
     # Number of bins/simulations
     num_bin = len(area_values)
@@ -490,19 +533,27 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_
     # Get histogram and frequency
     if density == 'y':
         # Draw kde (kernel density estimate) plot
-        sns.kdeplot(area_values/unit, color='crimson', ax=axis_func)
+        sns.kdeplot(area_values / 100, color='crimson', ax=axis_func)
 
         # Set y label
-        axis_func.set_ylabel("Density", fontsize=15, labelpad=38)
+        axis_func.set_ylabel("Probability density", fontsize=15, labelpad=38)
 
 
     elif density == 'n':
         # Draw histogram
-        sns.distplot(area_values/unit, bins=num_bin, kde=False, ax=axis_func,
-                     hist_kws={"histtype": "bar", "linewidth": 2, "alpha": 1, "color": "b", 'edgecolor': 'black'})
+        # sns.distplot(area_values/unit, bins=num_bin, kde=False, ax=axis_func,
+        #              hist_kws={"histtype": "bar", "linewidth": 1, "alpha": 1, "color": "springgreen",
+        #                        'edgecolor':'navy'})
+
+        sns.histplot(area_values / 100, bins=num_bin, stat='count',
+                     legend=False,
+                     edgecolor='darkgreen',
+                     facecolor='springgreen',
+                     ax=axis_func)
+
 
         # Set y label
-        axis_func.set_ylabel("Frequency (number of simulations)", fontsize=15, labelpad=38)
+        axis_func.set_ylabel("Number of simulations", fontsize=15, labelpad=38)
         
 
     else:
@@ -510,18 +561,24 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_
         axis_density = axis_func.twinx()
 
         # Frequency plot
-        sns.distplot(area_values/unit, bins=num_bin, kde=False, ax=axis_func,
-                     hist_kws={"histtype": "bar", "linewidth": 2, "alpha": 1, "color": "b", 'edgecolor': 'black'},
-                     kde_kws={'color': 'crimson', 'lw': 5})
+        # sns.distplot(area_values/unit, bins=num_bin, kde=False, ax=axis_func,
+        #              hist_kws={"histtype": "bar", "linewidth": 1, "alpha": 1, "color": "springgreen",
+        #                        'edgecolor':'darkgreen'})
+
+        sns.histplot(area_values / 100, bins=num_bin, stat='count',
+                     legend=False,
+                     edgecolor='darkgreen',
+                     facecolor='springgreen',
+                     ax=axis_func)
 
         # Density plot
-        sns.kdeplot(area_values/unit, ax=axis_density, color="r", linewidth=2)
+        sns.kdeplot(area_values / 100, ax=axis_density, color="r", linewidth=2)
 
         # Set y label for 'Frequency'
-        axis_func.set_ylabel("Frequency (number of simulations)", fontsize=20, labelpad=38)
+        axis_func.set_ylabel("Number of simulations", fontsize=20, labelpad=38)
 
         # Set y label for 'Density'
-        axis_density.set_ylabel("Density", rotation=270, fontsize=20, labelpad=38)
+        axis_density.set_ylabel("Probability density", rotation=270, fontsize=20, labelpad=38)
 
         # Design ticks and x figures for 'Density'
         axis_density.tick_params(direction='out', length=8, pad=10)
@@ -556,18 +613,210 @@ def plot_area(axis_func, area_dataframe_func, resolution_func, density='y', add_
     title = f"Distribution of area values,\nresolution = {resolution_func} meters"
     title += add_title
 
+    # Set up for x axis to make sure it appears with integers
+    axis_func.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
+
     # Ticks, title, and y label
     axis_func.tick_params(direction='out', length=8, pad=10)
-    axis_func.set_xlabel(fr'Areas (x{unit} $m^{2}$)', fontsize=20, labelpad=38)
+    x_label = f'Areas (x100 '
+    x_label += r'$\mathrm{m}^2$)'
+    axis_func.set_xlabel(x_label, fontsize=20, labelpad=38)
     axis_func.set_title(title, fontsize=25, pad=25,
                         fontweight='bold')
 
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(15)
 
+    # Create text string
+    textstr = "mean = {0:.3f}".format(area_dataframe_func.mean(axis=1)[0])
+    textstr += "\nstdev = {0:.3f}".format(area_dataframe_func.std(axis=1)[0])
+
+    # place a text box in upper left in axes coords
+    # Refer here for more information
+    # https://stackoverflow.com/questions/50869424/increase-line-separation-in-matplotlib-annotation-text/50888491
+    axis_func.text(text_box_loc[0], text_box_loc[1], textstr, transform=axis_func.transAxes, fontsize=13,
+                   linespacing=1.5,
+                   fontweight= 'normal',
+                   fontstyle='italic',
+                   horizontalalignment='left',
+                   verticalalignment='top')
+
     # Get max and min
     print("Maximum area:", np.max(area_values))
     print("Minimum area:", np.min(area_values))
+    print("Mean of number of buildings:", area_dataframe_func.mean(axis=1)[0])
+    print("Standard deviation of number of buildings:", area_dataframe_func.std(axis=1)[0])
+
+
+def plot_building(axis_func, building_dataframe_func, resolution_func, text_box_loc,
+                  density='y', add_title=""):
+    """This function is to plot histogram of areas of simulations
+
+    -----------
+    References:
+                https://stackoverflow.com/questions/69524514/how-to-modify-the-kernel-density-estimate-line-in-a-sns-histplot
+                https://seaborn.pydata.org/generated/seaborn.distplot.html
+
+                https://stackoverflow.com/questions/65400669/how-to-generate-two-separate-y-axes-for-a-histogram-on-the-same-figure-in-seabor
+                https://stackoverflow.com/questions/26752464/how-do-i-align-gridlines-for-two-y-axis-scales-using-matplotlib
+                https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html#matplotlib.axes.Axes.hist
+                https://seaborn.pydata.org/generated/seaborn.kdeplot.html
+
+                https://seaborn.pydata.org/generated/seaborn.histplot.html#seaborn.histplot
+                https://seaborn.pydata.org/generated/seaborn.distplot.html
+                https://stackoverflow.com/questions/27671748/how-to-print-y-axis-label-horizontally-in-a-matplotlib-pylab-chart
+                https://stackoverflow.com/questions/24391892/printing-subscript-in-python
+
+                https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes (best
+                answer for align two axis)
+                https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib
+    -----------
+
+    -----------
+    Arguments:
+                axis_func:
+                (axis in matplotlib)
+                                        The subplot
+                building_dataframe_func:
+                (pandas dataframe)
+                                        Dataframe of simulations' buildings
+                resolution_func:
+                (int or float)
+                                        Resolution value in meter
+                text_box_loc:
+                (list)
+                                        A list of text box coordinates [x, y]
+                add_title:
+                (string)
+                                        Add more words into title
+                density:
+                (string)
+                                        Performing "density" of "frequency"
+    -----------
+
+    -----------
+    Returns:
+                None.
+    -----------
+
+    """
+    # Get buildings' values under array format
+    building_values = building_dataframe_func.iloc[0].to_numpy()
+
+    # Number of bins/simulations
+    num_bin = len(building_values)
+
+    # Get histogram and frequency
+    if density == 'y':
+        # Draw kde (kernel density estimate) plot
+        sns.kdeplot(building_values, color='crimson', ax=axis_func)
+
+        # Set y label
+        axis_func.set_ylabel("Probability density", fontsize=15, labelpad=38)
+
+
+    elif density == 'n':
+        # Draw histogram
+        # sns.distplot(building_values, bins=num_bin, kde=False, ax=axis_func,
+        #              hist_kws={"histtype": "bar", "linewidth": 1, "alpha": 1, "color": "deepskyblue", 'edgecolor':
+        #                  'navy'})
+
+        sns.histplot(building_values, bins=num_bin, stat='count',
+                     legend=False,
+                     edgecolor='navy',
+                     facecolor='deepskyblue',
+                     ax=axis_func)
+
+        # Set y label
+        axis_func.set_ylabel("Number of simulations", fontsize=15, labelpad=38)
+
+
+    else:
+        # Get another y axis - for 'Density'
+        axis_density = axis_func.twinx()
+
+        # Frequency plot
+        # sns.distplot(building_values, bins=num_bin, kde=False, ax=axis_func,
+        #              hist_kws={"histtype": "bar", "linewidth": 1, "alpha": 1, "color": "deepskyblue", 'edgecolor':
+        #                  'navy'})
+
+        sns.histplot(building_values, bins=num_bin, stat='count',
+                     legend=False,
+                     edgecolor='navy',
+                     facecolor='deepskyblue',
+                     ax=axis_func)
+
+        # Density plot
+        sns.kdeplot(building_values, ax=axis_density, color="r", linewidth=2)
+
+        # Set y label for 'Frequency'
+        axis_func.set_ylabel("Number of simulations", fontsize=20, labelpad=38)
+
+        # Set y label for 'Density'
+        axis_density.set_ylabel("Probability density", rotation=270, fontsize=20, labelpad=38)
+
+        # Design ticks and x figures for 'Density'
+        axis_density.tick_params(direction='out', length=8, pad=10)
+        for item in (axis_density.get_xticklabels() + axis_density.get_yticklabels()):  # For x, y ticks' labels
+            item.set_fontsize(15)
+
+        # Approximately align with the first y axis. Please visit here for more information
+        # https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes
+        # https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib (for
+        # changing interval in ylim
+        # Get lims of first axis - Frequency
+        # len_axis1 = axis_func.get_ylim()
+
+        start, end = axis_func.get_ylim()
+        axis_func.yaxis.set_ticks(np.arange(start, end, 1))
+
+        len_axis1 = axis_func.get_ylim()
+
+        # Get lims of second axis - Density
+        len_axis2 = axis_density.get_ylim()
+
+        # Develop a function to get the general ticks for both x and y
+        f = lambda x: len_axis2[0] + (x - len_axis1[0]) / (len_axis1[1] - len_axis1[0]) * (len_axis2[1] - len_axis2[0])
+
+        # Get number of ticks
+        num_ticks = f(axis_func.get_yticks())
+
+        # Set the ticks for second y axis
+        axis_density.yaxis.set_major_locator(matplotlib.ticker.FixedLocator(num_ticks))
+
+    # Set up for x axis to make sure it appears with integers
+    axis_func.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
+
+    # Area title
+    title = f"Distribution of number of buildings being inundated,\nresolution = {resolution_func} meters"
+    title += add_title
+
+    # Ticks, title, and y label
+    axis_func.tick_params(direction='out', length=8, pad=10)
+    axis_func.set_xlabel(fr'Number of buildings', fontsize=20, labelpad=38)
+    axis_func.set_title(title, fontsize=25, pad=25,
+                        fontweight='bold')
+
+    for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
+        item.set_fontsize(15)
+
+    # Create text string
+    textstr = "mean = {0:.3f}".format(building_dataframe_func.mean(axis=1)[0])
+    textstr += "\nstdev = {0:.3f}".format(building_dataframe_func.std(axis=1)[0])
+
+    # place a text box in upper left in axes coords
+    axis_func.text(text_box_loc[0], text_box_loc[1], textstr, transform=axis_func.transAxes, fontsize=13,
+                   linespacing=1.5,
+                   fontweight='normal',
+                   fontstyle='italic',
+                   horizontalalignment='left',
+                   verticalalignment='top')
+
+    # Get max and min
+    print("Maximum number of buildings:", np.max(building_values))
+    print("Minimum number of buildings:", np.min(building_values))
+    print("Mean of number of buildings:", building_dataframe_func.mean(axis=1)[0])
+    print("Standard deviation of number of buildings:", building_dataframe_func.std(axis=1)[0])
 
 
 def find_nth(strings, value, n):
@@ -616,6 +865,7 @@ def scatter_area_transformation(transformation_selection,
     References: https://www.digitalocean.com/community/tutorials/how-to-index-and-slice-strings-in-python-3
                 https://stackoverflow.com/questions/31186019/rotate-tick-labels-in-subplot-pyplot-matplotlib-gridspec/52461208
                 https://www.delftstack.com/howto/matplotlib/python-matplotlib-plot-superscript/
+                https://stackoverflow.com/questions/9764298/how-to-sort-two-lists-which-reference-each-other-in-the-exact-same-way
     -----------
 
     -----------
@@ -651,38 +901,47 @@ def scatter_area_transformation(transformation_selection,
 
     # Get list of rotation
     if transformation_selection == "r":
-        rotation_list = [int(angle[(find_nth(angle, "_", 1) + 1): find_nth(angle, "_", 2)]) for angle in
+        rotation_list = [float(angle[(find_nth(angle, "_", 1) + 1): find_nth(angle, "_", 2)]) for angle in
                          area_dataframe_func.columns]
         return_list = rotation_list
 
         # Set information for scatter plot
-        title = "Areas when transforming the grid - rotation"
+        title = f"Areas when transforming the grid - rotation,\nresolution = {resolution_func} meters"
         title += add_title
+
+        # x label
+        x_label = "Transformed simulations - rotation (degree)"
 
 
     # Get list of translation x
     elif transformation_selection == "tx":
         x_translation_list = [
-            int(x_translation[(find_nth(x_translation, "_", 3) + 1): find_nth(x_translation, "_", 4)])
+            float(x_translation[(find_nth(x_translation, "_", 3) + 1): find_nth(x_translation, "_", 4)])
             for x_translation in area_dataframe_func.columns
         ]
         return_list = x_translation_list
 
         # Set information for scatter plot
-        title = "Areas when transforming the grid - East translation,\nresolution = {resolution_func} meters"
+        title = f"Areas when transforming the grid - east translation,\nresolution = {resolution_func} meters"
         title += add_title
+
+        # x label
+        x_label = "Transformed simulations - east translation (m)"
 
     # Get list of translation y
     elif transformation_selection == "ty":
         y_translation_list = [
-            int(y_translation[(find_nth(y_translation, "_", 5) + 1):])
+            float(y_translation[(find_nth(y_translation, "_", 5) + 1):])
             for y_translation in area_dataframe_func.columns
         ]
         return_list = y_translation_list
 
         # Set information for scatter plot
-        title = "Areas when transforming the grid - North translation,\nresolution = {resolution_func} meters"
+        title = f"Areas when transforming the grid - north translation,\nresolution = {resolution_func} meters"
         title += add_title
+
+        # x label
+        x_label = "Transformed simulations - north translation (m)"
 
     # Get list of combination
     else:
@@ -691,18 +950,27 @@ def scatter_area_transformation(transformation_selection,
         return_list = combination_list
 
         # Set information for scatter plot
-        title = f"Areas when transforming the grid,\nresolution = {resolution_func} meters"
+        title = f"Areas when transforming the grid - combination,\nresolution = {resolution_func} meters"
         title += add_title
+
+        # x label
+        x_label = "Transformed simulations - combination"
 
     # Get unit of area
     unit = np.power(resolution_func, 2)
 
-    # x, y labels
-    x_label = "Transformed simulations"
-    y_label = fr'Areas (x{unit} $m^{2}$)'
+    # Y labels
+    y_label = f'Areas (x{unit} '
+    y_label += r'$\mathrm{m}^2$)'
+
+    # Sorting list
+    new_return_list, new_areas_func = (list(val) for val in zip(*sorted(zip(return_list, areas_func))))
+
+    # Convert list into string for x label
+    string_return_list = [str(num) for num in new_return_list]
 
     # Draw scatter plot
-    axis_func.scatter(return_list, areas_func/unit, s=80, edgecolors="darkblue")
+    axis_func.scatter(string_return_list, new_areas_func/unit, s=250, facecolor="aqua", edgecolors="navy")
 
     # Set title
     axis_func.set_title(title, pad=25, fontsize=25, fontweight='bold')
@@ -711,13 +979,11 @@ def scatter_area_transformation(transformation_selection,
     # Set y label and y ticks
     axis_func.set_ylabel(y_label, rotation=-270, fontsize=20, labelpad=38)
     axis_func.tick_params('y', length=8, pad=10)
+    # x label presentation
+    axis_func.tick_params('x', labelrotation=90, length=8, pad=10)
 
     # Add grid
     axis_func.grid(which='both', axis='x', linestyle='--')
-
-    # x label presentation of combined transformation
-    if transformation_selection == "c":
-        axis_func.tick_params('x', labelrotation=90, length=8, pad=10)
 
     # Control the grid
     for index, label in enumerate(axis_func.xaxis.get_ticklabels()):

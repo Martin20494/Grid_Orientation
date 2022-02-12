@@ -155,9 +155,9 @@ def get_figure_folder(
             if selection == 'resolution':
                 if version_func == "version_21":
                     newname = f"2m_{oldname}"
-                elif version_func == "version_22":
+                elif version_func == "version_26":
                     newname = f"5m_{oldname}"
-                elif version_func == "version_23":
+                elif version_func == "version_12":
                     newname = f"10m_{oldname}"
                 else:
                     newname = f"20m_{oldname}"
@@ -190,7 +190,7 @@ def get_figure_folder(
                 if oldfolder == "density":
                     statistical_list_func = ['mean', 'sd', 'cv', 'cell']
                 else:
-                    statistical_list_func = ['mean', 'sd', 'cv', 'cell', "area"]
+                    statistical_list_func = ['mean', 'sd', 'cv', 'cell', "area", "building"]
                 for newfolder in statistical_list_func:
                     oldname = f"{newfolder}_{version_selection}"
                     newname = f"{newfolder}_{version_selection}_{oldfolder}"

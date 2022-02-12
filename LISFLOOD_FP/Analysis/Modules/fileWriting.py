@@ -6,11 +6,14 @@ import numpy as np                              # For all calculation and data a
 import rioxarray                                # For manipulating pixel values, spatial attributes, and raster files
 import xarray                                   # For writing arrays into raster files
 import rasterio                                 # For manipulating raster files (mainly crs and transformation)
+import rasterio.features                        # For manipulating raster features
 
 # For handling polygons
 from shapely.geometry import shape              # For converting geometry data into shapely geometry format
 import geopandas as gpd                         # For manipulating geospatial data under polygon format
 import pandas as pd                             # For manipulating dataframe
+from pyogrio import write_dataframe             # For writing out shape file (twice faster than geopandas)
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -111,7 +114,7 @@ def raster_conversion(x_func, y_func, z_func):
     return x_values_func, y_values_func, z_values_func
 
 
-def raster_generation(transformation_selection, x_func, y_func, z_func, filename):
+def raster_generation(transformation_selection, x_func, y_func, z_func, filename, save_path=None):
     """This function is used to write gridded array (x, y, z) into raster file
 
     -----------
@@ -138,6 +141,10 @@ def raster_generation(transformation_selection, x_func, y_func, z_func, filename
                 filename:
                 (string)
                                             Name of raster file
+                save_path:
+                (string)
+                                            If None, save rasters of statistical resutls.
+                                            If specify, save rasters to specified path.
     -----------
 
     -----------
@@ -185,8 +192,12 @@ def raster_generation(transformation_selection, x_func, y_func, z_func, filename
     raster_array.rio.write_crs("epsg:2193", inplace=True)
     raster_array.rio.write_nodata(-999, inplace=True)
 
-    # Write into raster file (tiff)
-    raster_array.rio.to_raster(fr"{raster_transformation_path}\\{filename}_un{transformed}_flowdepth_raster.nc")
+    # Write into raster file (netcdf)
+    if save_path is None:
+        raster_array.rio.to_raster(fr"{raster_transformation_path}\\{filename}_un{transformed}_flowdepth_raster.nc")
+
+    else:
+        raster_array.rio.to_raster(fr"{save_path}\\{filename}.nc")
 # END RASTER WRITING ###################################################################################################
 
 
@@ -267,7 +278,7 @@ def polygon_conversion(transformation_selection, dataset_func, column):
     return poly_dataframe
 
 
-def polygon_generation(transformation_selection, dataset_func, column):
+def polygon_generation(transformation_selection, dataset_func, column, save_path):
     """This function is to write dataframe into shape file
 
     -----------
@@ -288,6 +299,10 @@ def polygon_generation(transformation_selection, dataset_func, column):
                 column:
                 (string)
                                                 Column name that needs converting
+                save_path:
+                (string)
+                                                If None, save rasters of statistical resutls.
+                                                If specify, save rasters to specified path.
     -----------
 
     -----------
@@ -311,6 +326,13 @@ def polygon_generation(transformation_selection, dataset_func, column):
     polygon_dataframe = polygon_conversion(transformation_selection, dataset_func, column)
 
     # Write into shape file
-    polygon_dataframe.to_file(fr"{polygon_transformation_path}\\{column}_un{transformed}_flowdepth_polygon.shp",
-                              driver='ESRI Shapefile')
+    if save_path is None:
+        write_dataframe(polygon_dataframe,
+                        fr"{polygon_transformation_path}\\{column}_un{transformed}_flowdepth_polygon.shp",
+                        driver='GeoJSON')
+    else:
+        write_dataframe(polygon_dataframe,
+                        fr"{save_path}\\{column}_un{transformed}_flowdepth_polygon.shp",
+                        driver='GeoJSON')
+
 # END POLYGON WRITING ##################################################################################################

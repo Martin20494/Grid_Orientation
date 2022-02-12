@@ -13,7 +13,7 @@ import shutil  # For copying file/folder
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def download_lidar(boundary_coordinates_func, lidar_number):
+def download_lidar(boundary_coordinates_func, name_dataset, lidar_number):
     """This function is to download las/laz files from Open Topography
 
     -----------
@@ -25,6 +25,9 @@ def download_lidar(boundary_coordinates_func, lidar_number):
                 boundary_coordinates_func:
                 (list)
                                             A list of xmin, ymin, xmax, ymax of rectangular boundary
+                name_dataset:
+                (string)
+                                            Name of the dataset
                 lidar_number:
                 (int)
                                             Ordinal number of lidar folder
@@ -76,4 +79,4 @@ def download_lidar(boundary_coordinates_func, lidar_number):
     lidar_fetcher = geoapis.lidar.OpenTopography(cache_path=fr"{original_lidar_path}\\lidar_{lidar_number}",
                                                  search_polygon=lidar_polygon,
                                                  verbose=True)
-    lidar_fetcher.run()
+    lidar_fetcher.run(name_dataset)

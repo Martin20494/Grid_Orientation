@@ -289,7 +289,7 @@ wrapping_point_translation = gu_translation(point_translation)
 
 # WRITING TRANSFORMED LAS/LAZ FILES ####################################################################################
 def writing_las_file(transformation_selection, point_classification_func, number_simulation, transformed_array,
-                     filename_code):
+                     filename_code, lidar_dataset_name):
     """This function is to create a new lidar las/laz file
     the same as the old lidar las/laz file with different coordinates
 
@@ -316,6 +316,9 @@ def writing_las_file(transformation_selection, point_classification_func, number
                 filename_code:
                 (string)
                                             Code of file name (the same as original lidar tiles' names)
+                lidar_dataset_name:
+                (string)
+                                            LiDAR dataset name
     -----------
 
     -----------
@@ -329,17 +332,17 @@ def writing_las_file(transformation_selection, point_classification_func, number
 
     # Output file
     if transformation_selection == 'r':
-        pathlib.Path(fr"{rotated_lidar_path}\\rotated_lidar_{number_simulation}\\Wellington_2013")\
+        pathlib.Path(fr"{rotated_lidar_path}\\rotated_lidar_{number_simulation}\\{lidar_dataset_name}")\
             .mkdir(parents=True, exist_ok=True)
-        outfile = fr"{rotated_lidar_path}\\rotated_lidar_{number_simulation}\\Wellington_2013\\{filename_code}.laz"
+        outfile = fr"{rotated_lidar_path}\\rotated_lidar_{number_simulation}\\{lidar_dataset_name}\\{filename_code}.laz"
     elif transformation_selection == 't':
-        pathlib.Path(fr"{translated_lidar_path}\\translated_lidar_{number_simulation}\\Wellington_2013")\
+        pathlib.Path(fr"{translated_lidar_path}\\translated_lidar_{number_simulation}\\{lidar_dataset_name}")\
             .mkdir(parents=True, exist_ok=True)
-        outfile = fr"{translated_lidar_path}\\translated_lidar_{number_simulation}\\Wellington_2013\\{filename_code}.laz"
+        outfile = fr"{translated_lidar_path}\\translated_lidar_{number_simulation}\\{lidar_dataset_name}\\{filename_code}.laz"
     else:
-        pathlib.Path(fr"{combined_lidar_path}\\combined_lidar_{number_simulation}\\Wellington_2013")\
+        pathlib.Path(fr"{combined_lidar_path}\\combined_lidar_{number_simulation}\\{lidar_dataset_name}")\
             .mkdir(parents=True, exist_ok=True)
-        outfile = fr"{combined_lidar_path}\\combined_lidar_{number_simulation}\\Wellington_2013\\{filename_code}.laz"
+        outfile = fr"{combined_lidar_path}\\combined_lidar_{number_simulation}\\{lidar_dataset_name}\\{filename_code}.laz"
 
     # Get the shape of transformed LiDAR array
     lidar_arr_shape = len(point_classification_func)
@@ -359,8 +362,8 @@ def writing_las_file(transformation_selection, point_classification_func, number
             "type": "writers.las",
             "scale_x": 0.0001,
             "scale_y": 0.0001,
-            "offset_x": 1700000,
-            "offset_y": 5400000,
+            "offset_x": 1700000,    # for Waikanae - 1700000, Buller - 1400000
+            "offset_y": 5400000,    # for Waikanae - 5400000, Buller - 5300000
             "a_srs": f"EPSG:{h_crs}+{v_crs}",
             "filename": str(outfile),
             "compression": "laszip"
@@ -419,7 +422,7 @@ def tile_index_polygon(tile_array_coordinate):
     return tile_boundary_polygon
 
 
-def get_url(lidar_number):
+def get_url(lidar_number, lidar_dataset_name):
     """This function is to extract the URL of each tile from original tile index file
 
     -----------
@@ -431,7 +434,10 @@ def get_url(lidar_number):
     Arguments:
                 lidar_number:
                 (int)
-                                Ordinal number of lidar folder
+                                        Ordinal number of lidar folder
+                lidar_dataset_name:
+                (string)
+                                        LiDAR name
     -----------
 
     -----------
@@ -444,10 +450,10 @@ def get_url(lidar_number):
     """
     # Read the shape file to have geopandas dataframe
     full_file = gpd.read_file(
-        fr"{original_lidar_path}\\lidar_{lidar_number}\\Wellington_2013\\Wellington_2013_TileIndex.zip")
+        fr"{original_lidar_path}\\lidar_{lidar_number}\\{lidar_dataset_name}\\{lidar_dataset_name}_TileIndex.zip")
 
     # Get list of tiles names
-    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\Wellington_2013\*.laz")
+    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\{lidar_dataset_name}\*.laz")
     length_list = len(list_tile_paths)
     list_tile_names = [pathlib.Path(list_tile_paths[name]).stem for name in range(length_list)]
 
@@ -456,7 +462,7 @@ def get_url(lidar_number):
     # Collect point classification and coordinate array
     for each_tile in range(length_list):
         # Get the row with the file name the same as given 'filename_tile'
-        file_info = full_file[full_file['Filename'] == f"{list_tile_names[each_tile]}.laz"]
+        file_info = full_file[full_file[full_file.columns[0]] == f"{list_tile_names[each_tile]}.laz"]
 
         # Get the index of that row
         url_index = file_info.index[0]
@@ -468,7 +474,7 @@ def get_url(lidar_number):
 
 
 
-def get_dictionary(lidar_number, type_dictionary):
+def get_dictionary(lidar_number, type_dictionary, lidar_dataset_name):
     """This function is to create transformed tiles
 
     -----------
@@ -484,6 +490,9 @@ def get_dictionary(lidar_number, type_dictionary):
                 type_dictionary:
                 (string)
                                                 There are two types - classification and coordinate
+                lidar_dataset_name:
+                (string)
+                                                LiDAR name
     -----------
 
     -----------
@@ -495,7 +504,7 @@ def get_dictionary(lidar_number, type_dictionary):
 
     """
     # Get list of tiles names
-    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\Wellington_2013\*.laz")
+    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\{lidar_dataset_name}\*.laz")
     length_list = len(list_tile_paths)
     list_tile_names = [pathlib.Path(list_tile_paths[name]).stem for name in range(length_list)]
 
@@ -574,7 +583,7 @@ def transformed_tiles_generation(transformation_selection, lidar_number,
                                  center_x_func, center_y_func,
                                  tile_url_list,
                                  point_classification_func, point_coordinate_func,
-                                 number_simulation):
+                                 number_simulation, lidar_dataset_name):
     """This function is to create transformed tiles
 
     -----------
@@ -623,6 +632,9 @@ def transformed_tiles_generation(transformation_selection, lidar_number,
                 number_simulation:
                 (int)
                                                 Ordinal number of simulation
+                lidar_dataset_name:
+                (string)
+                                                LiDAR dataset name
     -----------
 
     -----------
@@ -643,7 +655,7 @@ def transformed_tiles_generation(transformation_selection, lidar_number,
         transformed = "combined"
 
     # Get list of tiles names
-    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\Wellington_2013\*.laz")
+    list_tile_paths = glob.glob(fr"{original_lidar_path}\\lidar_{lidar_number}\\{lidar_dataset_name}\*.laz")
     length_list = len(list_tile_paths)
     list_tile_names = [pathlib.Path(list_tile_paths[name]).stem for name in range(length_list)]
 
@@ -669,7 +681,7 @@ def transformed_tiles_generation(transformation_selection, lidar_number,
         start_writing_lidar = time.time()
         # Write LiDAR tiles into las/laz file
         writing_las_file(transformation_selection, point_classification_func[f"{list_tile_names[each_tile]}.laz"],
-                         number_simulation, combined_array_func, list_tile_names[each_tile])
+                         number_simulation, combined_array_func, list_tile_names[each_tile], lidar_dataset_name)
         # End timing the process of writing LiDAR data into las/laz file
         end_writing_lidar = time.time()
 
@@ -722,18 +734,23 @@ def transformed_tiles_generation(transformation_selection, lidar_number,
         print("-" * 30)
         # End printing -------------------------------------------------------------------------------------------
 
+    # Read the shape file to have geopandas dataframe
+    full_file = gpd.read_file(
+        fr"{original_lidar_path}\\lidar_{lidar_number}\\{lidar_dataset_name}\\{lidar_dataset_name}_TileIndex.zip")
+
     # Create geopandas dataframe containing tile index information
     tile_info = {
-        "Filename": [os.path.basename(list_tile_paths[name]) for name in range(length_list)],
+        f"{full_file.columns[0]}": [os.path.basename(list_tile_paths[name]) for name in range(length_list)],
         "URL": tile_url_list
     }
     tile_data_index = gpd.GeoDataFrame(data=tile_info,
                                        geometry=tile_index_list,
                                        crs=2193)
 
+
     # Create tiles shapefile
-    tile_index_path = pathlib.Path(
-        fr"{transformed_lidar_path}\\{transformed}_lidar_{number_simulation}\\Wellington_2013\\Wellington_2013_TileIndex")
+    tile_index_path = pathlib.Path(fr"{transformed_lidar_path}\\{transformed}_lidar_{number_simulation}\\{lidar_dataset_name}\\{lidar_dataset_name}_TileIndex")
+
     tile_data_index.to_file(tile_index_path)
     shutil.make_archive(base_name=tile_index_path, format='zip', root_dir=tile_index_path)
     shutil.rmtree(tile_index_path)

@@ -14,7 +14,10 @@ from datasetClipping import clip, xyz_array               # For clipping dataset
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Create a function to convert raster array into shape file
-def raster_array_to_shapefile(transformation_selection, number_simulation, time_extract_func):
+def raster_array_to_shapefile(transformation_selection,
+                              number_simulation,
+                              time_extract_func,
+                              adjusted_value_list=[0, 0, 0, 0]):
     """This function is to convert a raster array into a shape file
 
     -----------
@@ -37,6 +40,9 @@ def raster_array_to_shapefile(transformation_selection, number_simulation, time_
                 time_extract_func:
                 (int)
                                             Amount of time that flood model predicted
+                adjusted_value_list:
+                (list)
+                                            List contain values to chan
     -----------
 
     -----------
@@ -56,7 +62,7 @@ def raster_array_to_shapefile(transformation_selection, number_simulation, time_
 
     # Call out and clip the raster array
     raster_func = xyz_array(transformation_selection, number_simulation, time_extract_func)
-    clipped_raster_func = clip(transformation_selection, raster_func)
+    clipped_raster_func = clip(transformation_selection, raster_func, adjusted_value_list)
 
     # Convert x, y coordinates array into shapely geometry
     point_geo_values_func = [Point(clipped_raster_func[i, 0], clipped_raster_func[i, 1]) for i in

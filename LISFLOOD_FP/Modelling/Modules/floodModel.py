@@ -16,7 +16,8 @@ from hydrograph import discharge_data                      # For generating disc
 
 
 def parameter_files(transformation_selection,
-                    resolution_func, number_simulation,
+                    discharge_file, time_file, resolution_func,
+                    number_simulation,
                     angle_func, x_translation_func, y_translation_func,
                     center_x_func, center_y_func):
     """This function is to create parameters files for LISFLOOD-FP model
@@ -33,9 +34,16 @@ def parameter_files(transformation_selection,
                                                 "r" means rotation
                                                 "t" means translation
                                                 "c" means combination
+                discharge_file:
+                (string)
+                                                Path to the discharge file
+
+                time_file:
+                (string)
+                                                Path to the time file
                 resolution_func:
                 (int or float)
-                                            resolution value in meter
+                                                resolution value in meter
                 number_simulation:
                 (int)
                                                 Ordinal number of simulation
@@ -115,18 +123,18 @@ def parameter_files(transformation_selection,
 
     # BDY FILE --------------------------------------------------------------
     # Construct river discharge
-    discharge_array = discharge_data(resolution_func)
+    discharge_array = discharge_data(discharge_file, time_file, resolution_func)
     row_number = discharge_array.shape[0]
 
     # Write into text file bci format
     with open(fr"{param_dir}\\{transformed}_{number_simulation}.bdy", "w") as discharge:
         note = 'Waikanae - Predict in 1 hour\n'
         reference = note + 'Waikanae\n'
-        column_name = reference + '{0:<8}seconds\n'.format(row_number)
+        column_name = reference + '{0:<20}seconds\n'.format(row_number)
         discharge.write(column_name)
         for line in range(row_number):
             data_discharge = discharge_array[line]
-            text_river_discharge = '{0[0]:<8}{0[1]}\n'.format(data_discharge)
+            text_river_discharge = '{0[0]:<20}{0[1]}\n'.format(data_discharge)
             discharge.write(text_river_discharge)
 
     # Create output path
@@ -138,14 +146,14 @@ def parameter_files(transformation_selection,
     # PAR FILE ---------------------------------------------------------------
     # Construct parameter files
     parameters_list = [('resroot', 'out'),
-                       ('saveint', 200),       #for normal saveint = 200 if sim_time = 7200
-                       ('massint', 100),       #for normal massint = 100 if sim_time = 7200
-                       ('sim_time', 7200),     #for normal sim_time = 7200
+                       ('saveint', 100),       #for normal saveint = 200 if sim_time = 7200. Real event, saveint = 100
+                       ('massint', 100),       #for normal massint = 100 if sim_time = 7200. Real event, massint = 100
+                       ('sim_time', 4800),     #for normal sim_time = 7200. Real event, sim_time = 4800
                        ('initial_tstep', 2),
                        ('bcifile', fr"{param_dir}\\{transformed}_{number_simulation}.bci"),
                        ('bdyfile', fr"{param_dir}\\{transformed}_{number_simulation}.bdy"),
                        ('DEMFile', fr"{asc_raster_path_func}\\generated_dem_{transformed}_{number_simulation}.asc"),
-                       ('fpfric', 0.06),
+                       ('fpfric', 0.03),
                        ('dirroot', fr"{output_dir}")]
     parameters_array = np.array(parameters_list)
 
@@ -163,7 +171,8 @@ def parameter_files(transformation_selection,
 
 
 def run_LISFLOOD(transformation_selection,
-                 resolution_func, number_simulation,
+                 discharge_file, time_file, resolution_func,
+                 number_simulation,
                  angle_func, x_translation_func, y_translation_func,
                  center_x_func, center_y_func):
     """This function is to run LISFLOOD-FP model
@@ -180,6 +189,13 @@ def run_LISFLOOD(transformation_selection,
                                             "r" means rotation
                                             "t" means translation
                                             "c" means combination
+                discharge_file:
+                (string)
+                                            Path to the discharge file
+
+                time_file:
+                (string)
+                                            Path to the time file
                 resolution_func:
                 (int or float)
                                             resolution value in meter
@@ -216,21 +232,24 @@ def run_LISFLOOD(transformation_selection,
     # Set up the path for transformation_selection
     if transformation_selection == "r":
         parameter_files('r',
-                        resolution_func, number_simulation,
+                        discharge_file, time_file, resolution_func,
+                        number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')
         os.system("lisflood_v8.exe -v Waikanae_LISFLOOD_acceleration.par")
     elif transformation_selection == "t":
         parameter_files('t',
-                        resolution_func, number_simulation,
+                        discharge_file, time_file, resolution_func,
+                        number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')
         os.system("lisflood_v8.exe -v Waikanae_LISFLOOD_acceleration.par")
     else:
         parameter_files('c',
-                        resolution_func, number_simulation,
+                        discharge_file, time_file, resolution_func,
+                        number_simulation,
                         angle_func, x_translation_func, y_translation_func,
                         center_x_func, center_y_func)
         os.chdir(r'P:\\Courses\\PhD\\LISFLOOD_FP')

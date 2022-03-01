@@ -411,10 +411,19 @@ def plotting_histogram(filtered_data_func,
         axis_func.set_xlabel('Coefficient of variation (%)', fontsize=20, labelpad=38)
 
         # Set new y tick axis
-        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
-        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
-        axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
-        axis_func.set_yticklabels(num_tick_label)                                      # Set up new tick label
+        if y_limit == None:
+            num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+            axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label)                                      # Set up new tick label
+        else:
+            axis_func.set_ylim(0, y_limit)  # Set up new range
+            num_tick = axis_func.get_yticks().tolist()  # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in
+                              num_tick]  # Convert cells into areas
+            num_tick_label[-2] = f'{num_tick_label[-2]}+'  # Add upper limit (by adding +)
+            axis_func.set_yticks(num_tick[:-1])  # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label[:-1])
 
     elif calculation_option == "sd":
         # Title for contour map and x label
@@ -424,10 +433,19 @@ def plotting_histogram(filtered_data_func,
         axis_func.set_xlabel('Standard deviation (m)', fontsize=20, labelpad=38)
 
         # Set new y tick axis
-        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
-        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
-        axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
-        axis_func.set_yticklabels(num_tick_label)                                      # Set up new tick label
+        if y_limit == None:
+            num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+            axis_func.set_yticks(num_tick)                                                 # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label)                                     # Set up new tick label
+        else:
+            axis_func.set_ylim(0, y_limit)  # Set up new range
+            num_tick = axis_func.get_yticks().tolist()  # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in
+                              num_tick]  # Convert cells into areas
+            num_tick_label[-2] = f'{num_tick_label[-2]}+'  # Add upper limit (by adding +)
+            axis_func.set_yticks(num_tick[:-1])  # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label[:-1])
 
     else:
         # Title for contour map
@@ -437,10 +455,19 @@ def plotting_histogram(filtered_data_func,
         axis_func.set_xlabel(f"{calculation_option.capitalize()} (m)", fontsize=20, labelpad=38)
         
         # Set new y tick axis
-        num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
-        num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
-        axis_func.set_yticks(num_tick[:-1])                                            # Set up new tick sign
-        axis_func.set_yticklabels(num_tick_label[:-1])                                 # Set up new tick label
+        if y_limit == None:
+            num_tick = axis_func.get_yticks().tolist()                                     # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in num_tick]  # Convert cells into areas
+            axis_func.set_yticks(num_tick[:-1])                                            # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label[:-1])                                # Set up new tick label
+        else:
+            axis_func.set_ylim(0, y_limit)  # Set up new range
+            num_tick = axis_func.get_yticks().tolist()  # Convert new range into list
+            num_tick_label = [str(int(val * (resolution_func ** 2) / 100)) for val in
+                              num_tick]  # Convert cells into areas
+            num_tick_label[-2] = f'{num_tick_label[-2]}+'  # Add upper limit (by adding +)
+            axis_func.set_yticks(num_tick[:-1])  # Set up new tick sign
+            axis_func.set_yticklabels(num_tick_label[:-1])
 
     # Ticks, title, and y label
     axis_func.tick_params(direction='out', length=8, pad=10)
@@ -768,7 +795,7 @@ def plot_building(axis_func, building_dataframe_func, resolution_func, text_box_
         # len_axis1 = axis_func.get_ylim()
 
         start, end = axis_func.get_ylim()
-        axis_func.yaxis.set_ticks(np.arange(start, end, 1))
+        axis_func.yaxis.set_ticks(np.arange(start, end, 5))
 
         len_axis1 = axis_func.get_ylim()
 

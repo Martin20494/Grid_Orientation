@@ -286,7 +286,7 @@ def run_changing_value(set_of_simulation,
 
 def run_flood_model(set_of_simulation,
                     transformation_selection,
-                    resolution_func,
+                    discharge_file, time_file, resolution_func,
                     center_x_func, center_y_func):
     """This function is to run flood model
 
@@ -305,6 +305,13 @@ def run_flood_model(set_of_simulation,
                                                 "r" means rotation
                                                 "t" means translation
                                                 "c" means combination
+                discharge_file:
+                (string)
+                                                Path to the discharge file
+
+                time_file:
+                (string)
+                                                Path to the time file
                 resolution_func:
                 (int or float)
                                                 resolution value in meter
@@ -344,7 +351,7 @@ def run_flood_model(set_of_simulation,
 
         # Run LISFLOOD-FP
         run_LISFLOOD(transformation_selection,
-                     resolution_func,
+                     discharge_file, time_file, resolution_func,
                      combination_number,
                      angle_val, x_val, y_val,
                      center_x_func, center_y_func)

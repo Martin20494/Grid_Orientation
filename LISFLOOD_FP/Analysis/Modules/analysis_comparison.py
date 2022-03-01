@@ -11,7 +11,7 @@ from runStatistic import calculation_dict       # For generating statistical dic
 # ----------------------------------------------------------------------------------------------------------------------
 
 def get_datalist(list_filename, transformation_selection, resolution_func_list, filter_rate_func, building_path,
-                 dif_path_list):
+                 dif_path_list, raster=True):
     """This function is to call data from csv, filter by a specific value and store in pandas dataframe
 
     -----------
@@ -41,6 +41,9 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 dif_path_list:
                 (list)
                                             A list of paths of different file versions
+                raster:
+                (boolean)
+                                            To decide if raster should be generated
     -----------
 
     -----------
@@ -66,7 +69,8 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 resolution_func_list[i],
                 filter_rate_func,
                 building_path,
-                dif_path_list[i]
+                dif_path_list[i],
+                raster
             )
         else:
             # Get data if there is only one resolution
@@ -75,7 +79,8 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 resolution_func_list[0],
                 filter_rate_func,
                 building_path,
-                dif_path_list[i]
+                dif_path_list[i],
+                raster
             )
 
         # Add into list
@@ -419,7 +424,7 @@ def kdeplots(statistic_df_dictionary,
             fill=True, linewidth=1.8,
             label=label_legend[num_name],
             clip=(x_range_func[0], x_range_func[1]),
-            alpha=0.3,
+            alpha=0.25,
             color=color_each[num_name],
             ax=axis_func
         )

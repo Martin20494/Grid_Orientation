@@ -283,7 +283,7 @@ wrapping_point_rotation = gu_rotation(point_rotation)
 # END ROTATION #########################################################################################################
 
 
-def clip(transformation_selection, dataset):
+def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0]):
     """This function is to clip rasters (remove padding box)
 
     -----------
@@ -301,6 +301,9 @@ def clip(transformation_selection, dataset):
                 dataset:
                 (array)
                                             An array with x, y, z values
+                adjusted_value_list:
+                (list)
+                                            List contain values to change boundaries
     -----------
 
     -----------
@@ -323,16 +326,22 @@ def clip(transformation_selection, dataset):
     raster_origin = rasterio.open(fr"{nc_raster_path_func}\\generated_dem_no_padding.nc")
     x_min, y_min, x_max, y_max = raster_origin.bounds
 
+    # Get new xmin, xmax, ymin, ymax
+    new_xmin = x_min + adjusted_value_list[0]
+    new_ymin = y_min + adjusted_value_list[1]
+    new_xmax = x_max + adjusted_value_list[2]
+    new_ymax = y_max + adjusted_value_list[3]
+
     # Calculate coordinates of center point
     center_point = center_calculation('c', True)
     center_x = center_point[0]  # Extract x coordinate of center point
     center_y = center_point[1]  # Extract y coordinate of center point
 
     # Remove padding by filtering
-    dataset_clip = dataset[(x_min <= dataset[:, 0])
-                           & (x_max >= dataset[:, 0])
-                           & (y_min <= dataset[:, 1])
-                           & (y_max >= dataset[:, 1])]
+    dataset_clip = dataset[(new_xmin <= dataset[:, 0])
+                           & (new_xmax >= dataset[:, 0])
+                           & (new_ymin <= dataset[:, 1])
+                           & (new_ymax >= dataset[:, 1])]
 
     # Adjust x and y to get flowdepth values later (to avoid the case one point with two flowdepth values)
     # Rotate -0.000001 degree

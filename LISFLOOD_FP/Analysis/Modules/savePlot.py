@@ -141,11 +141,11 @@ def get_figure_folder(
     if super_selection == 'no comparison':
 
         # Get information from 'mean', 'sd', 'cv', 'cell.
-        # If 'histogram', 'area' will be added
+        # If 'histogram', 'area', 'building' will be added
         if addition == "":
             statistical_list_func = ['mean', 'sd', 'cv', 'cell']
         else:
-            statistical_list_func = ['mean', 'sd', 'cv', 'cell', "area"]
+            statistical_list_func = ['mean', 'sd', 'cv', 'cell', "area", "building"]
 
         # Loop to get information
         for newfolder in statistical_list_func:

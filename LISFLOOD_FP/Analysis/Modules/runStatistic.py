@@ -10,7 +10,7 @@ from fileWriting import raster_generation                               # For ra
 # ----------------------------------------------------------------------------------------------------------------------
 
 def calculation_dict(transformation_selection, dataset_func,
-                     resolution_func, filter_rate, building_path, dif_path=None):
+                     resolution_func, filter_rate, building_path, dif_path=None, raster=True):
     """
 
     -----------
@@ -41,6 +41,9 @@ def calculation_dict(transformation_selection, dataset_func,
                 (string)
                                                 None if dif_path is not specified
                                                 Different path for different file version
+                raster:
+                (boolean)
+                                                To decide if raster should be generated
     -----------
 
     -----------
@@ -64,13 +67,16 @@ def calculation_dict(transformation_selection, dataset_func,
         calculation_dict_set[each_method] = statistic_result
 
         # Write into raster
-        raster_generation(
-            transformation_selection,
-            statistic_result['x'],
-            statistic_result['y'],
-            statistic_result[each_method],
-            each_method
-        )
+        if raster:
+            raster_generation(
+                transformation_selection,
+                statistic_result['x'],
+                statistic_result['y'],
+                statistic_result[each_method],
+                each_method
+            )
+        else:
+            pass
 
     # Add area result
     calculation_dict_set['area'] = area_calculation(dataset_func, resolution_func, filter_rate)

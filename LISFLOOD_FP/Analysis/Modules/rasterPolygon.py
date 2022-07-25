@@ -17,7 +17,8 @@ from datasetClipping import clip, xyz_array               # For clipping dataset
 def raster_array_to_shapefile(transformation_selection,
                               number_simulation,
                               time_extract_func,
-                              adjusted_value_list=[0, 0, 0, 0]):
+                              adjusted_value_list=[0, 0, 0, 0],
+                              clip_using_shape_file=False):
     """This function is to convert a raster array into a shape file
 
     -----------
@@ -42,7 +43,14 @@ def raster_array_to_shapefile(transformation_selection,
                                             Amount of time that flood model predicted
                 adjusted_value_list:
                 (list)
-                                            List contain values to chan
+                                            List contain values to change the boundaries
+                                            [distance xmin, distance ymin, distance xmax, distance ymax]
+                clip_using_shape_file:
+                (boolean)
+                                            Selection for clipping by using shapfile or manually
+                                            True means using shapefile and clipping out all -999/nodata values
+                                            False means clipping manually (following rectangle shape)
+                                            Default is False
     -----------
 
     -----------
@@ -62,7 +70,7 @@ def raster_array_to_shapefile(transformation_selection,
 
     # Call out and clip the raster array
     raster_func = xyz_array(transformation_selection, number_simulation, time_extract_func)
-    clipped_raster_func = clip(transformation_selection, raster_func, adjusted_value_list)
+    clipped_raster_func = clip(transformation_selection, raster_func, adjusted_value_list, clip_using_shape_file)
 
     # Convert x, y coordinates array into shapely geometry
     point_geo_values_func = [Point(clipped_raster_func[i, 0], clipped_raster_func[i, 1]) for i in

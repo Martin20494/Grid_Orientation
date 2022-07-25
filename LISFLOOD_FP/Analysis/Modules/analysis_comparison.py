@@ -11,7 +11,8 @@ from runStatistic import calculation_dict       # For generating statistical dic
 # ----------------------------------------------------------------------------------------------------------------------
 
 def get_datalist(list_filename, transformation_selection, resolution_func_list, filter_rate_func, building_path,
-                 dif_path_list, raster=True):
+                 dif_path_list, raster=True,
+                 rectangle=True, switch=False):
     """This function is to call data from csv, filter by a specific value and store in pandas dataframe
 
     -----------
@@ -44,6 +45,16 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 raster:
                 (boolean)
                                             To decide if raster should be generated
+                rectangle:
+                (boolean)
+                                            To specify that if the data shape is rectangle or not.
+                                            True is rectangle (default)
+                                            False is not rectangle
+                switch:
+                (boolean)
+                                            To switch the row and column of array
+                                            True is switching
+                                            False is not switching (default)
     -----------
 
     -----------
@@ -70,7 +81,9 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 filter_rate_func,
                 building_path,
                 dif_path_list[i],
-                raster
+                raster,
+                rectangle,
+                switch
             )
         else:
             # Get data if there is only one resolution
@@ -80,7 +93,9 @@ def get_datalist(list_filename, transformation_selection, resolution_func_list, 
                 filter_rate_func,
                 building_path,
                 dif_path_list[i],
-                raster
+                raster,
+                rectangle,
+                switch
             )
 
         # Add into list
@@ -316,6 +331,8 @@ def boxplots(statistic_df_dictionary, axis_func, title_func, y_label_func, calcu
         item.set_fontsize(15)
     axis_func.tick_params(direction='out', length=8, pad=10)
 
+def skewness(series):
+    return (((series - series.mean()) / series.std(ddof=0)) ** 3).mean()
 
 def kdeplots(statistic_df_dictionary,
              axis_func, title_func, x_range_func,
@@ -360,7 +377,7 @@ def kdeplots(statistic_df_dictionary,
                                             Title of legends
                 position_func:
                 (string)
-                                            Name of position to locate legend. Please vistit here for more information
+                                            Name of position to locate legend. Please visit here for more information
                                             
                 calculation_option:
                 (string)
@@ -428,6 +445,8 @@ def kdeplots(statistic_df_dictionary,
             color=color_each[num_name],
             ax=axis_func
         )
+
+        print(skewness(dat_reversed[dat_reversed.columns[num_name]]), "-", label_legend[num_name])
 
     # Add legends
     axis_func.legend(prop={'size': 14}, title=legend_label_func,
@@ -517,7 +536,7 @@ def kdeplots_vers2(statistic_df_dictionary,
                                             Title of legends
                 position_func:
                 (string)
-                                            Name of position to locate legend. Please vistit here for more information
+                                            Name of position to locate legend. Please visit here for more information
 
                 calculation_option:
                 (string)

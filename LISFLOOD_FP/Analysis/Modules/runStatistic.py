@@ -10,7 +10,8 @@ from fileWriting import raster_generation                               # For ra
 # ----------------------------------------------------------------------------------------------------------------------
 
 def calculation_dict(transformation_selection, dataset_func,
-                     resolution_func, filter_rate, building_path, dif_path=None, raster=True):
+                     resolution_func, filter_rate, building_path, dif_path=None, raster=True,
+                     rectangle=True, switch=False):
     """
 
     -----------
@@ -44,6 +45,16 @@ def calculation_dict(transformation_selection, dataset_func,
                 raster:
                 (boolean)
                                                 To decide if raster should be generated
+                rectangle:
+                (boolean)
+                                                To specify that if the data shape is rectangle or not.
+                                                True is rectangle (default)
+                                                False is not rectangle
+                switch:
+                (boolean)
+                                                To switch the row and column of array
+                                                True is switching
+                                                False is not switching (default)
     -----------
 
     -----------
@@ -73,7 +84,10 @@ def calculation_dict(transformation_selection, dataset_func,
                 statistic_result['x'],
                 statistic_result['y'],
                 statistic_result[each_method],
-                each_method
+                each_method,
+                None,
+                rectangle,
+                switch
             )
         else:
             pass

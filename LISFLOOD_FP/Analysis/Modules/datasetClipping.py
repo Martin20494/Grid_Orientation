@@ -11,6 +11,9 @@ from osgeo import gdal                             # For manipulating rasters (c
 import numpy as np                                 # For all calculation and data array/matrices manipulation
 import rioxarray                                   # For manipulating pixel values, spatial attributes, and raster files
 import rasterio                                    # For manipulating raster files (mainly crs and transformation)
+
+# For polygon clipping
+import geopandas as gpd                            # For creating polygon
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -25,7 +28,7 @@ warnings.simplefilter('ignore', category=NumbaWarning)
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-def array_creation(data_array, value):
+def array_creation(data_array, value, switch=False):
     """This function is to create an array of a coordinate
 
     -----------
@@ -48,6 +51,11 @@ def array_creation(data_array, value):
                 shape_y:
                 (int)
                                         Shape of y array
+                switch:
+                (boolean)
+                                        To switch the row and column of array
+                                        True is switching
+                                        False is not switching (default)
     -----------
 
     -----------
@@ -62,8 +70,12 @@ def array_creation(data_array, value):
     arr_x = data_array.x.values
     arr_y = data_array.y.values
 
-    # Create zero array
-    new_array = np.zeros((arr_x.shape[0], arr_y.shape[0]))
+    if switch:
+        # Create zero array
+        new_array = np.zeros((arr_y.shape[0], arr_x.shape[0]))
+    else:
+        # Create zero array
+        new_array = np.zeros((arr_x.shape[0], arr_y.shape[0]))
 
     # Get full number of x or y values
     if value == "x":
@@ -100,7 +112,7 @@ def xyz_array(transformation_selection, number_simulation, time_extract_func):
                                             Ordinal number of simulation
                 time_extract_func:
                 (int)
-                                            Amount of time that BG_flood model predicted
+                                            Amount of time that flood model predicted
     -----------
 
     -----------
@@ -127,8 +139,8 @@ def xyz_array(transformation_selection, number_simulation, time_extract_func):
     dataset_rioxarray = rioxarray.open_rasterio(path)
 
     # Create full number of values of x, y, z coordinates
-    array_x = array_creation(dataset_rioxarray, 'x')
-    array_y = array_creation(dataset_rioxarray, 'y')
+    array_x = array_creation(dataset_rioxarray, 'x', False)
+    array_y = array_creation(dataset_rioxarray, 'y', False)
     array_z = dataset_rioxarray.isel(band=0).values
 
     # Flatten x, y, z arrays
@@ -283,7 +295,7 @@ wrapping_point_rotation = gu_rotation(point_rotation)
 # END ROTATION #########################################################################################################
 
 
-def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0]):
+def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0], clip_using_shape_file=False):
     """This function is to clip rasters (remove padding box)
 
     -----------
@@ -304,6 +316,11 @@ def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0]):
                 adjusted_value_list:
                 (list)
                                             List contain values to change boundaries
+                clip_using_shape_file:
+                                            Selection for clipping by using shapfile or manually
+                                            True means using shapefile and clipping out all -999/nodata values
+                                            False means clipping manually (following rectangle shape)
+                                            Default is False
     -----------
 
     -----------
@@ -338,10 +355,15 @@ def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0]):
     center_y = center_point[1]  # Extract y coordinate of center point
 
     # Remove padding by filtering
-    dataset_clip = dataset[(new_xmin <= dataset[:, 0])
-                           & (new_xmax >= dataset[:, 0])
-                           & (new_ymin <= dataset[:, 1])
-                           & (new_ymax >= dataset[:, 1])]
+    if clip_using_shape_file:
+        # if clipping using in-rectangle shapefile
+        dataset_clip = dataset[(dataset[:, 2] > -999)]
+    else:
+        # if clipping using rectangle shape
+        dataset_clip = dataset[(new_xmin <= dataset[:, 0])
+                               & (new_xmax >= dataset[:, 0])
+                               & (new_ymin <= dataset[:, 1])
+                               & (new_ymax >= dataset[:, 1])]
 
     # Adjust x and y to get flowdepth values later (to avoid the case one point with two flowdepth values)
     # Rotate -0.000001 degree
@@ -353,3 +375,97 @@ def clip(transformation_selection, dataset, adjusted_value_list=[0, 0, 0, 0]):
     adjusted_dataset_clip2[:, 2] = adjusted_dataset_clip1[:, 2]
 
     return adjusted_dataset_clip2
+
+
+def clipping_using_shapefile(transformation_selection, polygon_coord,
+                            number_simulation, time_extract_func,
+                            value_clipping):
+    """This function is to clip the raster using created shapefile
+
+    -----------
+    References:
+                None.
+    -----------
+
+    -----------
+    Arguments:
+                transformation_selection:
+                (string)
+                                            "r" means rotation
+                                            "t" means translation
+                                            "c" means combination
+                polygon_coord:
+                (shapely polygon format)
+                                            None means polygon shapfile was created manually (e.g. using QGIS)
+                                            or shapely polygon format (e.g. Polygon([(0, 1), (1, 1), (1, 0), (0, 0)]))
+                number_simulation:
+                (int)
+                                            Ordinal number of simulation
+                time_extract_func:
+                (int)
+                                            Amount of time that flood model predicte
+                value_clipping:
+                (float or int)
+                                            This value is used for clipping, in which all values within polygon will
+                                            be changed into this value (e.g. -999)
+    -----------
+
+    -----------
+    Returns:
+                None.
+    -----------
+
+    """
+    # Set up the path for transformation_selection
+    if transformation_selection == 'r':
+        clipping_shapefile = polygon_rotation
+        transformed = "rotated"
+        flowdepth_path = rotated_flowdepth
+    elif transformation_selection == 't':
+        clipping_shapefile = polygon_translation
+        transformed = "translated"
+        flowdepth_path = translated_flowdepth
+    else:
+        clipping_shapefile = polygon_combination
+        transformed = "combined"
+        flowdepth_path = combined_flowdepth
+
+    # Create polygon based on the given list of polygon coordinates
+    if polygon_coord is not None:
+        polygon_data = gpd.GeoDataFrame(geometry=[polygon_coord], crs=2193)
+        polygon_data.to_file(fr"{clipping_shapefile}\\polygon_clipping.shp")
+    else:
+        pass
+
+    # Get the path of polygon_clipping.shp
+    polygon_clipping_path = fr"{clipping_shapefile}\\polygon_clipping.shp"
+
+    # Convert raster from netcdf to geotiff
+    # Get raster from 5_flowdepth file
+    path = fr"{flowdepth_path}\\flowdepth_{transformed}_{number_simulation}_at_{time_extract_func}.nc"
+    raster_nc = rioxarray.open_rasterio(path)
+    # Convert to geotiff file and save to polygon file in 7_results
+    raster_nc.rio.to_raster(
+        fr"{clipping_shapefile}\\converted_flowdepth_{transformed}_{number_simulation}_at_{time_extract_func}.tiff"
+    )
+    # Get raster geotiff path
+    raster_tiff_path = fr"{clipping_shapefile}\\converted_flowdepth_{transformed}_{number_simulation}_at_{time_extract_func}.tiff"
+
+    # Clip the raster by changing all values into a specific value (e.g. -999)
+    # Build up command
+    command = fr"gdal_rasterize -i -burn -999 {polygon_clipping_path} {raster_tiff_path}"
+    # Execute the command
+    os.system(command)
+
+    # Convert value_clipping to nodata value
+    # Read the geotiff file
+    raster_tiff = rioxarray.open_rasterio(
+        raster_tiff_path
+    )
+    # Convert
+    nodata_raster_tiff = raster_tiff.rio.write_nodata(value_clipping, inplace=True)
+    # Add crs
+    crs_nodata_raster_tiff = nodata_raster_tiff.rio.write_crs(2193)
+    # Write to file
+    crs_nodata_raster_tiff.rio.to_raster(fr"{flowdepth_path}\\flowdepth_{transformed}_{number_simulation}_clipped_at_{time_extract_func}.nc")
+

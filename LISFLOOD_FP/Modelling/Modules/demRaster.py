@@ -168,7 +168,7 @@ def dem_raster(transformation_selection,
         json.dump(instructions, instruction)
 
     # Create DEM raster
-    runner = processor.DemGenerator(instructions)
+    runner = processor.LidarDemGenerator(instructions)
     runner.run()
 
 
@@ -521,7 +521,7 @@ def value_change_execution(transformation_selection, number_simulation):
 
     # Convert NetCDF file into GeoTiff file
     raster_nc = rioxarray.open_rasterio(fr"{nc_raster_path_func}\\generated_dem_{transformed}_{number_simulation}.nc")
-    raster_nc.rio.to_raster(
+    raster_nc.z.rio.to_raster(
         fr"{tiff_raster_path_func}\\{transformed}_{number_simulation}\\generated_dem_{transformed}_{number_simulation}.tif")
 
     # Get polygon shape_file and file that has values need changing

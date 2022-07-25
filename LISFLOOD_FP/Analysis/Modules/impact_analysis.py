@@ -10,7 +10,7 @@ import numpy as np                                # For all calculation and data
 import rasterio                                   # For reading and manipulating spatial data
 import rasterio.features                          # For vectorising features in array
 from fileWriting import raster_generation         # For generating raster
-
+import copy                                       # For deep copying numpy array
 
 # For polygon handling
 import geopandas as gpd                           # For manipulating shape files
@@ -19,7 +19,8 @@ from shapely.ops import unary_union               # For combining all polygons i
 from pyogrio import write_dataframe               # For writing out shape file (twice faster than geopandas)
 # ----------------------------------------------------------------------------------------------------------------------
 
-def one_polygon_raster_generation(transformation_selection, dataset_func, filter_rate_func):
+def one_polygon_raster_generation(transformation_selection, dataset_func, filter_rate_func,
+                                  rectangle=True, switch=False):
     """This function is to convert dataset into raster which will be used for converting into one polygon
 
     -----------
@@ -40,6 +41,16 @@ def one_polygon_raster_generation(transformation_selection, dataset_func, filter
                 filter_rate_func:
                 (float or int)
                                             The rate at which the depth values will be ignored
+                rectangle:
+                (boolean)
+                                            To specify that if the data shape is rectangle or not.
+                                            True is rectangle (default)
+                                            False is not rectangle
+                switch:
+                (boolean)
+                                            To switch the row and column of array
+                                            True is switching
+                                            False is not switching (default)
     -----------
 
     -----------
@@ -63,29 +74,33 @@ def one_polygon_raster_generation(transformation_selection, dataset_func, filter
     oneraster_path = f"{one_poly_path}\\oneRaster"
     pathlib.Path(oneraster_path).mkdir(parents=True, exist_ok=True)
 
-    for num in range(len(dataset_func.columns) - 2):    # Minus 2 due to two columns of coordinates x and y
+    # Make a copy of data
+    dataset_func_copy = dataset_func.copy(deep=True)
+
+    for num in range(len(dataset_func_copy.columns) - 2):    # Minus 2 due to two columns of coordinates x and y
         # Convert to -999
-        col = dataset_func.columns[num + 2]
-        dataset_func.loc[dataset_func[col] < filter_rate_func, [col]] = -999
+        col = dataset_func_copy.columns[num + 2]
+        dataset_func_copy.loc[dataset_func_copy[col] < filter_rate_func, [col]] = -999
         
         # Generate raster
         raster_generation(
             transformation_selection,
-            dataset_func['x_coord'],
-            dataset_func['y_coord'],
-            dataset_func[f'{dataset_func.columns[num + 2]}'],
-            f"oneRaster_un{transformed}_{dataset_func.columns[num + 2]}",
-            oneraster_path
+            dataset_func_copy['x_coord'],
+            dataset_func_copy['y_coord'],
+            dataset_func_copy[f'{dataset_func_copy.columns[num + 2]}'],
+            f"oneRaster_un{transformed}_{dataset_func_copy.columns[num + 2]}",
+            oneraster_path, rectangle, switch
         )
 
 
 
-def one_polygon_conversion(transformation_selection, dataset_func, column, filter_rate_func):
+def one_polygon_conversion(transformation_selection, dataset_func, column, filter_rate_func, rectangle=True):
     """This function is to convert dataset into polygon (to write into shapefile)
 
     -----------
     References:
-                None.
+                https://numpy.org/doc/stable/reference/generated/numpy.copy.html
+                https://stackoverflow.com/questions/19666626/replace-all-elements-of-python-numpy-array-that-are-greater-than-some-value
     -----------
 
     -----------
@@ -104,6 +119,11 @@ def one_polygon_conversion(transformation_selection, dataset_func, column, filte
                 filter_rate_func:
                 (float or int)
                                             The rate at which the depth values will be ignored
+                rectangle:
+                (boolean)
+                                            To specify that if the data shape is rectangle or not.
+                                            True is rectangle (default)
+                                            False is not rectangle
     -----------
 
     -----------
@@ -125,6 +145,8 @@ def one_polygon_conversion(transformation_selection, dataset_func, column, filte
         transformed = "combined"
         one_poly_path = one_polygon_combination
 
+
+
     # Read original DEM raster without padding
     raster_poly = rasterio.open(fr"{one_poly_path}\\oneRaster\\oneRaster_un{transformed}_{column}.nc")
 
@@ -133,9 +155,18 @@ def one_polygon_conversion(transformation_selection, dataset_func, column, filte
     raster_transform = raster_poly.transform
     raster_crs = raster_poly.crs
 
-    # Extract parameters: id and depth
+    # Extract parameters: id
     id_pixels = np.arange(raster_array.size).reshape(raster_array.shape)
-    value_list = dataset_func[f"{column}"].tolist()
+
+    # Extract parameters: depth
+    if rectangle:
+        # Make a copy of data
+        dataset_func_copy = dataset_func.copy(deep=True)
+        value_list = dataset_func_copy[f"{column}"].tolist()
+    else:
+        value_array_flatten = raster_array.flatten()
+        value_array_flatten[value_array_flatten == -999] = 0
+        value_list = copy.deepcopy(value_array_flatten)
 
     # Vectorise features
     vectors = rasterio.features.shapes(source=id_pixels.astype(np.int16), transform=raster_transform)
@@ -175,7 +206,7 @@ def one_polygon_conversion(transformation_selection, dataset_func, column, filte
                     driver="GeoJSON")
 
 
-def one_polygon_generation(transformation_selection, dataset_func, filter_rate_func):
+def one_polygon_generation(transformation_selection, dataset_func, filter_rate_func, rectangle=True):
     """This function is to write dataframe into one-polygon shape file
 
     -----------
@@ -196,6 +227,11 @@ def one_polygon_generation(transformation_selection, dataset_func, filter_rate_f
                 filter_rate_func:
                 (float or int)
                                                 The rate at which the depth values will be ignored
+                rectangle:
+                (boolean)
+                                                To specify that if the data shape is rectangle or not.
+                                                True is rectangle (default)
+                                                False is not rectangle
     -----------
 
     -----------
@@ -204,10 +240,15 @@ def one_polygon_generation(transformation_selection, dataset_func, filter_rate_f
     -----------
 
     """
-    for num in range(len(dataset_func.columns) - 2):
+    # Make a copy of data
+    dataset_func_copy = dataset_func.copy(deep=True)
+
+    # Convert to one polygon
+    for num in range(len(dataset_func_copy.columns) - 2):
         one_polygon_conversion(
             transformation_selection,
-            dataset_func,
-            dataset_func.columns[num + 2],
-            filter_rate_func
+            dataset_func_copy,
+            dataset_func_copy.columns[num + 2],
+            filter_rate_func,
+            rectangle
         )

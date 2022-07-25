@@ -1,13 +1,13 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
-import pathlib  # For creating and manipulating the directory path
-import os  # For manipulating the directory and to execute commands
+import pathlib                          # For creating and manipulating the directory path
+import os                               # For manipulating the directory and to execute commands
+from version_module import version      # For changing version
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 # Set up 'header' path -------------------------------------------------------------------------------------------------
 drive = "S"
 main_folder = "LISFLOOD"
-version = "version_45"
 header = fr"{drive}:\\{main_folder}\\{version}"
 
 # Create header path

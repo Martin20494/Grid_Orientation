@@ -44,7 +44,7 @@ def plotting_map(filtered_data_func,
                  extend_colorbar=None,
                  color_range=None,
                  add_title="",):
-    """This function is to plot water depth on basemap
+    """This function is to plot water depths on basemap
 
     -----------
     References: https://stackoverflow.com/questions/41897544/make-a-contour-plot-by-using-three-1d-arrays-in-python
@@ -121,7 +121,7 @@ def plotting_map(filtered_data_func,
     # Titles and labels:
     if calculation_option == 'cell':
         # Title for colorbar
-        name_map = "Proportion of simulations\nof each area being inundated,"
+        name_map = "Proportion of simulations\nof each cell being inundated,"
         name_map += f"\nresolution = {resolution_func} meters"
         name_map += add_title
 
@@ -143,13 +143,13 @@ def plotting_map(filtered_data_func,
     else:
         # Title for colorbar
         if calculation_option == 'sd':
-            name_map = f"Standard deviation of water depth,\nresolution = {resolution_func} meters"
+            name_map = f"Standard deviation of water depths,\nresolution = {resolution_func} meters"
             name_map += add_title
         elif calculation_option == 'cv':
-            name_map = f"Coefficient of variation of water depth,\nresolution = {resolution_func} meters"
+            name_map = f"Coefficient of variation of water depths,\nresolution = {resolution_func} meters"
             name_map += add_title
         else:
-            name_map = f"Mean of water depth,\nresolution = {resolution_func} meters"
+            name_map = f"Mean of water depths,\nresolution = {resolution_func} meters"
             name_map += add_title
 
         # Title for contour map
@@ -188,6 +188,7 @@ def plotting_map(filtered_data_func,
 
     for item in (axis_func.get_xticklabels() + axis_func.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(15)
+
 
     # Remove grid background lines (including x, y lines)
     axis_func.grid(False)
@@ -265,7 +266,7 @@ def plotting_histogram(filtered_data_func,
                        x_limit_sign="",
                        y_limit=None,
                        add_title=""):
-    """This function is to plot histogram of information regarding water depth
+    """This function is to plot histogram of information regarding water depths
 
     -----------
     References: https://stackoverflow.com/questions/23061657/plot-histogram-with-colors-taken-from-colormap (first)
@@ -353,7 +354,6 @@ def plotting_histogram(filtered_data_func,
                                       bins=num_bin_func,
                                       density=False)
 
-
     # Get values of columns (scale values to interval [0,1])
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
     col = bin_centers - min(bin_centers)
@@ -384,7 +384,7 @@ def plotting_histogram(filtered_data_func,
     # Set titles and labels
     if calculation_option == 'cell':
         # Title for contour map and x label
-        name_hist = "Histogram of proportion of simulations\nof each area being inundated,"
+        name_hist = "Histogram of proportion of simulations\nof each cell being inundated,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel("Proportion (%)", fontsize=20, labelpad=38)
@@ -403,9 +403,10 @@ def plotting_histogram(filtered_data_func,
         axis_func.set_yticks(num_tick[:-1])                                         # Set up new tick sign
         axis_func.set_yticklabels(num_tick_label[:-1])                              # Set up new tick label
 
+
     elif calculation_option == "cv":
         # Title for contour map and x label
-        name_hist = "Histogram of coefficient of variation of water depth,"
+        name_hist = "Histogram of coefficient of variation of water depths,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel('Coefficient of variation (%)', fontsize=20, labelpad=38)
@@ -427,7 +428,7 @@ def plotting_histogram(filtered_data_func,
 
     elif calculation_option == "sd":
         # Title for contour map and x label
-        name_hist = "Histogram of standard deviation of water depth,"
+        name_hist = "Histogram of standard deviation of water depths,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel('Standard deviation (m)', fontsize=20, labelpad=38)
@@ -449,7 +450,7 @@ def plotting_histogram(filtered_data_func,
 
     else:
         # Title for contour map
-        name_hist = f"Histogram of {calculation_option} of water depth,"
+        name_hist = f"Histogram of {calculation_option} of water depths,"
         name_hist += f"\nresolution = {resolution_func} meters"
         name_hist += add_title
         axis_func.set_xlabel(f"{calculation_option.capitalize()} (m)", fontsize=20, labelpad=38)
@@ -795,7 +796,7 @@ def plot_building(axis_func, building_dataframe_func, resolution_func, text_box_
         # len_axis1 = axis_func.get_ylim()
 
         start, end = axis_func.get_ylim()
-        axis_func.yaxis.set_ticks(np.arange(start, end, 5))
+        axis_func.yaxis.set_ticks(np.arange(start, end, 1))
 
         len_axis1 = axis_func.get_ylim()
 

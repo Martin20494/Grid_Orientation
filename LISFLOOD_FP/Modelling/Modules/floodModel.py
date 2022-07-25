@@ -126,7 +126,7 @@ def parameter_files(transformation_selection,
     discharge_array = discharge_data(discharge_file, time_file, resolution_func)
     row_number = discharge_array.shape[0]
 
-    # Write into text file bci format
+    # Write into text file bdy format
     with open(fr"{param_dir}\\{transformed}_{number_simulation}.bdy", "w") as discharge:
         note = 'Waikanae - Predict in 1 hour\n'
         reference = note + 'Waikanae\n'
@@ -146,10 +146,25 @@ def parameter_files(transformation_selection,
     # PAR FILE ---------------------------------------------------------------
     # Construct parameter files
     parameters_list = [('resroot', 'out'),
-                       ('saveint', 100),       #for normal saveint = 200 if sim_time = 7200. Real event, saveint = 100
-                       ('massint', 100),       #for normal massint = 100 if sim_time = 7200. Real event, massint = 100
-                       ('sim_time', 4800),     #for normal sim_time = 7200. Real event, sim_time = 4800
-                       ('initial_tstep', 2),
+                       ('saveint', 200),       # for normal saveint = 200 if sim_time = 7200, count = 36.
+                                               # Real event, saveint = 100, count = 48
+                                               # if sim_time = 9600, saveint = 400, count = 24
+                                               # if sim_time = 14400, saveint = 400, count = 36
+                                               # if sim_time = 28800, saveint = 800, count = 36
+                                               # if sim_time = 43200, saveint = 1200, count = 36
+                                               # if sim_time = 172800, saveint = 4800, count = 36
+
+                       ('massint', 100),       # for normal massint = 100 if sim_time = 7200. Real event, massint = 100
+
+                       ('sim_time', 7200),     # for normal sim_time = 7200, count = 36
+                                               # Real event, sim_time = 4800, count = 48
+                                               # if sim_time = 9600, saveint = 400, count = 24
+                                               # if sim_time = 14400, saveint = 400, count = 36
+                                               # if sim_time = 28800, saveint = 800, count = 36
+                                               # if sim_time = 43200, saveint = 1200, count = 36
+                                               # if sim_time = 172800, saveint = 4800, count = 36
+
+                       ('initial_tstep', 1),
                        ('bcifile', fr"{param_dir}\\{transformed}_{number_simulation}.bci"),
                        ('bdyfile', fr"{param_dir}\\{transformed}_{number_simulation}.bdy"),
                        ('DEMFile', fr"{asc_raster_path_func}\\generated_dem_{transformed}_{number_simulation}.asc"),
@@ -163,7 +178,7 @@ def parameter_files(transformation_selection,
             data_parameter = parameters_array[each_parameter]
             text_parameter = '{0[0]:<20}{0[1]}\n'.format(data_parameter)
             parameters.write(text_parameter)
-        parameters.write('acceleration\ndrain_data\n\n')
+        parameters.write('acceleration\ndrain_nodata\n\n')
 
     # Copy the text files for later checking
     shutil.copy2(fr"P:\\Courses\\PhD\\LISFLOOD_FP\\Waikanae_LISFLOOD_acceleration.par",

@@ -50,7 +50,7 @@ def read_las_file(filename_tile):
                 filename_tile:
                 (string)
                                                 Name of las/laz files of tiles
-
+    -----------
     Returns:
                 points_classification_func:
                 (array)
@@ -58,6 +58,7 @@ def read_las_file(filename_tile):
                 coordinates_func:
                 (array)
                                                 An array includes x, y, z coordinates values of points as rows
+    -----------
     """
     # Set up horizontal and vertical crs
     h_crs = 2193
@@ -112,6 +113,7 @@ def center_calculation(transformation_selection, lidar=True):
 
     -----------
     Returns:
+                center_func:
                 (tuple)
                                             A tuple of x, y coordinates of center raster
     -----------

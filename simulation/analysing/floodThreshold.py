@@ -1,4 +1,6 @@
 # Prepare packages -----------------------------------------------------------------------------------------------------
+from folder import *
+
 # For data manipulation
 import numpy as np                                                  # For data array manipulation
 
@@ -24,7 +26,8 @@ def flood_rate_comparison(
     @Definition:
                 A function to calculate the change of areas/ buildings through different flood rates
     @References:
-                None.
+                https://stackoverflow.com/questions/6081008/dump-a-numpy-array-into-a-csv-file
+                https://stackoverflow.com/questions/46614526/how-to-import-a-csv-file-into-a-data-array
     @Arguments:
                 flood_rate_range (list):
                                         A list of 3 values includes lower, upper limits and step
@@ -81,6 +84,14 @@ def flood_rate_comparison(
     # Area
     mean_area_arr = np.array(mean_area).astype('float64')
     sd_area_arr = np.array(sd_area).astype('float64')
+
+    # Write into csv
+    # Building
+    np.savetxt(fr"{other_untransformation}\\mean_building_array.csv", mean_building_arr, delimiter=",")
+    np.savetxt(fr"{other_untransformation}\\sd_building_array.csv", sd_building_arr, delimiter=",")
+    # Area
+    np.savetxt(fr"{other_untransformation}\\mean_area_array.csv", mean_area_arr, delimiter=",")
+    np.savetxt(fr"{other_untransformation}\\sd_area_array.csv", sd_area_arr, delimiter=",")
 
     return mean_building_arr, sd_building_arr, mean_area_arr, sd_area_arr
 

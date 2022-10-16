@@ -131,7 +131,7 @@ hex_list36 = ["247ba0", "70c1b3", "b2dbbf", "f3ffbd", "ff1654"]
 hex_list37 = ["03071e", "370617", "6a040f", "9d0208", "d00000", "dc2f02", "e85d04", "f48c06", "faa307", "ffba08"]
 hex_list38 = ["3d5a80", "98c1d9", "e0fbfc", "ee6c4d", "293241", "#e60000"]
 hex_list39 = ["8ecae6", "219ebc", "023047", "ffb703", "fb8500", "#54D852"]
-hex_list40 = ["9b5de5", "f15bb5", "fee440", "F9C74F", "00bbf9", "184E77"]
+hex_list40 = ["6411ad", "f15bb5", "fee440", "F9C74F", "00bbf9", "184E77"]
 hex_list41 = ["0c0a3e", "7b1e7a", "b33f62", "f9564f", "f3c677", "#e60000"]
 hex_list42 = ["2d728f", "3b8ea5", "f5ee9e", "f49e4c", "ab3428", "#e60000"]
 hex_list43 = ["6e44ff", "b892ff", "ffc2e2", "ff90b3", "BA324F", "#e60000"]
@@ -200,4 +200,28 @@ hex_list104 = ["ffbe0b","70e000","ff006e","2d00f7","03045e"]
 hex_list105 = ["ffbe0b","70e000","ff006e","540d6e","3a86ff"]
 hex_list106 = ["10451d","70e000","ff006e","540d6e","3a86ff"]
 hex_list107 = ["1a7431","70e000","ff006e","540d6e","3a86ff"]
+hex_list108 = ["2c699a", "2c699a", "83e377", "83e377", "83e377",
+               "efea5a", "efea5a", "efea5a", "f29e4c", "f29e4c", "f29e4c"]
+hex_list109 = ["00ffff", "00ffff", "0000ff", "0000ff", "ff1e35"]
+hex_list110 = ["9c4f96", "ff6355", "fba949", "fae442", "8bd448", "2aa8f2"]
+hex_list111 = ["ff0017", "ff8900", "ffb200", "ffff00", "94ff00"]
+hex_list112 = ["dc8665", "138086", "534666", "cd7672", "eeb462"]
+hex_list113 = ["e8a49c", "3c4cad", "240e8b", "240e8b", "f04393", "f04393", "f9c449"]
+hex_list114 = ["35bbca", "f8d90f", "f8d90f", "d3dd18", "fe7a15"]
+hex_list115 = ["fe7a15", "fe7a15", "f8d90f", "f8d90f", "f8d90f", "f8d90f", "35bbca"]
+hex_list116 = ["8ecae6","8ecae6","219ebc","219ebc","023047","023047","023047","fb8500"]
+hex_list117 = ["03071e","370617","6a040f","9d0208","d00000","dc2f02","e85d04","f48c06","faa307","ffba08"]
+hex_list118 = ["001219","005f73","0a9396","94d2bd","e9d8a6","ee9b00","ca6702","bb3e03","ae2012","9b2226"]
+hex_list119 = ["f72585","7209b7","3a0ca3","4361ee","4361ee","4361ee","4cc9f0"]
+hex_list120 = ["54478c","2c699a","048ba8","0db39e","16db93","83e377","b9e769","efea5a","f1c453","f29e4c"]
+hex_list121 = ["ff499e","d264b6","a480cf","779be7","49b6ff"]
+hex_list122 = ["d61c4e", "d61c4e", "fedb39", "fedb39", "1cd6ce", "1cd6ce", "293462"]
+hex_list123 = ["89cffd", "fbdf07", "ff7f3f", "f94892"]
+hex_list124 = ["ff8b3d", "ff8b3d", "ffda00", "ffda00", "1cd6ce", "1cd6ce", "2a0944"]
+hex_list125 = ["6411ad", "6411ad", "6411ad",
+               "e3242b", "e3242b", "e3242b",
+               "f15bb5", "f15bb5", "f15bb5",
+               "fee440", "fee440", "fee440",
+               "00bbf9", "00bbf9", "00bbf9"]
+
 

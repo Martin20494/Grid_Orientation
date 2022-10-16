@@ -174,3 +174,9 @@ def flood_rate_plotting(
     # Set up x range
     xlabel_arr = np.array(np.round(flood_rates[::flood_rate_range[3]], 2), dtype='float')
     ax.set_xticks(xlabel_arr)
+
+    # Save fig
+    fig.savefig(
+        fr"{plot_untransformation}\\threshold_{calculation_option}.png",
+        bbox_inches='tight', dpi=330
+    )

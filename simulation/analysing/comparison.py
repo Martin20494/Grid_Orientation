@@ -50,7 +50,7 @@ def get_datalist(
     # Loop to get dataframe of each type of data
     for i in range(len(list_filename)):
         # Get data from csv file
-        statdata_df = pd.read_csv(list_filename[i])
+        statdata_df = pd.read_csv(fr"{list_filename[i]}\\5_analysis\\untransformed_csv\\all_simulations.csv")
 
         if len(list_resolution) != 1:
             # Get statistic data if there are many resolution values
@@ -59,6 +59,7 @@ def get_datalist(
                 list_resolution[i],
                 building_path,
                 flood_rate,
+                list_filename[i],
                 False
             )
 
@@ -69,6 +70,7 @@ def get_datalist(
                 list_resolution[0],
                 building_path,
                 flood_rate,
+                list_filename[i],
                 False
             )
 
@@ -253,7 +255,7 @@ def boxplotting(
             line.set_color(col)
             line.set_mfc(col)  # facecolor of fliers
             line.set_mec(col)  # edgecolor of fliers
-            line.set_linewidth(0.5)
+            line.set_linewidth(0.7)
 
     # Design x labels
     if calculation_option == 'mean':
@@ -302,7 +304,8 @@ def kdeplotting(
     legend_location,
     calculation_option,
     comparison_sign,
-    palette='husl'
+    palette='husl',
+    mean_line=False
 ):
     """
     @Definition:
@@ -316,6 +319,10 @@ def kdeplotting(
 
                 https://stackoverflow.com/questions/66903255/retrieve-values-from-scipy-gaussian-kde
 
+                https://seaborn.pydata.org/generated/seaborn.set_style.html
+                https://stackoverflow.com/questions/25540259/remove-or-adapt-border-of-frame-of-legend-using-matplotlib
+                https://seaborn.pydata.org/generated/seaborn.kdeplot.html (multiple='stack')
+
 
     @Arguments:
                 figsize (tuple):
@@ -324,7 +331,7 @@ def kdeplotting(
                             A dataframe contains sets of simulations as columns. Ex: The columns are 'north
                             translation', 'east translation', ...
                 x_axis_range (list)
-                            A list of 3 values include lower and upper limit and step
+                            A list of 5 values include lower and upper limit, step, bandwith, and ylimit
                 legend_title (stirng):
                             Title of legend
                 legend_location (list):
@@ -339,48 +346,64 @@ def kdeplotting(
                             the default
                             A dictionary represents the colors for each column in the pandas dataframe. Ex: {'north
                             translation': 'orange', 'east translation': 'dodgerblue', ...}
+                mean_line (boolean):
+                            If False, mean line for each distribution will not be appeared
+                            If True, mean line for each distribution will be appeared
     @Returns:
                 A new tuple of 3 values of RGB color
     """
-    # Change font
-    plt.rcParams['font.family'] = 'times new roman'
+    # Set up background
+    sns.set_style('ticks')
 
     # Set up axis
     fig, ax = plt.subplots(figsize=figsize)
 
+    # Fontsize
+    fontsize = 15
+    labelpad = 23
+
     for number_column in range(stat_df.shape[1]):
         # Plot kde
         sns.kdeplot(
-            np.clip(stat_df[stat_df.columns[number_column]], x_axis_range[0], x_axis_range[1]),
-            fill=True, linewidth=0.5,
+            np.clip(stat_df[stat_df.columns[number_column]].dropna(), x_axis_range[0], x_axis_range[1]),
+            fill=True, linewidth=.7,
             clip=(x_axis_range[0], x_axis_range[1]),
-            alpha=0.5,
-            bw_adjust=1,
+            alpha=0.6,
+            bw_adjust=x_axis_range[3],
             color=lighten_color(sns.color_palette(palette, 10)[number_column], 1),
             label=stat_df.columns[number_column],
+            multiple='stack', # to get white curve line
             ax=ax
         )
 
-        # Calculate kde values by Gaussian
-        kde_gauss = gaussian_kde(stat_df.iloc[:, number_column].to_numpy(), bw_method='scott')
+        if mean_line:
+            # Calculate kde values by Gaussian
+            kde_gauss = gaussian_kde(stat_df.iloc[:, number_column].dropna().to_numpy(), bw_method='scott')
 
-        # Calculate mean and height
-        mean_gauss = stat_df.iloc[:, number_column].to_numpy().mean()
-        height_gauss = kde_gauss(mean_gauss)
+            # Calculate mean and height
+            mean_gauss = stat_df.iloc[:, number_column].dropna().to_numpy().mean()
+            height_gauss = kde_gauss(mean_gauss)
 
-        # Plot mean line
-        ymean_line = np.linspace(0, height_gauss, 200)
-        xmean_line = [mean_gauss]*len(ymean_line)
-        ax.plot(xmean_line, ymean_line,
-                ls="-.", linewidth=1,
-                color=lighten_color(sns.color_palette(palette, 10)[number_column], 1.5))
+            # Plot mean line
+            ymean_line = np.linspace(0, height_gauss, 200)
+            xmean_line = [mean_gauss]*len(ymean_line)
+            ax.plot(xmean_line, ymean_line,
+                    ls="-.", linewidth=1,
+                    color=lighten_color(sns.color_palette(palette, 10)[number_column], 1.5))
 
     # Legend
-    ax.legend(ncol=2 if stat_df.shape[1] > 3 else 1,
-              prop={'size': 10}, title=legend_title,
-              title_fontproperties={'size': 12, 'weight': 'bold'},
-              frameon=False,
-              loc=legend_location)
+    leg = ax.legend(ncol=2 if stat_df.shape[1] > 3 else 1,
+                    prop={'size': fontsize-4}, title=legend_title,
+                    title_fontproperties={'size': fontsize-3, 'weight': 'bold'},
+                    framealpha=1,
+                    loc=legend_location)
+
+    # Set ylim
+    ax.set_ylim(top=None if x_axis_range[4]==0 else x_axis_range[4])
+
+    # Ref: https://stackoverflow.com/questions/25540259/remove-or-adapt-border-of-frame-of-legend-using-matplotlib
+    leg.get_frame().set_facecolor('white')
+    leg.get_frame().set_linewidth(0.0)
 
     # Design labels
     if calculation_option == 'mean':
@@ -392,16 +415,12 @@ def kdeplotting(
     else:
         x_label = "Proportion (%)"
 
-    # Fontsize
-    fontsize = 17
-    labelpad = 25
-
     # Generate title and labels
-    ax.set_xlabel(x_label, fontsize=fontsize, labelpad=labelpad)
-    ax.set_ylabel("Probability density", rotation=-270, fontsize=fontsize, labelpad=labelpad+5)
+    ax.set_xlabel(x_label, fontsize=fontsize-1, labelpad=labelpad)
+    ax.set_ylabel("Probability density", rotation=-270, fontsize=fontsize-1, labelpad=labelpad+4)
 
     # Remove grid background lines (including x, y lines)
-    ax.grid(False)
+    # ax.grid(False)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(False)

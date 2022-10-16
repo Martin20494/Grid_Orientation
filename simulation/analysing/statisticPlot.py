@@ -14,6 +14,10 @@ from matplotlib_scalebar.scalebar import ScaleBar                   # For creati
 import contextily as ctx                                            # For basemap
 import seaborn as sns                                               # For plotting density
 
+# For color
+from colorDevelopment import *
+
+
 # For raster manipulation
 import xarray as xr                                                 # For raster manipulation
 # ----------------------------------------------------------------------------------------------------------------------
@@ -489,13 +493,14 @@ def map_plotting(
             # Map arguments
             map_level_range = [0.1, 5.1, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
-            cmap_flood = plt.get_cmap('ocean')
+            # cmap_flood = plt.get_cmap('ocean')
+            cmap_flood = get_gradient_cmap(hex_list110[::-1])
 
             # Inset arguments
             clip_range = [0.1, 5.1]
             bw_adjust = 1
             density_rate = 1
-            density_y_limit = 0.65
+            density_y_limit = 0.75
             pdf_xaxis_label = "Means (m)"
             x_tick_range_pdf = [0.1, 6.1, 1]
             comparison_sign = r'$\geq $'
@@ -512,13 +517,14 @@ def map_plotting(
             # Map arguments
             map_level_range = [0, 1.1, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
-            cmap_flood = plt.get_cmap('turbo')
+            # cmap_flood = plt.get_cmap('turbo')
+            cmap_flood = get_gradient_cmap(hex_list125)
 
             # Inset arguments
             clip_range = [0, 1]
-            bw_adjust = 1
+            bw_adjust = 2
             density_rate = 10
-            density_y_limit = 0.55
+            density_y_limit = 0.35
             pdf_xaxis_label = "Standard deviations (m)"
             x_tick_range_pdf = [0, 1.1, 0.2]
             comparison_sign = r'$\geq $'
@@ -535,7 +541,8 @@ def map_plotting(
             # Map arguments
             map_level_range = [0, 200.1, 0.1]
             cmap_terrain = plt.get_cmap('gist_gray')
-            cmap_flood = plt.get_cmap('gnuplot')
+            # cmap_flood = plt.get_cmap('gnuplot')
+            cmap_flood = get_gradient_cmap(hex_list108)
 
             # Inset arguments
             clip_range = [0, 200]
@@ -558,7 +565,8 @@ def map_plotting(
             # Map arguments
             map_level_range = [0, 100, 5]
             cmap_terrain = plt.get_cmap('gist_gray')
-            cmap_flood = plt.get_cmap('turbo')
+            # cmap_flood = plt.get_cmap('turbo')
+            cmap_flood = get_gradient_cmap(hex_list124)
 
             # Inset arguments
             clip_range = [0, 100]

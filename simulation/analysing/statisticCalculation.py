@@ -145,7 +145,7 @@ def area_calculation(dataset_func, resolution_func, flood_rate):
     return area_dataframe
 
 
-def building_calculation(dataset_func, building_path):
+def building_calculation(dataset_func, building_path, onepolygon_untransformation_path=None):
     """
     @Definition:
                 A function to calculate number of buildings being inundated
@@ -162,6 +162,11 @@ def building_calculation(dataset_func, building_path):
                                         A full dataset including unnecessary information
                 building_path (string):
                                         Path of file containing building polygons
+                onepolygon_untransformation_path (string):
+                                        If specify, a string of MAINDIR will be provided to change the version path.
+                                        Otherwise, one version will be kept over iteration and causes error file not
+                                        existed.
+                                        If None, a path will be automatically chosen.
     @Returns:
                 building_dataframe (pandas dataframe):
                                         Dataframe of simulations' flooded buildings
@@ -182,9 +187,14 @@ def building_calculation(dataset_func, building_path):
         column = nogeo_data_func.columns[each_col]
 
         # Get flowdepth map which were converted to one big polygon
-        flowdepthmap_gpf = pd.read_csv(
-            fr"{onepolygon_untransformation}\\flowdepth_polygon_{column}.csv", engine='pyarrow'
-        )
+        if onepolygon_untransformation_path is None:
+            flowdepthmap_gpf = pd.read_csv(
+                fr"{onepolygon_untransformation}\\flowdepth_polygon_{column}.csv", engine='pyarrow'
+            )
+        else:
+            flowdepthmap_gpf = pd.read_csv(
+                fr"{onepolygon_untransformation_path}\\5_analysis\\untransformed_impact\\onepolygon_nobackground\\flowdepth_polygon_{column}.csv", engine='pyarrow'
+            )
         flowdepthmap_gpf['geometry'] = flowdepthmap_gpf['geometry'].apply(wkt.loads)
         flowdepthmap_gpf = gpd.GeoDataFrame(flowdepthmap_gpf, crs='epsg:2193')
 
@@ -201,7 +211,9 @@ def building_calculation(dataset_func, building_path):
 
 def calculation_dict(dataset_func, resolution,
                      building_path, flood_rate,
-                     raster_generation_command=True):
+                     raster_generation_command=True,
+                     onepolygon_untransformation_path=None,
+                     ):
     """
     @Definition:
                 A function to calculate number of buildings being inundated
@@ -220,6 +232,11 @@ def calculation_dict(dataset_func, resolution,
                 raster_generation_command (boolean):
                                         If True, raster_generation function will be processed
                                         If False, raster_generation function will not be processed
+                onepolygon_untransformation_path (string):
+                                        If specify, a string of MAINDIR will be provided to change the version path.
+                                        Otherwise, one version will be kept over iteration and causes error file not
+                                        existed.
+                                        If None, a path will be automatically chosen.
     @Returns:
                 calculation_dict_set (dictionary):
                                         A dictionary contains all statistical results
@@ -252,6 +269,7 @@ def calculation_dict(dataset_func, resolution,
     calculation_dict_set['area'] = area_calculation(dataset_func, resolution, flood_rate)
 
     # Add building result
-    calculation_dict_set['building'] = building_calculation(dataset_func, building_path)
+    calculation_dict_set['building'] = building_calculation(dataset_func, building_path,
+                                                            onepolygon_untransformation_path)
 
     return calculation_dict_set

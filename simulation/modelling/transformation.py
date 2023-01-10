@@ -28,8 +28,6 @@ import geopandas as gpd                             # For manipulating shape fil
 from functools import partial                       # For containing many variables
 import multiprocessing                              # For parallelising
 
-# Package for timing steps
-import time                                         # For timing steps
 # ----------------------------------------------------------------------------------------------------------------------
 
 

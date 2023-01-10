@@ -223,5 +223,41 @@ hex_list125 = ["6411ad", "6411ad", "6411ad",
                "f15bb5", "f15bb5", "f15bb5",
                "fee440", "fee440", "fee440",
                "00bbf9", "00bbf9", "00bbf9"]
+hex_list126 = ["f94144","f3722c","f8961e","f9c74f","90be6d","43aa8b","577590"]
+hex_list127 = ["f72585","b5179e","7209b7","560bad","480ca8","3a0ca3","3f37c9","4361ee","4895ef","4cc9f0"]
+hex_list128 = ["ffbe0b","fb5607","ff006e","8338ec","3a86ff"]
+hex_list129 = ["f72585","f72585","7209b7","3a0ca3","4361ee","4cc9f0"]
+hex_list130 = ["b7094c","a01a58","892b64","723c70","5c4d7d","455e89","2e6f95","1780a1","0091ad"]
+hex_list131 = ["54478c","2c699a","048ba8","0db39e","16db93","83e377","b9e769","efea5a","f1c453","f29e4c"]
+hex_list132 = ['#4aad5a', '#b5d663', '#ffe710', '#ff9c08', '#ff9c08', '#ff7b10', '#ff7b10']
+hex_list133 = ["247ba0","70c1b3","b2dbbf","f3ffbd","ff1654"]
+hex_list134 = ["8ecae6","219ebc","126782","023047","ffb703","fd9e02","fb8500"]
+hex_list135 = ["042a2b","5eb1bf","cdedf6","ef7b45","d84727"]
+hex_list136 = ['#440154', '#3b528b', '#21918c', '#5ec962', '#fde725', '#fde725', '#fde725']
+hex_list137 = ["8ecae6","219ebc","126782","023047","ffb703","fd9e02","fb8500"]
+hex_list138 = ["ff499e","d264b6","a480cf","779be7","49b6ff"]
+hex_list139 = ["247ba0","247ba0","70c1b3","b2dbbf","f3ffbd","ff1654"]
+hex_list140 = ['#0a0079', '#0d81f8', '#44caff', '#8aecae', '#8aecae', '#dff58d', '#dff58d','#dff58d','#ffa045',
+               '#ffa045', '#ffa045','#ff5a5a', '#ff5a5a', '#ff5a5a']
+hex_list141 = ["f79256","fbd1a2","7dcfb6","00b2ca","1d4e89"]
+hex_list142 = ['#9e0142','#fee08b','#e6f598','#abdda4','#3288bd','#3288bd','#3288bd']
+hex_list143 = ['#440154', '#472878',
+               '#1e9e89', '#6cce59', '#6cce59','#b4de2c', '#b4de2c','#fde725','#fde725','#fde725']
+hex_list144 = ['#0b0405', '#3e356b', '#357ba3', '#4bc2ad', '#c9decf']
+hex_list145 = ['#e41a1c', '#e41a1c', '#e41a1c', '#377eb8', '#377eb8', '#984ea3', '#984ea3', '#ff7f00', '#ff7f00',
+               '#ebeb2f']
+hex_list146 = ["083d77","ebebd3","f4d35e","ee964b","f95738"]
+hex_list147 = ["ff595e","ffca3a","8ac926","1982c4","6a4c93"]
+hex_list148 = ['#0000ff','#0000ff','#0000ff','#0000ff',
+               '#0059ff',
+               '#ffff00','#ffff00','#ffff00',
+               '#ff8000',
+               '#e30000']
+hex_list149 = ['#0a0079', '#0d81f8', '#dff58d', '#dff58d','#dff58d','#ffa045',
+               '#ffa045', '#ffa045','#ff5a5a', '#ff5a5a', '#ff5a5a']
+
+
+
+
 
 

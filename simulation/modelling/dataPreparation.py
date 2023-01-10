@@ -471,11 +471,8 @@ def terrain_shading(
                 https://www.geophysique.be/2014/02/25/shaded-relief-map-in-python/
                 https://www.l3harrisgeospatial.com/docs/topographicshading.html
     @Arguments:
-                customise (boolean):
-                            If True, azimuth and altitude should be specified to customise the terrain shading
-                            If False, terrain shading will be automatically customised
                 azimuth and altitude (float):
-                            Values to customise the terrain shading
+                            Values to customise the terrain shading. Ex: altitude = 45, azimuth = 355
     @Returns:
                 None.
     """

@@ -299,7 +299,6 @@ def mapping(
     # Trim map
     parent_axis.set_ylim(bottom=5471400)
 
-
     # Remove 1e6
     parent_axis.ticklabel_format(style='plain')
 
@@ -385,9 +384,6 @@ def mapping(
     axins.spines['right'].set_visible(False)
     axins.spines['bottom'].set_visible(False)
     axins.spines['left'].set_visible(False)
-
-    # Set x axis limit
-    axins.set_xlim(left=0)
 
     # Zooming -------------------------------------------------------------------------------------
     if zoom:
@@ -497,14 +493,14 @@ def map_plotting(
             # Map arguments
             map_level_range = [0.1, 5.1, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
-            # cmap_flood = plt.get_cmap('terrain')
-            cmap_flood = get_gradient_cmap(hex_list132)
+            # cmap_flood = plt.get_cmap('ocean')
+            cmap_flood = get_gradient_cmap(hex_list110[::-1])
 
             # Inset arguments
             clip_range = [0.1, 5.1]
-            bw_adjust = 2
+            bw_adjust = 1
             density_rate = 1
-            density_y_limit = 0.55
+            density_y_limit = 0.75
             pdf_xaxis_label = "Means (m)"
             x_tick_range_pdf = [0.1, 6.1, 1]
             comparison_sign = r'$\geq $'
@@ -521,15 +517,14 @@ def map_plotting(
             # Map arguments
             map_level_range = [0, 1.1, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
-            # cmap_flood = plt.get_cmap('gnuplot')
-            cmap_flood = get_gradient_cmap(hex_list143)
-
+            # cmap_flood = plt.get_cmap('turbo')
+            cmap_flood = get_gradient_cmap(hex_list125)
 
             # Inset arguments
             clip_range = [0, 1]
             bw_adjust = 2
             density_rate = 10
-            density_y_limit = 0.4
+            density_y_limit = 0.35
             pdf_xaxis_label = "Standard deviations (m)"
             x_tick_range_pdf = [0, 1.1, 0.2]
             comparison_sign = r'$\geq $'
@@ -547,13 +542,13 @@ def map_plotting(
             map_level_range = [0, 200.1, 0.1]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('gnuplot')
-            cmap_flood = get_gradient_cmap(hex_list140)
+            cmap_flood = get_gradient_cmap(hex_list108)
 
             # Inset arguments
             clip_range = [0, 200]
-            bw_adjust = 2
+            bw_adjust = 1
             density_rate = 1
-            density_y_limit = 0.023
+            density_y_limit = 0.035
             pdf_xaxis_label = "Coefficients of variations (m)"
             x_tick_range_pdf = [0, 201, 50]
             comparison_sign = r'$\geq $'
@@ -571,13 +566,13 @@ def map_plotting(
             map_level_range = [0, 100, 5]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('turbo')
-            cmap_flood = get_gradient_cmap(hex_list148)
+            cmap_flood = get_gradient_cmap(hex_list124)
 
             # Inset arguments
             clip_range = [0, 100]
-            bw_adjust = 2
+            bw_adjust = 3
             density_rate = 1
-            density_y_limit = 0.065
+            density_y_limit = 0.045
             pdf_xaxis_label = "Proportion (%)"
             x_tick_range_pdf = [0, 102, 20]
             comparison_sign = r''

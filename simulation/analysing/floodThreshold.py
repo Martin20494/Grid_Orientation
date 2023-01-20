@@ -145,10 +145,9 @@ def flood_rate_plotting(
     # Plot area of errors
     ax.fill_between(flood_rates, lower, upper, color=color_list[0], alpha=0.2, zorder=0)
     # Plot error bar
-    ax.errorbar(flood_rates, mean_arr, sd_arr * sd_rate, linestyle='none', capsize=4, capthick=2, color=color_list[1],
-                zorder=1)
+    ax.errorbar(flood_rates, mean_arr, sd_arr * sd_rate, capsize=4, capthick=2, color=color_list[1], zorder=1)
     # Plot line
-    # ax.plot(flood_rates, mean_arr, color=color_list[1], zorder=2)
+    ax.plot(flood_rates, mean_arr, color=color_list[1], zorder=2)
     # Plot scatter
     ax.scatter(flood_rates, mean_arr, edgecolor=color_list[2], facecolor=color_list[3], s=50, zorder=3)
 

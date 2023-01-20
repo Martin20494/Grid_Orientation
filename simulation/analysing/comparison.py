@@ -5,7 +5,7 @@ import numpy as np                                      # For handling data (usi
 
 
 from statisticCalculation import calculation_dict       # For generating statistical dictionary
-from scipy.stats import gaussian_kde, skew              # For kde calculation and skewness calculation
+from scipy.stats import gaussian_kde                    # For kde calculation
 
 # For plotting
 import matplotlib
@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mc
 import seaborn as sns
 import colorsys
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 # GET DATA #############################################################################################################
@@ -60,8 +59,8 @@ def get_datalist(
                 list_resolution[i],
                 building_path,
                 flood_rate,
-                False,
-                list_filename[i]
+                list_filename[i],
+                False
             )
 
         else:
@@ -71,8 +70,8 @@ def get_datalist(
                 list_resolution[0],
                 building_path,
                 flood_rate,
-                False,
-                list_filename[i]
+                list_filename[i],
+                False
             )
 
         # Add into list
@@ -273,7 +272,7 @@ def boxplotting(
         x_label = "Number of buildings"
 
     # Fontsize
-    fontsize = 20
+    fontsize = 17
     labelpad = 25
 
     # Adjust x and y labels
@@ -360,21 +359,20 @@ def kdeplotting(
     fig, ax = plt.subplots(figsize=figsize)
 
     # Fontsize
-    fontsize = 18
+    fontsize = 15
     labelpad = 23
 
     for number_column in range(stat_df.shape[1]):
         # Plot kde
         sns.kdeplot(
             np.clip(stat_df[stat_df.columns[number_column]].dropna(), x_axis_range[0], x_axis_range[1]),
-            fill=True, linewidth=1.25,
+            fill=True, linewidth=.7,
             clip=(x_axis_range[0], x_axis_range[1]),
-            alpha=0.12,
+            alpha=0.6,
             bw_adjust=x_axis_range[3],
-            color=lighten_color(sns.color_palette(palette)[number_column], 1.5), # transformation (0.9),
-                                                                                 # resolution (1.1)
+            color=lighten_color(sns.color_palette(palette, 10)[number_column], 1),
             label=stat_df.columns[number_column],
-            # multiple='stack', # to get white curve line
+            multiple='stack', # to get white curve line
             ax=ax
         )
 
@@ -391,7 +389,7 @@ def kdeplotting(
             xmean_line = [mean_gauss]*len(ymean_line)
             ax.plot(xmean_line, ymean_line,
                     ls="-.", linewidth=1,
-                    color=lighten_color(sns.color_palette(palette)[number_column], 1))
+                    color=lighten_color(sns.color_palette(palette, 10)[number_column], 1.5))
 
     # Legend
     leg = ax.legend(ncol=2 if stat_df.shape[1] > 3 else 1,
@@ -456,41 +454,6 @@ def kdeplotting(
     for item in (ax.get_xticklabels() + ax.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(fontsize-3)
     ax.tick_params(direction='out', length=5, pad=labelpad-17)
-
-
-def comparison_calculation(stat_df, choice_calculation):
-    """
-    References:
-                https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm#:~:text=Kurtosis%20is%20a%20measure%20of,would%20be%20the%20extreme%20case.
-    """
-    for i in range(stat_df.shape[1]):
-        text = "{:<24}: {:>5.4f}"
-        q1 = np.nanpercentile(stat_df[stat_df.columns[i]], 25, method='hazen')
-        q2 = np.nanpercentile(stat_df[stat_df.columns[i]], 50, method='hazen')
-        q3 = np.nanpercentile(stat_df[stat_df.columns[i]], 75, method='hazen')
-
-        if choice_calculation == 'galton skewness':
-            galton_skewness = (q1 + q3 - (2 * q2))/(q3 - q1)
-            print(text.format(stat_df.columns[i], galton_skewness))
-        elif choice_calculation == 'quartile dev':
-            quartile_dev = (q3 - q1)/2
-            print(text.format(stat_df.columns[i], quartile_dev))
-        elif choice_calculation == 'coefficient quartile dev':
-            coef_quartile_dev = (q3 - q1)/(q3 + q1)
-            print(text.format(stat_df.columns[i], coef_quartile_dev))
-        elif choice_calculation == 'quartile median':
-            quartile_median = (q3 - q1)/q2
-            print(text.format(stat_df.columns[i], quartile_median))
-        elif choice_calculation == 'fisher-pearson skewness':
-            print(text.format(stat_df.columns[i], skew(stat_df[stat_df.columns[i]].to_numpy(), nan_policy='omit')))
-        elif choice_calculation == 'mean':
-            print(text.format(stat_df.columns[i], np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
-        elif choice_calculation == 'sd':
-            print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())))
-        else:
-            print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
-
-
 
 
 

@@ -361,7 +361,7 @@ def dem_raster_reference(resolution_func,
             "max_bank_height": 2,
             "rec_alignment_tolerance": 65,
             "width_centre_smoothing": 10,
-            "channel_area_threshold": 141000000,
+            "channel_area_threshold": 121000000,
             "channel_rec_id": 9253579,
             "cross_section_spacing": 10,
             "min_bank_height": 0.75,
@@ -471,11 +471,8 @@ def terrain_shading(
                 https://www.geophysique.be/2014/02/25/shaded-relief-map-in-python/
                 https://www.l3harrisgeospatial.com/docs/topographicshading.html
     @Arguments:
-                customise (boolean):
-                            If True, azimuth and altitude should be specified to customise the terrain shading
-                            If False, terrain shading will be automatically customised
                 azimuth and altitude (float):
-                            Values to customise the terrain shading
+                            Values to customise the terrain shading. Ex: altitude = 45, azimuth = 355
     @Returns:
                 None.
     """

@@ -395,8 +395,11 @@ def zo_to_n(number_simulation, H):
     # Convert roughness length (zo) to Manning's n
     manning_n = (0.41 * (H ** (1 / 6)) * ((H / zo) - 1)) / (np.sqrt(9.80665) * (1 + (H / zo) * (np.log(H / zo) - 1)))
 
+    # Calibrate manning's n
+    new_manning_n = manning_n * 1.7
+
     # Write out Manning's n
-    manning_n.rio.to_raster(
+    new_manning_n.rio.to_raster(
         fr"{transformed_n_nc_path}\\generated_n_transformed_{number_simulation}.nc"
     )
 

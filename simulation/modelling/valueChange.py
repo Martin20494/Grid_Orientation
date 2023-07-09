@@ -99,8 +99,8 @@ def polygon_generation(
         # Set up polygon coordinates into a list
         polygon_padding = [
             (no_padding_xmin, no_padding_ymax),
-            (no_padding_xmin + 4000, no_padding_ymax), # 3100
-            (no_padding_xmin, no_padding_ymax - 3150) # 2170
+            (no_padding_xmin + 4115, no_padding_ymax), # 3100/4000
+            (no_padding_xmin, no_padding_ymax - 3375) # 2170
         ]
         output_name = "sea"
 
@@ -312,9 +312,10 @@ def convert_to_asc(number_simulation):
     tiff_n_func = rxr.open_rasterio(
         fr"{transformed_n_tiff_path}\\generated_n_transformed_{number_simulation}.tif"
     )
-    nodata_tiff_n_func = tiff_n_func.rio.write_nodata(-999, inplace=True)
-    crs_tiff_n_func = nodata_tiff_n_func.rio.write_crs(2193)
-    crs_tiff_n_func.rio.to_raster(fr"{transformed_n_asc_path}\\generated_n_transformed_{number_simulation}.asc")
+    tiff_n_func_upperlimit = tiff_n_func.where(tiff_n_func.values < 1000, 0)
+    tiff_n_func_lowerlimit = tiff_n_func_upperlimit.where(tiff_n_func.values > -1000, -999)
+    nodata_tiff_n_func = tiff_n_func_lowerlimit.rio.write_nodata(-999)
+    nodata_tiff_n_func.rio.to_raster(fr"{transformed_n_asc_path}\\generated_n_transformed_{number_simulation}.asc")
 
     # STARTDEPTH --------------------------
     # Convert GeoTiff file into ASCII file

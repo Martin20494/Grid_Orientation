@@ -5,7 +5,7 @@ import numpy as np                                      # For handling data (usi
 
 
 from statisticCalculation import calculation_dict       # For generating statistical dictionary
-from scipy.stats import gaussian_kde                    # For kde calculation
+from scipy.stats import gaussian_kde, skew              # For kde calculation and skewness calculation
 
 # For plotting
 import matplotlib
@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mc
 import seaborn as sns
 import colorsys
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 # GET DATA #############################################################################################################
@@ -50,7 +51,7 @@ def get_datalist(
     # Loop to get dataframe of each type of data
     for i in range(len(list_filename)):
         # Get data from csv file
-        statdata_df = pd.read_csv(fr"{list_filename[i]}\\5_analysis\\untransformed_csv\\all_simulations.csv")
+        statdata_df = pd.read_csv(fr"{list_filename[i]}\\5_analysis\\wd\\untransformed_csv\\all_simulations.csv")
 
         if len(list_resolution) != 1:
             # Get statistic data if there are many resolution values
@@ -58,9 +59,14 @@ def get_datalist(
                 statdata_df,
                 list_resolution[i],
                 building_path,
-                flood_rate,
+                flood_rate, 'out.max', -9999,
+                False,
                 list_filename[i],
-                False
+                [
+                    fr"{list_filename[i]}\\5_analysis\\wse\\untransformed_csv",
+                    fr"{list_filename[i]}\\5_analysis\\wd\\untransformed_csv",
+                    fr"{list_filename[i]}\\5_analysis\\elev\\untransformed_csv"
+                ]
             )
 
         else:
@@ -69,9 +75,14 @@ def get_datalist(
                 statdata_df,
                 list_resolution[0],
                 building_path,
-                flood_rate,
+                flood_rate, 'out.max', -9999,
+                False,
                 list_filename[i],
-                False
+                [
+                    fr"{list_filename[i]}\\5_analysis\\wse\\untransformed_csv",
+                    fr"{list_filename[i]}\\5_analysis\\wd\\untransformed_csv",
+                    fr"{list_filename[i]}\\5_analysis\\elev\\untransformed_csv"
+                ]
             )
 
         # Add into list
@@ -110,7 +121,7 @@ def statistic_dataframe(list_dataname, list_dataframe, calculation_option):
         if calculation_option not in ["area", "building"]:
             # Get dataframe of mean, sd, cv, and cell
             comparison_dictionary[f'{list_dataname[i]}'] = list_dataframe[i][calculation_option][
-                calculation_option][list_dataframe[i][calculation_option][calculation_option] != -999]
+                calculation_option][list_dataframe[i][calculation_option][calculation_option] != -9999]
         else:
             # Get dataframe of area and building
             comparison_dictionary[f'{list_dataname[i]}'] = list_dataframe[i][calculation_option].iloc[0]
@@ -183,6 +194,9 @@ def boxplotting(
     stat_df,
     y_label,
     calculation_option,
+    legend_appearance=True,
+    legend_location='upper right',
+    ylabel=True,
     palette='husl'
 ):
     """
@@ -216,6 +230,11 @@ def boxplotting(
                             Y label represents for the statistical name of the boxplots
                 calculation_option (string):
                             Statistical options includes mean, sd, cv, cell, area, and building
+                legend_appearance (boolean):
+                            True: Create legends for mean and median
+                            False: Remove legends for mean and median
+                legend_location (string):
+                            Location of legend
                 palette (string/dictionary):
                             A string which is a name listed in palette color library of seaborn. Ex: 'husl' - also
                             the default
@@ -227,16 +246,27 @@ def boxplotting(
     # Set up axis
     fig, ax = plt.subplots(figsize=figsize)
 
+    # Filter -9999
+
+
     # Boxplot
-    sns.boxplot(
+    boxplot_sns = sns.boxplot(
         data=stat_df,
         orient='h', # Boxplots lie horizontally
         showmeans=True, # Turn on mean sign
-        meanprops=dict(marker='o', markersize=3), # Use big dot to visualise mean sign
-        flierprops=dict(marker='o', markersize=3), # Visualise outliers
+        meanprops=dict(marker='s', markersize=6), # Use big dot to visualise mean sign
+        flierprops=dict(marker='o', markersize=1.5), # Visualise outliers
         width=0.4, # Size/width of boxplots
         palette=palette, saturation=1, ax=ax
     )
+
+    # Generate legends for mean and median
+    if legend_appearance:
+        ax.plot([], [], '|', linewidth=1, color='black', label='median')
+        ax.plot([], [], 's', linewidth=1, color='black', label='mean')
+        ax.legend(fontsize='x-large', frameon=False, loc=legend_location)
+    else:
+        pass
 
     # Colorise all lines of boxplots
     box_patches = [
@@ -272,12 +302,17 @@ def boxplotting(
         x_label = "Number of buildings"
 
     # Fontsize
-    fontsize = 17
+    fontsize = 20
     labelpad = 25
 
     # Adjust x and y labels
     ax.set_xlabel(x_label, fontsize=fontsize, labelpad=labelpad)
-    ax.set_ylabel(y_label, rotation=-270, fontsize=fontsize, labelpad=labelpad+5)
+    if ylabel:
+        ax.set_ylabel(y_label, rotation=-270, fontsize=fontsize, labelpad=labelpad+5)
+    else:
+        boxplot_sns.set(yticklabels=[])
+        boxplot_sns.set(ylabel=None)
+        boxplot_sns.tick_params(left=False)
 
     # Control scientific notation
     # Refer here for more information
@@ -359,20 +394,21 @@ def kdeplotting(
     fig, ax = plt.subplots(figsize=figsize)
 
     # Fontsize
-    fontsize = 15
+    fontsize = 18
     labelpad = 23
 
     for number_column in range(stat_df.shape[1]):
         # Plot kde
         sns.kdeplot(
             np.clip(stat_df[stat_df.columns[number_column]].dropna(), x_axis_range[0], x_axis_range[1]),
-            fill=True, linewidth=.7,
+            fill=True, linewidth=1.25,
             clip=(x_axis_range[0], x_axis_range[1]),
-            alpha=0.6,
+            alpha=0.12,
             bw_adjust=x_axis_range[3],
-            color=lighten_color(sns.color_palette(palette, 10)[number_column], 1),
+            color=lighten_color(sns.color_palette(palette)[number_column], 1.5), # transformation (0.9),
+                                                                                 # resolution (1.1)
             label=stat_df.columns[number_column],
-            multiple='stack', # to get white curve line
+            # multiple='stack', # to get white curve line
             ax=ax
         )
 
@@ -389,7 +425,7 @@ def kdeplotting(
             xmean_line = [mean_gauss]*len(ymean_line)
             ax.plot(xmean_line, ymean_line,
                     ls="-.", linewidth=1,
-                    color=lighten_color(sns.color_palette(palette, 10)[number_column], 1.5))
+                    color=lighten_color(sns.color_palette(palette)[number_column], 1))
 
     # Legend
     leg = ax.legend(ncol=2 if stat_df.shape[1] > 3 else 1,
@@ -454,6 +490,54 @@ def kdeplotting(
     for item in (ax.get_xticklabels() + ax.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(fontsize-3)
     ax.tick_params(direction='out', length=5, pad=labelpad-17)
+
+
+def comparison_calculation(stat_df, choice_calculation):
+    """
+    References:
+                https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm#:~:text=Kurtosis%20is%20a%20measure%20of,would%20be%20the%20extreme%20case.
+    """
+    # List of results
+    results = []
+
+    # Get results of calculation
+    for i in range(stat_df.shape[1]):
+        text = "{:<24}: {:>5.4f}"
+        q1 = np.nanpercentile(stat_df[stat_df.columns[i]], 25, method='hazen')
+        q2 = np.nanpercentile(stat_df[stat_df.columns[i]], 50, method='hazen')
+        q3 = np.nanpercentile(stat_df[stat_df.columns[i]], 75, method='hazen')
+
+        if choice_calculation == 'galton skewness':
+            galton_skewness = (q1 + q3 - (2 * q2))/(q3 - q1)
+            # print(text.format(stat_df.columns[i], galton_skewness))
+            results.append(galton_skewness)
+        elif choice_calculation == 'quartile dev':
+            quartile_dev = (q3 - q1)/2
+            # print(text.format(stat_df.columns[i], quartile_dev))
+            results.append(quartile_dev)
+        elif choice_calculation == 'coefficient quartile dev':
+            coef_quartile_dev = (q3 - q1)/(q3 + q1)
+            # print(text.format(stat_df.columns[i], coef_quartile_dev))
+            results.append(coef_quartile_dev)
+        elif choice_calculation == 'quartile median':
+            quartile_median = (q3 - q1)/q2
+            # print(text.format(stat_df.columns[i], quartile_median))
+            results.append(quartile_median)
+        elif choice_calculation == 'fisher-pearson skewness':
+            # print(text.format(stat_df.columns[i], skew(stat_df[stat_df.columns[i]].to_numpy(), nan_policy='omit')))
+            results.append(skew(stat_df[stat_df.columns[i]].to_numpy(), nan_policy='omit'))
+        elif choice_calculation == 'mean':
+            # print(text.format(stat_df.columns[i], np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
+            results.append(np.nanmean(stat_df[stat_df.columns[i]].to_numpy()))
+        elif choice_calculation == 'sd':
+            # print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())))
+            results.append(np.nanstd(stat_df[stat_df.columns[i]].to_numpy()))
+        else:
+            # print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
+            results.append(np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy()))
+
+    return results
+
 
 
 

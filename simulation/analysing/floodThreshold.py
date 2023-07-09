@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt                                     # For main/p
 
 # Packages for variation calculation
 from statisticCalculation import calculation_dict                   # For calculating statistics
-from impactCalculation import flowdepth_raster_nobackground, \
-                              flowdepthmap_onepolygon_parallelism   # For re-generate and re-join polygons
+from impactCalculation import water_raster_nobackground, \
+                              watermap_onepolygon_parallelism   # For re-generate and re-join polygons
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -58,8 +58,8 @@ def flood_rate_comparison(
     # Collect lists of means and standard deviations
     for each_threshold in flood_rates:
         # Do impact calculation
-        flowdepth_raster_nobackground(flowdepth_csv_df, each_threshold)
-        flowdepthmap_onepolygon_parallelism(flowdepth_csv_df, each_threshold, num_processes)
+        water_raster_nobackground(flowdepth_csv_df, each_threshold)
+        watermap_onepolygon_parallelism(flowdepth_csv_df, each_threshold, num_processes)
 
         # Get dictionary of all statistics
         stat_dict = calculation_dict(
@@ -102,6 +102,7 @@ def flood_rate_plotting(
     flood_rate_range,
     mean_arr, sd_arr, sd_rate,
     calculation_option,
+    extract_name,
     color_list=['fuchsia', 'red', 'white', 'maroon']
 ):
     """
@@ -125,12 +126,20 @@ def flood_rate_plotting(
                             Rate to get range of standard deviation. Ex: sd_rate = 2 means 2 * standard deviation
                 calculation_option (string):
                             Statistical options includes mean, sd, cv, cell, area, and building
+                extract_name (string):
+                            Name of a specific output among all flood model outputs
                 color_list (list):
                             A list of string represents 3 names of colors for <fill_between>, <errorbar> and <plot>,
                             and <scatter> functions
     @Returns:
                 None
     """
+    # Choose outputs
+    if extract_name == 'out.max':
+        plot_untransformation = wd_plot_untransformation
+    else:
+        plot_untransformation = wse_plot_untransformation
+
     # Set up axis
     fig, ax = plt.subplots(figsize=figsize)
 
@@ -145,9 +154,10 @@ def flood_rate_plotting(
     # Plot area of errors
     ax.fill_between(flood_rates, lower, upper, color=color_list[0], alpha=0.2, zorder=0)
     # Plot error bar
-    ax.errorbar(flood_rates, mean_arr, sd_arr * sd_rate, capsize=4, capthick=2, color=color_list[1], zorder=1)
+    ax.errorbar(flood_rates, mean_arr, sd_arr * sd_rate, linestyle='none', capsize=4, capthick=2, color=color_list[1],
+                zorder=1)
     # Plot line
-    ax.plot(flood_rates, mean_arr, color=color_list[1], zorder=2)
+    # ax.plot(flood_rates, mean_arr, color=color_list[1], zorder=2)
     # Plot scatter
     ax.scatter(flood_rates, mean_arr, edgecolor=color_list[2], facecolor=color_list[3], s=50, zorder=3)
 

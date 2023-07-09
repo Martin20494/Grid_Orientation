@@ -13,7 +13,6 @@ import rioxarray as rxr                           # For reading flowdepth files
 import rasterio                                   # For reading and manipulating spatial data
 import rasterio.features                          # For vectorising features in array
 from shapely.geometry import shape                # For manipulating spatial information (geometry) under GeoJSON format
-from shapely.ops import unary_union               # For combining all polygons into one
 import geopandas as gpd                           # For manipulating shape files
 
 
@@ -24,9 +23,7 @@ import multiprocessing                              # For parallelising
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-
-
-def flowdepth_extraction(
+def water_extraction(
     number_simulation,
     extract_name
 ):
@@ -43,16 +40,19 @@ def flowdepth_extraction(
     @Returns:
                 None.
     """
-    # Extract required flowdepth file
-    flowdepth_asc = rxr.open_rasterio(
+    # Extract required water file
+    water_asc = rxr.open_rasterio(
         fr"{transformed_FPoutput_path}\\transformed_{number_simulation}\\{extract_name}"
     )
 
     # Add crs
-    new_flowdepth = flowdepth_asc.rio.write_crs(2193)
+    new_water = water_asc.rio.write_crs(2193)
 
     # Write out new flowdepth file
-    new_flowdepth.rio.to_raster(fr"{extracted_flowdepth}\\untransformed_{extract_name}_{number_simulation}.nc")
+    if extract_name == 'out.max':
+        new_water.rio.to_raster(fr"{extracted_wd}\\untransformed_{extract_name}_{number_simulation}.nc")
+    else:
+        new_water.rio.to_raster(fr"{extracted_wse}\\untransformed_{extract_name}_{number_simulation}.nc")
 
 
 def polygon_untransformation(
@@ -86,15 +86,34 @@ def polygon_untransformation(
     @Returns:
                 None.
     """
+    # Choose the outputs
+    if extract_name == 'out.max':
+        extracted_water = extracted_wd
+        untransformed_water = untransformed_wd
+    elif extract_name == 'out.mxe':
+        extracted_water = extracted_wse
+        untransformed_water = untransformed_wse
+    else:
+        extracted_water = transformed_dem_nc_path
+        untransformed_water = untransformed_elev
+
+
     # Get new values for translation
     x_raster = x_translation_func / 10 * (-1)
     y_raster = y_translation_func / 10
 
     # Extract array from flowdepth raster
-    raster_poly = rasterio.open(fr"{extracted_flowdepth}\\untransformed_{extract_name}_{number_simulation}.nc")
-    raster_array = raster_poly.read(1)
-    raster_transform = raster_poly.transform
-    raster_crs = raster_poly.crs
+    if extract_name == 'elev':
+        raster_poly = rxr.open_rasterio(fr"{extracted_water}\\generated_dem_transformed_{number_simulation}.nc")
+        raster_array = raster_poly.z.values
+        raster_transform = raster_poly.z.rio.transform()
+        raster_crs = raster_poly.z.rio.crs
+
+    else:
+        raster_poly = rasterio.open(fr"{extracted_water}\\untransformed_{extract_name}_{number_simulation}.nc")
+        raster_array = raster_poly.read(1)
+        raster_transform = raster_poly.transform
+        raster_crs = raster_poly.crs
 
     # Extract parameters: id and depth
     id_pixels = np.arange(raster_array.size).reshape(raster_array.shape)
@@ -139,7 +158,7 @@ def polygon_untransformation(
 
     # Write out csv files
     untransformed_raster_poly_gdf.to_csv(
-        fr"{untransformed_flowdepth}\\untransformed_{extract_name}_{number_simulation}.csv", index=False
+        fr"{untransformed_water}\\untransformed_{extract_name}_{number_simulation}.csv", index=False
     )
 
 
@@ -167,18 +186,27 @@ def untransformation_simulation(
     y_val = ran_trans_i[2]
     number_simulation = f"angle_{angle_val}_x_{x_val}_y_{y_val}"
 
-    # Get specific flowdepth
-    flowdepth_extraction(
-        number_simulation,
-        extract_name
-    )
+    if extract_name == 'elev':
+        # Convert to and untransform polygons
+        polygon_untransformation(
+            angle_val, x_val, y_val,
+            number_simulation,
+            extract_name
+        )
 
-    # Convert to and untransform polygons
-    polygon_untransformation(
-        angle_val, x_val, y_val,
-        number_simulation,
-        extract_name
-    )
+    else:
+        # Get specific flowdepth
+        water_extraction(
+            number_simulation,
+            extract_name
+        )
+
+        # Convert to and untransform polygons
+        polygon_untransformation(
+            angle_val, x_val, y_val,
+            number_simulation,
+            extract_name
+        )
 
 def untransformation_parallelism(
     extract_name,

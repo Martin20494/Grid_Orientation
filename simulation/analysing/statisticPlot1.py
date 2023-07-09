@@ -3,7 +3,6 @@ from folder import *
 
 # For data manipulation
 import numpy as np                                                  # For data array manipulation
-import pandas as pd
 
 # For plotting
 import matplotlib                                                   # For importing ticker
@@ -146,44 +145,34 @@ def polygon(axes, x1, y1, x2, y2, c):
     axes.add_patch(polygon)
 
 
-def rainbow_fill_sns(axes, bin_data, X, Y, ylimit, cmap):
+def rainbow_fill_sns(axes, X, Y, top, cmap):
     """
     @Definition:
                 A function to create polygon
     @Arguments:
                 axes (matplotlib axis):
                             Axis of matplotlib subplot
-                bin_data (array):
-                            An array of quantiles
-                ylimit (float):
-                            Value represents the limit of y axis
-                X, Y (float):
-                            Two list of x and y labels of density plot
-                cmap (each color in cmap):
-                            Cmap color
+                x1, y1, x2, y2 (float):
+                            Coordinates of head (x1, y1) and tail (x2, y2) in matplotlib plot
+                c (each color in cmap):
+                            Each color in cmap
     @Returns:
                 None
     """
     # Get the size of the data (how many values)
-    N = Y.size
-
-    # Create sub-color from main color
-    kde_df = pd.DataFrame(data={'kde':X}) # Create dataframe for labels of x axis
-    kde_df['color'] = pd.cut(
-        kde_df['kde'], bin_data,
-        labels=[cmap(x/(bin_data.size-2)) for x in range(bin_data.size-1)],
-        ordered=False
-    ) # Create groups following range of values from bin_data and label it with sub-color
-    kde_df['color'][0] = kde_df['color'][1] # Color the first group otherwise it would be Nan
-
-    # Make the bottom x axis start at 0 of y axis
-    axes.set_ylim(top=ylimit, bottom=0)
+    N = float(X.size)
 
     # Plot each vertical color
     for n, (x, y) in enumerate(zip(X, Y)):
+        # Make the bottom x axis start at 0 of y axis
+        axes.set_ylim(top=top, bottom=0)
+
+        # Each color for each value
+        color = cmap(n/N)
+
         # Use polygon
         if n+1 == N: continue
-        polygon(axes, x, y, X[n+1], Y[n+1], kde_df['color'][n])
+        polygon(axes, x, y, X[n+1], Y[n+1], color)
 
 def mark_inset_noconnectedline(parent_axes, inset_axes, zorder=None, **kwargs):
     """
@@ -217,22 +206,21 @@ def mapping(
     building_data,
     terrain_data,
     # Map arguments
-    map_range_size,
+    map_level_range,
     cmap_terrain,
     cmap_flood,
     # Inset arguments
     inset_box_coords,
-    # As background for density occupies too much space,
-    # this argument is commented
-    # background_inset_box_coords,
-    clip_max,
+    background_inset_box_coords,
+    clip_range,
     bw_adjust,
     density_rate,
     density_y_limit,
     pdf_xaxis_label,
     x_tick_range_pdf,
     comparison_sign,
-    ynumbin, xnumbin,
+    xlimleft,
+    numbin,
     rounding,
     rounding_last_x,
     # Extract file name
@@ -249,8 +237,6 @@ def mapping(
                 https://stackoverflow.com/questions/43152502/how-can-i-rotate-xticklabels-in-matplotlib-so-that-the-spacing-between-each-xtic
                 https://stackoverflow.com/questions/11264521/date-ticks-and-rotation-in-matplotlib
 
-                https://stackoverflow.com/questions/9295026/how-to-remove-axis-legends-and-white-padding
-
     @Arguments:
                 figsize (tuple):
                             A tuple of figsize in matplotlib subplot (width, height)
@@ -265,8 +251,9 @@ def mapping(
                 terrain_data (raster read by xarray):
                             Raster of terrain shading
 
-                map_range_size (int):
-                            A value represents the quantity of range of map level
+                map_level (list):
+                            A list of three values for smoothing map level - upper and lower limit and step.
+                            The step would help to smooth the color
                 cmap_terrain, cmap_flood (cmap with format of matplotlib):
                             Selective cmap from matplotlib
 
@@ -277,8 +264,8 @@ def mapping(
                             A list of four values [position of parent axis x, position of parent axis y,
                                                    width of inset background, height of inset background]
                             This is for background that covers the inset plot
-                clip_max (float):
-                            Maximum value to clip upper part of density values
+                clip_range (list):
+                            A list with two values of upper and lower limits for clipping
                 bw_adjust (float):
                             Value to adjust the smoothiness of the density line/plot
                 density_rate (float):
@@ -294,10 +281,12 @@ def mapping(
                 comparison_sign (r string):
                             A comparison sign will be added into the upper limit of x axis. Ex: for larger
                             comparison, add this <r'$\geq $'>.
-                ynumbin, xnumbin (int):
-                            A value represents number of ticks of y and x axis
+                xlimleft (float):
+                            A value for starting the x axis in the graph
+                numbin (int):
+                            A value represents number of ticks
                 rounding (int):
-                            A value represents number of decimals of x axis labels
+                            A value represents number of decimals in on x axis
                 rounding_last_x (boolean):
                             Rounding last x axis value (True) or not (False)
 
@@ -336,34 +325,20 @@ def mapping(
 
     # (LAYER 2) Plot flood map -----------------------------------------------------------------
     # Plot map
-    if name_statistics == 'cell':
-        map_range = np.linspace(0, 1, map_range_size)
-        map_cell_df = pd.DataFrame(data={'cell':dens}) # Create dataframe with one column containing cell values
-        clip_map_cell_df = map_cell_df.query('cell != 100') # Filter values of 100, because this value dominate the
-                                                            # data, which will makes quantile full of duplicates
-        map_cell_quantile = clip_map_cell_df['cell'].quantile(map_range) # Start quantiling
-        map_cell_unique = np.unique(map_cell_quantile.to_numpy()) # Remove duplicates
-        map_cell_unique99 = np.append(map_cell_unique, [99.5]) # Add one more value represents the range 99.5 - 100
-        map_level = map_cell_unique99
-    else:
-        map_range = np.linspace(0, 1, map_range_size)
-        map_range_quantile = np.quantile(dens, map_range)
-        map_level = map_range_quantile
+    map_level = np.arange(map_level_range[0], map_level_range[1], map_level_range[2])
+    raster.Band1.plot(ax=parent_axis, levels=map_level, cmap=cmap_flood, add_colorbar=False, alpha=0.8, zorder=2)
 
-    raster.Band1.plot(ax=parent_axis, levels=map_level,
-                      cmap=cmap_flood, add_colorbar=False, alpha=0.8,
-                      zorder=2)
-    # Remove all grids, frames, and whitespaces
     matplotlib.pyplot.axis('off')
-    parent_axis.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
 
-    # # As the plot is used for publication so these lines of codes are commented
     # # Trim map
     # parent_axis.set_ylim(bottom=5471400)
     #
     # # Remove 1e6
     # parent_axis.ticklabel_format(style='plain')
-    #
+
+    # All font sizes
+    fsize = 20
+
     # # x, y label titles
     # parent_axis.set_xlabel("NZTM, east (m)", fontsize=fsize+15, labelpad=fsize+10)
     # parent_axis.set_ylabel("NZTM, north (m)", rotation=-270, fontsize=fsize+15, labelpad=fsize+10)
@@ -382,8 +357,7 @@ def mapping(
     # matplotlib.pyplot.draw()
     # setp(parent_axis.get_yticklabels(), rotation=90, ha='center', rotation_mode="anchor")
 
-    # All font sizes
-    fsize = 20
+    parent_axis.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
 
     # Add scale bar
     parent_axis.add_artist(ScaleBar(
@@ -412,80 +386,50 @@ def mapping(
 
     # Plot inset plots for density --------------------------------------------------------------
     # (LAYER 4) Create inset axis
-    # These lines of codes below are for blurry white background of density plot.
-    # However, because it occupies so much space, they are commented
+    axins = parent_axis.inset_axes(inset_box_coords, zorder=5)
     # parent_axis.add_patch(plt.Rectangle((background_inset_box_coords[0], background_inset_box_coords[1]),
     #                                     background_inset_box_coords[2], background_inset_box_coords[3],
     #                                     fc="w", alpha=0.7,
     #                                     transform=parent_axis.transAxes, zorder=4))
 
-    # Create axis for density
-    axins = parent_axis.inset_axes(inset_box_coords, zorder=5)
-
-    # Change background color to transparent
-    axins.patch.set_alpha(0)
-
-    # Create data for density
-    dens_data = np.clip(dens, min(dens), clip_max) * density_rate
-
     # Create density
     density_plot = sns.kdeplot(
-        dens_data,
+        np.clip(dens, clip_range[0], clip_range[1])*density_rate,
         bw_method='silverman',
         bw_adjust=bw_adjust,
-        linewidth=.01,
-        clip=(min(dens_data), max(dens_data)),
-        ax=axins
+        clip=(clip_range[0]*density_rate, clip_range[1]*density_rate)
     )
 
     # Get data from density
-    x_dens = density_plot.lines[0].get_data()[0]
+    x_dens = density_plot.lines[0].get_data()[0]/density_rate
     y_dens = density_plot.lines[0].get_data()[1]
 
-    # Create bins for coloring shade below the curve
-    if name_statistics == 'cell':
-        newcell_value = clip_map_cell_df['cell'].to_numpy() * density_rate # Create new cell data with density rate
-        clip_map_cell100 = clip_map_cell_df.assign(cell=newcell_value) # Assign new values back to cell column
-        dens_clip_quantile = clip_map_cell100['cell'].quantile(map_range) # Quantile with new data
-        dens_clip_unique = np.unique(dens_clip_quantile.to_numpy()) # Choose unique values
-        dens_clip_unique100 = np.append(dens_clip_unique, [99.5*density_rate, 100*density_rate]) # Add group of 100
-        dens_quantile_unique = dens_clip_unique100
-
-    else:
-        dens_df = pd.DataFrame(data={f'{name_statistics}': dens_data})
-        dens_quantile = dens_df[f'{name_statistics}'].quantile(map_range)
-        dens_quantile_unique = np.unique(dens_quantile.to_numpy())
-
     # Color shaded area below the density curve
-    rainbow_fill_sns(axins, dens_quantile_unique,
-                     x_dens, y_dens, density_y_limit, cmap_flood)
+    axins.plot(x_dens, y_dens, linewidth=0.01)
+    rainbow_fill_sns(axins, x_dens, y_dens, density_y_limit, cmap_flood)
 
     # Generate title and labels
     axins.set_title("Probability density\nfunction", pad=fsize-12, fontsize=fsize+6, fontweight='bold', color='white')
     axins.set_xlabel(pdf_xaxis_label, fontsize=fsize+5, labelpad=fsize-3, color='white')
     axins.set_ylabel("Probability density", rotation=-270, fontsize=fsize+5, labelpad=fsize-3, color='white')
 
+    # Change background color to transparent
+    axins.patch.set_alpha(0)
+
     # Set tick values
-    axins.locator_params(nbins=xnumbin, axis='x')
     if rounding == 0:
-        # Set tick positions first
-        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2]) * density_rate
+        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2])
         xlabel_arr = np.array(np.round(x_range[:], rounding), dtype='int')
         axins.set_xticks(xlabel_arr)
 
         # Set comparison sign
-        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2])
-        xlabel_arr = np.array(np.round(x_range[:], rounding), dtype='int')
         xlabel_arr_cop = np.array(np.round(x_range[:], rounding).astype('int'), dtype='str')
         xlabel_arr_cop[-1] = '{1}{0}'.format(xlabel_arr[-1], comparison_sign)
     else:
-        # Set tick positions first
-        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2]) * density_rate
+        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2])
         xlabel_arr = np.array(np.round(x_range[:], rounding), dtype='float')
         axins.set_xticks(xlabel_arr)
 
-        x_range = np.arange(x_tick_range_pdf[0], x_tick_range_pdf[1], x_tick_range_pdf[2])
-        xlabel_arr = np.array(np.round(x_range[:], rounding), dtype='float')
         # Set comparison sign
         if rounding_last_x:
             xlabel_arr_cop = np.array(np.round(x_range[:], rounding), dtype='str')
@@ -501,7 +445,7 @@ def mapping(
     for item in (axins.get_xticklabels() + axins.get_yticklabels()):  # For x, y ticks' labels
         item.set_fontsize(fsize+4)
     axins.tick_params(direction='out', length=fsize-10, pad=fsize-11, colors='white', width=3)
-    axins.locator_params(nbins=ynumbin, axis='y')
+    axins.locator_params(nbins=numbin, axis='y')
 
     # Remove grid background lines (including x, y lines)
     axins.spines['top'].set_visible(False)
@@ -510,7 +454,7 @@ def mapping(
     axins.spines['left'].set_visible(False)
 
     # Set x axis limit
-    axins.set_xlim(left=x_tick_range_pdf[0]*density_rate)
+    axins.set_xlim(left=xlimleft)
 
     # Zooming -------------------------------------------------------------------------------------
     if zoom:
@@ -613,9 +557,7 @@ def map_plotting_wse(
 
     # Inset arguments
     inset_box_coords = [0.11, 0.73, 0.22, 0.169]
-    # As we do use background for density plot, because it occupies too much space
-    # this line of code is commented
-    # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
+    background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
 
 
     # EACH STATISTIC -------------------------------------------------------------
@@ -626,26 +568,23 @@ def map_plotting_wse(
             name_statistics = 'mean'
 
             # Map arguments
-            map_range_size = 200
+            map_level_range = [-0.8, 33.1, 0.2]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('terrain')
-            # cmap_flood = plt.get_cmap('turbo')
-            cmap_flood = get_gradient_cmap(hex_list177)
-            # cmap_flood = plt.get_cmap('plasma')
-            # cmap_flood = plt.get_cmap('rainbow')
-
+            cmap_flood = plt.get_cmap('turbo')
+            # cmap_flood = get_gradient_cmap(hex_list132)
 
             # Inset arguments
-            clip_max = 26
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 0.17/density_rate
+            clip_range = [-0.8, 33.1]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.024
             pdf_xaxis_label = "Means (m)"
-            x_tick_range_pdf = [-1, 26.1, 9]
-            comparison_sign = r'$\geq $'
-            # comparison_sign = ''
-            ynumbin = 4
-            xnumbin = 4
+            x_tick_range_pdf = [-1, 35.1, 9]
+            # comparison_sign = r'$\geq $'
+            comparison_sign = ''
+            xlimleft = None
+            numbin = 4
             rounding = 0
             rounding_last_x = False
 
@@ -659,25 +598,24 @@ def map_plotting_wse(
             name_statistics = 'sd'
 
             # Map arguments
-            map_range_size = 200
+            map_level_range = [0.0001, 1.1, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('gnuplot')
-            # cmap_flood = plt.get_cmap('plasma')
-            # cmap_flood = plt.get_cmap('autumn')
-            cmap_flood = get_gradient_cmap(hex_list177)
-            # cmap_flood = plt.get_cmap('brg')
+            # cmap_flood = plt.get_cmap('jet')
+            cmap_flood = plt.get_cmap('brg_r')
+            # cmap_flood = get_gradient_cmap(hex_list165)
 
             # Inset arguments
-            clip_max = .4
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 8/density_rate
+            clip_range = [0.0001, 1]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.9
             pdf_xaxis_label = "Sd (m)"
-            x_tick_range_pdf = [0, .41, .1]
+            x_tick_range_pdf = [0, 1.1, .2]
             # comparison_sign = r'$\geq $'
             comparison_sign = r'$\geq $'
-            ynumbin = 5
-            xnumbin = 5
+            xlimleft = 0
+            numbin = 5
             rounding = 1
             rounding_last_x = False
 
@@ -751,22 +689,21 @@ def map_plotting_wse(
             building_data,
             terrain_data,
             # Map arguments
-            map_range_size,
+            map_level_range,
             cmap_terrain,
             cmap_flood,
             # Inset arguments
             inset_box_coords,
-            # As we do use background for density plot, because it occupies too much space
-            # this line of code is commented
-            # background_inset_box_coords,
-            clip_max,
+            background_inset_box_coords,
+            clip_range,
             bw_adjust,
             density_rate,
             density_y_limit,
             pdf_xaxis_label,
             x_tick_range_pdf,
             comparison_sign,
-            ynumbin, xnumbin,
+            xlimleft,
+            numbin,
             rounding,
             rounding_last_x,
             # Extract name
@@ -803,9 +740,7 @@ def map_plotting_wd(
 
     # Inset arguments
     inset_box_coords = [0.11, 0.73, 0.22, 0.169]
-    # As we do use background for density plot, because it occupies too much space
-    # this line of code is commented
-    # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
+    background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
 
 
     # EACH STATISTIC -------------------------------------------------------------
@@ -816,23 +751,23 @@ def map_plotting_wd(
             name_statistics = 'mean'
 
             # Map arguments
-            map_range_size = 200
+            map_level_range = [0.1, 4.71, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('terrain')
-            # cmap_flood = plt.get_cmap('turbo')
-            cmap_flood = get_gradient_cmap(hex_list175)
+            cmap_flood = plt.get_cmap('turbo')
+            # cmap_flood = get_gradient_cmap(hex_list132)
 
             # Inset arguments
-            clip_max = 5
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 0.6/density_rate
+            clip_range = [0.1, 4.71]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.12
             pdf_xaxis_label = "Means (m)"
             x_tick_range_pdf = [0, 5.1, 1]
-            comparison_sign = r'$\geq $'
-            # comparison_sign = ''
-            ynumbin = 5
-            xnumbin = 6
+            # comparison_sign = r'$\geq $'
+            comparison_sign = ''
+            xlimleft = 0
+            numbin = 4
             rounding = 0
             rounding_last_x = False
 
@@ -846,23 +781,23 @@ def map_plotting_wd(
             name_statistics = 'sd'
 
             # Map arguments
-            map_range_size = 200
+            map_level_range = [0.02, 1.51, 0.001]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('gnuplot')
-            cmap_flood = get_gradient_cmap(hex_list175)
-            # cmap_flood = plt.get_cmap('brg_r')
+            # cmap_flood = get_gradient_cmap(hex_list151)
+            cmap_flood = plt.get_cmap('brg_r')
 
             # Inset arguments
-            clip_max = 1
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 5/density_rate
+            clip_range = [0.02, 1.51]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.6
             pdf_xaxis_label = "Sd (m)"
-            x_tick_range_pdf = [0, 1.1, 0.2]
+            x_tick_range_pdf = [0, 1.51, 0.3]
             comparison_sign = r'$\geq $'
-            ynumbin = 4
-            xnumbin = 6
-            rounding = 1
+            xlimleft = 0
+            numbin = 4
+            rounding = 2
             rounding_last_x = False
 
             # Zoom
@@ -875,22 +810,21 @@ def map_plotting_wd(
             name_statistics = 'cv'
 
             # Map arguments
-            map_range_size = 200
+            map_level_range = [1, 300.1, 0.1]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('gnuplot')
-            # cmap_flood = get_gradient_cmap(hex_list165)
-            cmap_flood = get_gradient_cmap(hex_list175)
+            cmap_flood = get_gradient_cmap(hex_list165)
 
             # Inset arguments
-            clip_max = 200
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 0.03/density_rate
+            clip_range = [1, 300]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.003
             pdf_xaxis_label = "CoV (%)"
-            x_tick_range_pdf = [0, 200.1, 50]
+            x_tick_range_pdf = [0, 300.1, 100]
             comparison_sign = r'$\geq $'
-            ynumbin = 4
-            xnumbin = 5
+            xlimleft = 0
+            numbin = 4
             rounding = 0
             rounding_last_x = False
 
@@ -904,24 +838,21 @@ def map_plotting_wd(
             name_statistics = 'cell'
 
             # Map arguments
-            map_range_size = 30
+            map_level_range = [0, 100, 5]
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('turbo')
-            # cmap_flood = get_gradient_cmap(hex_list170)
-            # cmap_flood = get_gradient_cmap(hex_list176)
-            cmap_flood = get_gradient_cmap(hex_list182[::-1])
-            # cmap_flood = plt.get_cmap('magma')
+            cmap_flood = get_gradient_cmap(hex_list170)
 
             # Inset arguments
-            clip_max = 100
-            bw_adjust = 1
-            density_rate = 10
-            density_y_limit = 0.15/density_rate
+            clip_range = [0, 100]
+            bw_adjust = 2.5
+            density_rate = 5
+            density_y_limit = 0.01
             pdf_xaxis_label = "Proportion (%)"
             x_tick_range_pdf = [0, 101, 20]
             comparison_sign = r''
-            ynumbin = 4
-            xnumbin = 6
+            xlimleft = 0
+            numbin = 3
             rounding = 0
             rounding_last_x = False
 
@@ -936,22 +867,21 @@ def map_plotting_wd(
             building_data,
             terrain_data,
             # Map arguments
-            map_range_size,
+            map_level_range,
             cmap_terrain,
             cmap_flood,
             # Inset arguments
             inset_box_coords,
-            # As we do use background for density plot, because it occupies too much space
-            # this line of code is commented
-            # background_inset_box_coords,
-            clip_max,
+            background_inset_box_coords,
+            clip_range,
             bw_adjust,
             density_rate,
             density_y_limit,
             pdf_xaxis_label,
             x_tick_range_pdf,
             comparison_sign,
-            ynumbin, xnumbin,
+            xlimleft,
+            numbin,
             rounding,
             rounding_last_x,
             # Extract name
@@ -1109,103 +1039,6 @@ def area_building_plotting(
     # Show the plot
     matplotlib.pyplot.show()
 
-
-def building_plotting_only(
-    figsize,
-    df,
-    text_box_location,
-    extract_name
-):
-    """
-    @Definition:
-                A function to plot distribution of areas
-    @References:
-                https://stackoverflow.com/questions/69524514/how-to-modify-the-kernel-density-estimate-line-in-a-sns-histplot
-                https://seaborn.pydata.org/generated/seaborn.distplot.html
-
-                https://stackoverflow.com/questions/65400669/how-to-generate-two-separate-y-axes-for-a-histogram-on-the-same-figure-in-seabor
-                https://stackoverflow.com/questions/26752464/how-do-i-align-gridlines-for-two-y-axis-scales-using-matplotlib
-                https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html#matplotlib.axes.Axes.hist
-                https://seaborn.pydata.org/generated/seaborn.kdeplot.html
-
-                https://seaborn.pydata.org/generated/seaborn.histplot.html#seaborn.histplot
-                https://seaborn.pydata.org/generated/seaborn.distplot.html
-                https://stackoverflow.com/questions/27671748/how-to-print-y-axis-label-horizontally-in-a-matplotlib-pylab-chart
-                https://stackoverflow.com/questions/24391892/printing-subscript-in-python
-
-                https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes (best
-                answer for align two axis)
-                https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib
-    @Arguments:
-                figsize (tuple):
-                            A tuple of figsize in matplotlib subplot (width, height)
-                df (pandas dataframe):
-                            Dataframe of simulations' areas
-                text_box_location (list):
-                            A list of text box coordinates [x, y]
-    @Returns:
-                None
-    """
-    if extract_name == 'out.max':
-        raster_untransformation = wd_raster_untransformation
-        plot_untransformation = wd_plot_untransformation
-    else:
-        raster_untransformation = wse_raster_untransformation
-        plot_untransformation = wse_plot_untransformation
-
-    # Set up axes
-    fig, parent_axis = plt.subplots(figsize=figsize)
-
-    # Get area's values under array format
-    values = df.iloc[0].to_numpy()
-
-    # Number of simulations
-    num_bin = len(values)
-
-
-    # BUILDING ----------------------------------------------------
-    # Frequency plot
-    sns.histplot(values, bins=num_bin, stat='count',
-                 legend=False,
-                 edgecolor='navy',
-                 facecolor='deepskyblue',
-                 ax=parent_axis)
-
-    # Set y label for 'Frequency'
-    parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=15)
-
-    # X label
-    x_label = f'Number of buildings'
-
-    # Ticks, title, and y label
-    parent_axis.tick_params(direction='out', length=7, pad=5)
-    parent_axis.set_xlabel(x_label, fontsize=20, labelpad=15)
-
-    for item in (parent_axis.get_xticklabels() + parent_axis.get_yticklabels()):  # For x, y ticks' labels
-        item.set_fontsize(16)
-
-    # Create text string
-    textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
-    textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
-
-    # place a text box in upper left in axes coords
-    # Refer here for more information
-    # https://stackoverflow.com/questions/50869424/increase-line-separation-in-matplotlib-annotation-text/50888491
-    parent_axis.text(text_box_location[0], text_box_location[1], textstr, transform=parent_axis.transAxes, fontsize=13,
-                     linespacing=1.5,
-                     fontweight='normal',
-                     fontstyle='italic',
-                     horizontalalignment='left',
-                     verticalalignment='top')
-
-    # Save fig
-    fig.savefig(
-        fr"{plot_untransformation}\\building_nodensity.png",
-        bbox_inches='tight', dpi=600
-    )
-
-    # Show the plot
-    # matplotlib.pyplot.show()
 # END IMPACT PLOTTING ##################################################################################################
 
 

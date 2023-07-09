@@ -7,7 +7,7 @@ from versionModule import version          # For changing version
 
 # Set up PATH -------------------------------------------------------------------------------
 # Assign the path to the variable
-MAIN_DIR = f"S:\\new_versions\\{version}"
+MAIN_DIR = f"S:\\new_versions_005\\{version}"
 
 # Create header path
 pathlib.Path(f"{MAIN_DIR}").mkdir(parents=True, exist_ok=True)
@@ -70,22 +70,40 @@ transformed_FPoutput_path = f"{MAIN_DIR}\\3_LISFLOOD_FP\\transformed_output"
 
 
 ## 4_un_transformation
-extracted_flowdepth = f"{MAIN_DIR}\\4_untransformation\\flowdepth"
-untransformed_flowdepth = f"{MAIN_DIR}\\4_untransformation\\untransformed_flowdepth"
+# Water depth (wd)
+extracted_wd = f"{MAIN_DIR}\\4_untransformation\\wd"
+untransformed_wd= f"{MAIN_DIR}\\4_untransformation\\untransformed_wd"
+
+# Water surface elevation (wse)
+extracted_wse = f"{MAIN_DIR}\\4_untransformation\\wse"
+untransformed_wse= f"{MAIN_DIR}\\4_untransformation\\untransformed_wse"
+
+# Elevation
+untransformed_elev = f"{MAIN_DIR}\\4_untransformation\\untransformed_elev"
+
 
 
 # ----------------------------------------- This is for ANALYSIS PART -----------------------
 ## 5_results
-other_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_other"
-
 # Variation
-csv_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_csv"
-raster_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_raster"
-plot_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_plot"
+# Water depth
+wd_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\wd\\untransformed_csv"
+wd_raster_untransformation = f"{MAIN_DIR}\\5_analysis\\wd\\untransformed_raster"
+wd_plot_untransformation = f"{MAIN_DIR}\\5_analysis\\wd\\untransformed_plot"
+wd_onepolygon_untransformation = f"{MAIN_DIR}\\5_analysis\\wd\\untransformed_impact\\onepolygon_nobackground"
+wd_oneraster_untransformation = f"{MAIN_DIR}\\5_analysis\\wd\\untransformed_impact\\oneraster_nobackground"
 
-# Impact
-onepolygon_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_impact\\onepolygon_nobackground"
-oneraster_untransformation = f"{MAIN_DIR}\\5_analysis\\untransformed_impact\\oneraster_nobackground"
+# Water surface elevation
+wse_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_csv"
+wse_raster_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_raster"
+wse_plot_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_plot"
+wse_onepolygon_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_impact\\onepolygon_nobackground"
+wse_oneraster_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_impact\\oneraster_nobackground"
+
+# Elevation
+elev_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\elev\\untransformed_csv"
+
+
 # -------------------------------------------------------------------------------------------
 
 # Ending path creation ######################################################################
@@ -124,18 +142,35 @@ necessary_files = [
     transformed_FPoutput_path,
 
     # 4_untransformation
-    extracted_flowdepth,
-    untransformed_flowdepth,
+    # Water depth
+    extracted_wd,
+    extracted_wse,
+    # Water surface elevation
+    untransformed_wd,
+    untransformed_wse,
+    # Elevation
+    untransformed_elev,
 
     # 5_results
-    other_untransformation,
     # Variation
-    csv_untransformation,
-    raster_untransformation,
-    plot_untransformation,
+    # Water depth
+    wd_csv_untransformation,
+    wd_raster_untransformation,
+    wd_plot_untransformation,
+    # Water surface elevation
+    wse_csv_untransformation,
+    wse_raster_untransformation,
+    wse_plot_untransformation,
+    # Elevation
+    elev_csv_untransformation,
+
     # Impact
-    onepolygon_untransformation,
-    oneraster_untransformation
+    # Water depth
+    wd_onepolygon_untransformation,
+    wd_oneraster_untransformation,
+    # Water surface elevation
+    wse_onepolygon_untransformation,
+    wse_oneraster_untransformation
 ]
 # -------------------------------------------------------------------------------------------
 

@@ -324,11 +324,6 @@ def bci_generation(
 
     # Construct river point injection
     injection = ['P', translated_point_source[0][0], translated_point_source[0][1], 'QVAR', domain_name]
-    # injection = ['P',
-    #              int(np.round(translated_point_source[0][0])),
-    #              int(np.round(translated_point_source[0][1])),
-    #              'QVAR',
-    #              domain_name]
 
     # TIDE BOUNDARY ---------------------------------------------------
     # Transformed folder creation
@@ -348,10 +343,6 @@ def bci_generation(
         injection_text = '{0[0]:<5}{0[1]:<20}{0[2]:<20}{0[3]:<7}{0[4]:<5}\n'.format(injection)
         boundary.write(injection_text)
         for line in range(tidepts.shape[0]):
-            # tide_boundary = ['P',
-            #                  int(round(tidepts.iloc[line][0].x, 0)),
-            #                  int(round(tidepts.iloc[line][0].y, 0)),
-            #                  'HVAR', 'Tide']
             tide_boundary = ['P', tidepts.iloc[line][0].x, tidepts.iloc[line][0].y,
                              'HVAR', 'Tide']
             tide_text = '{0[0]:<5}{0[1]:<20}{0[2]:<20}{0[3]:<7}{0[4]:<5}\n'.format(tide_boundary)
@@ -443,7 +434,7 @@ def run_LISFLOOD(
     os.chdir(lisflood_software_path)
 
     # Get directory of par file
-    lisflood_par_path = fr"{transformed_FPpara_path}\\transformed_{number_simulation}\\transformed_{number_simulation}.par"
+    lisflood_par_path = fr"{transformed_FPpara_path}\transformed_{number_simulation}\transformed_{number_simulation}.par"
     os.system(f"lisflood_v8_1_0.exe -v {lisflood_par_path}")
 
 # END RUN FLOOD MODEL ##################################################################################################
@@ -498,11 +489,11 @@ def flood_simulation(
         number_simulation
     )
 
-    # Run LISFLOOD-FP
-    run_LISFLOOD(
-        lisflood_software_path,
-        number_simulation
-    )
+    # # Run LISFLOOD-FP
+    # run_LISFLOOD(
+    #     lisflood_software_path,
+    #     number_simulation
+    # )
 # END SIMULATE FLOOD PARAMETER FILES ###################################################################################
 
 

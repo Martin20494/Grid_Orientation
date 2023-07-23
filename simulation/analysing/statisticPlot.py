@@ -1000,6 +1000,7 @@ def area_building_plotting(
                 option (string):
                             "area" for area plotting
                             "building" for building plotting
+                            "rmse" for rmse plotting
     @Returns:
                 None
     """
@@ -1033,7 +1034,7 @@ def area_building_plotting(
         x_label += r'$\mathrm{m}^2$)'
 
     # BUILDING ----------------------------------------------------
-    else:
+    elif option == 'building':
         # Frequency plot
         sns.histplot(values, bins=num_bin, stat='count',
                      legend=False,
@@ -1049,6 +1050,23 @@ def area_building_plotting(
 
         # X label
         x_label = f'Number of buildings'
+
+    else:
+        # Frequency plot
+        sns.histplot(values, bins=num_bin, stat='count',
+                     legend=False,
+                     edgecolor='darkgoldenrod',
+                     facecolor='gold',
+                     ax=parent_axis)
+
+        # Density plot
+        sns.kdeplot(values, ax=axis_density, color="r", linewidth=2)
+
+        # Set y label for 'Frequency'
+        parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=38)
+
+        # X label
+        x_label = f'RMSEs'
 
     # Set y label for 'Frequency'
     parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=38)

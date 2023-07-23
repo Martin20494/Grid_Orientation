@@ -503,3 +503,69 @@ def get_water_parallelism(
     return water_df
 
 # END DEPTH VALUES #####################################################################################################
+
+
+# GET RMSE #############################################################################################################
+def get_geoforRMSE_parallelism(
+    num_processes
+):
+    """
+    @Definition:
+                A function to extract flowdepth at given coordinates from any geometry files by multiprocessing
+    @References:
+                https://stackoverflow.com/questions/43175382/python-create-a-pandas-data-frame-from-a-list
+    @Arguments:
+                num_processes (int):
+                                        A number of process for the parallelism
+
+    @Returns:
+                pts_extraction_df (pandas dataframe):
+                                        A dataframe contains values of water elevation surface at observed points
+                validation_df (pandas dataframe):
+                                        A dataframe contains observed values
+    """
+    # Get necessary parameters -----------------------
+
+    # Get point of observed data
+    # Get observed data
+    obs_data_df = gpd.read_file(fr"{other_data}\2005b_Flood.shp")
+    # Choose geometry and level
+    debris_df = obs_data_df[['geometry', 'X', 'Y', 'level_']]
+    # Rename
+    debris_df.rename(columns={'X': 'x', 'Y': 'y', 'level_': 'level'}, inplace=True)
+    # Copy the dataframe and call it validation dataframe
+    validation_df = debris_df.copy(deep=True)
+    # Extract geometry only
+    validation_geo_df = gpd.GeoDataFrame(validation_df['geometry'])
+    # List all parameters
+    point_sample_csv = validation_geo_df
+
+    # Get all csv folders
+    all_csv_folders = glob.glob(fr"{untransformed_wse}\\untransformed_*")
+    # Get all column names
+    column_names = [Path(all_csv_folders[i]).stem for i in range(len(all_csv_folders))]
+
+    # Design func parameters
+    func = partial(
+        get_water_values,
+        point_sample_csv,
+    )
+
+    # Design the pool and execute the multiprocessing
+    with multiprocessing.Pool(processes=num_processes) as pool:
+        pts_extraction_df = pd.DataFrame(
+            pool.map(func, all_csv_folders),
+            index=column_names
+        ).T
+    pool.close()
+    pool.join()
+
+    # Replace -9999 with NaN
+    pts_extraction_df = pts_extraction_df.replace(-9999, np.nan)
+
+    # Write out file
+    pts_extraction_df.to_csv(fr"{wse_csv_untransformation}\\rmse_all_simulations.csv", index=False)
+    validation_df.to_csv(fr"{wse_csv_untransformation}\\rmse_validation.csv", index=False)
+
+    return pts_extraction_df, validation_df
+# END RMSE #############################################################################################################

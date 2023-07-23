@@ -2,7 +2,9 @@
 from folder import *                                # For paths of sub-folders
 import geopandas as gpd                             # For manipulating geopandas dataframe
 import pandas as pd                                 # For manipulating dataframe
+import numpy as np                                  # For manipulating data
 from shapely import wkt                             # For reading geometry in csv files
+from sklearn.metrics import mean_squared_error      # For calculating RMSE
 from impactCalculation import raster_generation, \
                               apply_zero_values, \
                               get_floodrate_index   # For raster generation and statistical measurements
@@ -344,6 +346,40 @@ def building_calculation(dataset_func, building_path, extract_name, onepolygon_u
 
     return building_dataframe
 
+def rmse_calculation(pts_extraction_df, validation_df):
+    """
+    @Definition:
+                A function to calculate RMSEs
+    @References:
+                None.
+    @Arguments:
+                pts_extraction_df (pandas dataframe):
+                                        A dataframe contains values of observed points
+                validation_df (pandas dataframe):
+                                        A dataframe contains observed data
+    @Returns:
+                rmse_dataframe (pandas dataframe):
+                                        A dataframe contains RMSEs of each simulation
+    """
+
+    # Get empty RMSE dict
+    rmse_dict = {}
+
+    # Generate list of RMSEs
+    for i in range(pts_extraction_df.shape[1]):
+        # Remove NaNs
+        notnan_inds = pd.notnull(pts_extraction_df.iloc[:, i]).to_numpy().nonzero()
+        notnan_inds_list = np.array(notnan_inds).tolist()[0]
+        # Calculate RMSE
+        rmse = mean_squared_error(validation_df.level[notnan_inds_list], pts_extraction_df.iloc[notnan_inds_list, i],
+                                  squared=False)
+        rmse_dict[f'{pts_extraction_df.columns[i]}'] = rmse
+
+    # Convert to dataframe
+    rmse_dataframe = pd.DataFrame(rmse_dict, index=[0])
+
+    return rmse_dataframe
+
 def calculation_dict(dataset_func, resolution,
                      building_path, flood_rate,
                      extract_name, replace_value,
@@ -427,5 +463,14 @@ def calculation_dict(dataset_func, resolution,
     # Add building result
     calculation_dict_set['building'] = building_calculation(dataset_func, building_path, extract_name,
                                                             onepolygon_untransformation_path)
+
+    # Add RMSEs
+    if onepolygon_untransformation_path is None:
+        pts_extraction_df = pd.read_csv(fr"{wse_csv_untransformation}\\rmse_all_simulations.csv")
+        validation_df = pd.read_csv(fr"{wse_csv_untransformation}\\rmse_validation.csv")
+    else:
+        pts_extraction_df = pd.read_csv(fr"{onepolygon_untransformation_path}\\5_analysis\\wse\\untransformed_csv\\rmse_all_simulations.csv")
+        validation_df = pd.read_csv(fr"{onepolygon_untransformation_path}\\5_analysis\\wse\\untransformed_csv\\rmse_validation.csv")
+    calculation_dict_set['rmse'] = rmse_calculation(pts_extraction_df, validation_df)
 
     return calculation_dict_set

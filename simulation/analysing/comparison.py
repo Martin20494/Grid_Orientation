@@ -109,6 +109,7 @@ def statistic_dataframe(list_dataname, list_dataframe, calculation_option):
                                 "cell" means to calculate proportion of simulations of each cell being inundated
                                 "area" means to calculate flooded areas
                                 "building" means to calculate flooded buildings
+                                "rmse" means to calculate RMSEs
     @Returns:
                 comparison_dictionary (dictionary):
                                 A dictionary contains all dataframes of type of data
@@ -118,12 +119,12 @@ def statistic_dataframe(list_dataname, list_dataframe, calculation_option):
 
     # Add keys and values into dictionary
     for i in range(len(list_dataname)):
-        if calculation_option not in ["area", "building"]:
+        if calculation_option not in ["area", "building", "rmse"]:
             # Get dataframe of mean, sd, cv, and cell
             comparison_dictionary[f'{list_dataname[i]}'] = list_dataframe[i][calculation_option][
                 calculation_option][list_dataframe[i][calculation_option][calculation_option] != -9999]
         else:
-            # Get dataframe of area and building
+            # Get dataframe of area, building, and RMSE
             comparison_dictionary[f'{list_dataname[i]}'] = list_dataframe[i][calculation_option].iloc[0]
 
     return comparison_dictionary
@@ -147,7 +148,7 @@ def statistic_df_dict(list_dataname, list_dataframe):
     statistic_df_dictionary = dict()
 
     # Statistical selections
-    stat_selection = ['mean', 'sd', 'cv', 'cell', 'area', 'building']
+    stat_selection = ['mean', 'sd', 'cv', 'cell', 'area', 'building', 'rmse']
 
     # Generate statistical selection and add into a dictionary
     for each_option in stat_selection:
@@ -298,8 +299,10 @@ def boxplotting(
         x_label = "Proportion (%)"
     elif calculation_option == 'area':
         x_label = r'Areas (x100 $\mathrm{m}^2$)'
-    else:
+    elif calculation_option == 'building':
         x_label = "Number of buildings"
+    elif calculation_option == 'rmse':
+        x_label = calculation_option
 
     # Fontsize
     fontsize = 20
@@ -372,7 +375,7 @@ def kdeplotting(
                 legend_location (list):
                             A list of two values represents for the location of legend box
                 calculation_option (string):
-                            Statistical options includes mean, sd, cv, cell, area, and building
+                            Statistical options includes mean, sd, cv, cell, area, building, and RMSE
                 comparison_sign (r string):
                             A comparison sign will be added into the upper limit of x axis. Ex: for larger
                             comparison, add this <r'$\geq $'>

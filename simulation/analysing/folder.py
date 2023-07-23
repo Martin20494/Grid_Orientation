@@ -7,7 +7,7 @@ from versionModule import version           # For changing version
 
 # Set up PATH -------------------------------------------------------------------------------
 # Assign the path to the variable
-MAIN_DIR = f"S:\\new_versions_004\\{version}"
+MAIN_DIR = f"S:\\new_versions_006_forpublication\\{version}"
 
 # Create header path
 pathlib.Path(f"{MAIN_DIR}").mkdir(parents=True, exist_ok=True)

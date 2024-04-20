@@ -148,7 +148,7 @@ def statistic_calculation(
             calculated_dataset = cell_wse_df['cell']
 
     # Calculate mean, sd, cv, and proportion for water depth
-    else:
+    elif extract_name == 'out.max':
         # Calculate mean
         if calculation_option == 'mean':
             mean_wd_df = df_wd_zero.copy(deep=True)
@@ -205,6 +205,53 @@ def statistic_calculation(
 
             # Get values
             calculated_dataset = cell_wd_df['cell']
+
+    # Calculate mean, sd, cv for elevation
+    else:
+        # Calculate mean of water depth to filter
+        mean_wd_df = df_wd_zero.copy(deep=True)
+        mean_wd_df['mean'] = df_wd_zero.mean(axis=1)
+
+        # Filter flood rate
+        mean_wd_df.loc[floodrate_index, 'mean'] = replace_value
+
+        # Drop x, y coordinates
+        df_elev_nocoords = df_elev.drop(columns=['x_coord', 'y_coord'])
+
+        if calculation_option == 'mean':
+            mean_elev_df = df_elev_nocoords.copy(deep=True)
+            mean_elev_df['mean'] = df_elev_nocoords.mean(axis=1)
+
+            # Filter by mean of water depth
+            mean_elev_df.loc[mean_wd_df['mean'] == replace_value, 'mean'] = replace_value
+
+            # Get values
+            calculated_dataset = mean_elev_df['mean']
+
+        elif calculation_option == 'sd':
+            sd_elev_df = df_elev_nocoords.copy(deep=True)
+            sd_elev_df['sd'] = df_elev_nocoords.std(axis=1)
+
+            # Filter by mean of water depth
+            sd_elev_df.loc[mean_wd_df['mean'] == replace_value, 'sd'] = replace_value
+
+            # Get values
+            calculated_dataset = sd_elev_df['sd']
+
+        else:
+            cv_elev_df = df_elev_nocoords.copy(deep=True)
+            cv_elev_df['mean'] = df_elev_nocoords.mean(axis=1)
+            cv_elev_df['sd'] = df_elev_nocoords.std(axis=1)
+            cv_elev_df['cv'] = cv_elev_df['sd'] / cv_elev_df['mean'] * 100
+
+            # Filter unchanged values (background, otherwise the background will be colored)
+            cv_elev_df.loc[mean_wd_df['mean'] == replace_value, 'cv'] = replace_value
+
+            # Filter flood rate
+            cv_elev_df.loc[floodrate_index, 'cv'] = replace_value
+
+            # Get values
+            calculated_dataset = cv_elev_df['cv']
 
     # Create new dataset with calculated data and coordinates
     new_database = {'x': df_wse['x_coord'],
@@ -384,48 +431,73 @@ def calculation_dict(dataset_func, resolution,
                 calculation_dict_set (dictionary):
                                         A dictionary contains all statistical results
     """
-    statistic_method = ["mean", "sd", "cv", "cell"]
+    if extract_name == 'elev':
 
-    calculation_dict_set = {}
+        statistic_method = ['mean', 'sd', 'cv']
+        calculation_dict_set = {}
 
-    for each_method in statistic_method:
-        # Statistical calculation
-        statistic_result = statistic_calculation(extract_name, each_method, flood_rate, replace_value, csv_path)
+        for each_method in statistic_method:
+            # Statistical calculation
+            statistic_result = statistic_calculation(extract_name, each_method, flood_rate, replace_value, csv_path)
 
-        # Store in dictionary
-        calculation_dict_set[each_method] = statistic_result
+            # Store in dictionary
+            calculation_dict_set[each_method] = statistic_result
 
-        # If raster_generation_command = True, we will generate rasters of mean, sd, ...
-        # If False, we will not generate rasters of mean, sd, ...
-        # In comparison modules, we might not need to generate the raster again
-        if raster_generation_command:
-            if extract_name == 'out.max':
-                # Water depth
+            if raster_generation_command:
                 raster_generation(
                     statistic_result['x'],
                     statistic_result['y'],
                     statistic_result[each_method],
                     filename=each_method,
-                    extract_name='out.max',
+                    extract_name='elev'
                 )
             else:
-                # Water surface elevation
-                raster_generation(
-                    statistic_result['x'],
-                    statistic_result['y'],
-                    statistic_result[each_method],
-                    filename=each_method,
-                    extract_name='out.mxe'
-                )
+                pass
 
-        else:
-            pass
+    else:
 
-    # Add area result
-    calculation_dict_set['area'] = area_calculation(dataset_func, resolution, flood_rate, csv_path)
+        statistic_method = ["mean", "sd", "cv", "cell"]
 
-    # Add building result
-    calculation_dict_set['building'] = building_calculation(dataset_func, building_path, extract_name,
-                                                            onepolygon_untransformation_path)
+        calculation_dict_set = {}
+
+        for each_method in statistic_method:
+            # Statistical calculation
+            statistic_result = statistic_calculation(extract_name, each_method, flood_rate, replace_value, csv_path)
+
+            # Store in dictionary
+            calculation_dict_set[each_method] = statistic_result
+
+            # If raster_generation_command = True, we will generate rasters of mean, sd, ...
+            # If False, we will not generate rasters of mean, sd, ...
+            # In comparison modules, we might not need to generate the raster again
+            if raster_generation_command:
+                if extract_name == 'out.max':
+                    # Water depth
+                    raster_generation(
+                        statistic_result['x'],
+                        statistic_result['y'],
+                        statistic_result[each_method],
+                        filename=each_method,
+                        extract_name='out.max',
+                    )
+                else:
+                    # Water surface elevation
+                    raster_generation(
+                        statistic_result['x'],
+                        statistic_result['y'],
+                        statistic_result[each_method],
+                        filename=each_method,
+                        extract_name='out.mxe'
+                    )
+
+            else:
+                pass
+
+        # Add area result
+        calculation_dict_set['area'] = area_calculation(dataset_func, resolution, flood_rate, csv_path)
+
+        # Add building result
+        calculation_dict_set['building'] = building_calculation(dataset_func, building_path, extract_name,
+                                                                onepolygon_untransformation_path)
 
     return calculation_dict_set

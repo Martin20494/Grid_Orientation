@@ -7,7 +7,7 @@ from versionModule import version           # For changing version
 
 # Set up PATH -------------------------------------------------------------------------------
 # Assign the path to the variable
-MAIN_DIR = f"S:\\new_versions_008_forpublication_onlyfloodevents\\{version}"
+MAIN_DIR = f"S:\\for\\GRID\\versions\\{version}"
 
 # Create header path
 pathlib.Path(f"{MAIN_DIR}").mkdir(parents=True, exist_ok=True)
@@ -99,6 +99,8 @@ wse_oneraster_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_im
 
 # Elevation
 elev_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\elev\\untransformed_csv"
+elev_raster_untransformation = f"{MAIN_DIR}\\5_analysis\\elev\\untransformed_raster"
+elev_plot_untransformation = f"{MAIN_DIR}\\5_analysis\\elev\\untransformed_plot"
 
 # -------------------------------------------------------------------------------------------
 
@@ -158,6 +160,8 @@ necessary_files = [
     wse_plot_untransformation,
     # Elevation
     elev_csv_untransformation,
+    elev_raster_untransformation,
+    elev_plot_untransformation,
 
     # Impact
     # Water depth

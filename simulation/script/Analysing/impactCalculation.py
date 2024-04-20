@@ -97,8 +97,10 @@ def raster_generation(
     # Choose outputs
     if extract_name == 'out.max':
         raster_untransformation = wd_raster_untransformation
-    else:
+    elif extract_name == 'out.mxe':
         raster_untransformation = wse_raster_untransformation
+    else:
+        raster_untransformation = elev_raster_untransformation
 
     # Read original DEM raster without padding
     raster_origin = rxr.open_rasterio(

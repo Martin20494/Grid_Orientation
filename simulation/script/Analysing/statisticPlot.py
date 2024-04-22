@@ -16,6 +16,7 @@ import contextily as ctx                                            # For basema
 import seaborn as sns                                               # For plotting density
 
 from matplotlib.artist import setp
+import matplotlib.ticker as ticker
 
 # For color
 from colorDevelopment import *
@@ -466,8 +467,8 @@ def mapping(
 
     # Generate title and labels
     axins.set_title("Probability density\nfunction", pad=fsize-12, fontsize=fsize+6, fontweight='bold', color='white')
-    axins.set_xlabel(pdf_xaxis_label, fontsize=fsize+5, labelpad=fsize-3, color='white')
-    axins.set_ylabel("Probability density", rotation=-270, fontsize=fsize+5, labelpad=fsize-9, color='white')
+    axins.set_xlabel(pdf_xaxis_label, fontsize=fsize+8, labelpad=fsize-2, color='white')
+    axins.set_ylabel("Probability density", rotation=-270, fontsize=fsize+9, labelpad=fsize-9, color='white')
 
     # Set tick values
     axins.locator_params(nbins=xnumbin, axis='x')
@@ -503,8 +504,8 @@ def mapping(
 
     # Design size and style for ticks and labels
     for item in (axins.get_xticklabels() + axins.get_yticklabels()):  # For x, y ticks' labels
-        item.set_fontsize(fsize+4)
-    axins.tick_params(direction='out', length=fsize-10, pad=fsize-11, colors='white', width=3)
+        item.set_fontsize(fsize+9)
+    axins.tick_params(direction='out', length=fsize-10, pad=fsize-9, colors='white', width=3)
     axins.locator_params(nbins=ynumbin, axis='y')
 
     # Remove grid background lines (including x, y lines)
@@ -616,7 +617,7 @@ def map_plotting_wse(
     figsize = (25, 16)
 
     # Inset arguments
-    inset_box_coords = [0.11, 0.73, 0.22, 0.169]
+    # inset_box_coords = [0.11, 0.73, 0.24, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
     # As we do use background for density plot, because it occupies too much space
     # this line of code is commented
     # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
@@ -626,11 +627,14 @@ def map_plotting_wse(
     for each_stat in statistics:
         # Mean
         if each_stat == 'mean':
+            # Inset arguments
+            inset_box_coords = [0.09, 0.73, 0.25, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'mean'
 
             # Map arguments
-            map_range_size = 100
+            map_range_size = 200
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('terrain')
             # cmap_flood = plt.get_cmap('turbo')
@@ -643,8 +647,8 @@ def map_plotting_wse(
             # Inset arguments
             clip_max = 24
             bw_adjust = .2 # 1
-            density_rate = 100
-            density_y_limit = 0.004 # .17/density
+            density_rate = 1
+            density_y_limit = 0.4 # .17/density
             pdf_xaxis_label = "Means (m)"
             x_tick_range_pdf = [-1, 24.1, 5]
             comparison_sign = r'$\geq $'
@@ -660,6 +664,9 @@ def map_plotting_wse(
 
         # STANDARD DEVIATION
         elif each_stat == 'sd':
+            # Inset arguments
+            inset_box_coords = [0.08, 0.73, 0.24, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'sd'
 
@@ -677,8 +684,8 @@ def map_plotting_wse(
             # Inset arguments
             clip_max = .4
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .16 # 8/density
+            density_rate = 1
+            density_y_limit = 16 # 8/density
             pdf_xaxis_label = "Sd (m)"
             x_tick_range_pdf = [0, .41, .1]
             # comparison_sign = r'$\geq $'
@@ -694,6 +701,9 @@ def map_plotting_wse(
 
         # COEFFICIENT OF VARIATION
         elif each_stat == 'cv':
+            # Inset arguments
+            inset_box_coords = [0.11, 0.73, 0.24, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'cv'
 
@@ -724,6 +734,9 @@ def map_plotting_wse(
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
         else:
+            # Inset arguments
+            inset_box_coords = [0.11, 0.73, 0.24, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'cell'
 
@@ -808,8 +821,8 @@ def map_plotting_wd(
     # General arguments
     figsize = (25, 16)
 
-    # Inset arguments
-    inset_box_coords = [0.11, 0.73, 0.22, 0.169]
+    # # Inset arguments
+    # inset_box_coords = [0.11, 0.73, 0.22, 0.169]
     # As we do use background for density plot, because it occupies too much space
     # this line of code is commented
     # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
@@ -819,6 +832,9 @@ def map_plotting_wd(
     for each_stat in statistics:
         # Mean
         if each_stat == 'mean':
+            # Inset arguments
+            inset_box_coords = [0.09, 0.73, 0.24, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'mean'
 
@@ -833,8 +849,8 @@ def map_plotting_wd(
             # Inset arguments
             clip_max = 5
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = 0.008 # 0.6/density_rate
+            density_rate = 1
+            density_y_limit = 0.8 # 0.6/density_rate
             pdf_xaxis_label = "Means (m)"
             x_tick_range_pdf = [0, 5.1, 1]
             comparison_sign = r'$\geq $'
@@ -850,6 +866,9 @@ def map_plotting_wd(
 
         # STANDARD DEVIATION
         elif each_stat == 'sd':
+            # Inset arguments
+            inset_box_coords = [0.065, 0.73, 0.28, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'sd'
 
@@ -864,8 +883,8 @@ def map_plotting_wd(
             # Inset arguments
             clip_max = 1
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .06 # 5/density_rate
+            density_rate = 1
+            density_y_limit = 6 # 5/density_rate
             pdf_xaxis_label = "Sd (m)"
             x_tick_range_pdf = [0, 1.1, 0.2]
             comparison_sign = r'$\geq $'
@@ -880,6 +899,9 @@ def map_plotting_wd(
 
         # COEFFICIENT OF VARIATION
         elif each_stat == 'cv':
+            # Inset arguments
+            inset_box_coords = [0.0995, 0.73, 0.24, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'cv'
 
@@ -894,8 +916,8 @@ def map_plotting_wd(
             # Inset arguments
             clip_max = 200
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .00064 # 0.003/density_rate
+            density_rate = 1
+            density_y_limit = .064 # 0.003/density_rate
             pdf_xaxis_label = "CoV (%)"
             x_tick_range_pdf = [0, 200.1, 50]
             comparison_sign = r'$\geq $'
@@ -910,6 +932,9 @@ def map_plotting_wd(
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
         else:
+            # Inset arguments
+            inset_box_coords = [0.099, 0.73, 0.24, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'cell'
 
@@ -925,13 +950,13 @@ def map_plotting_wd(
 
             # Inset arguments
             clip_max = 100
-            bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .0084 # 0.15/density_rate
+            bw_adjust = 1
+            density_rate = 1
+            density_y_limit = .16 # 0.15/density_rate
             pdf_xaxis_label = "Proportion (%)"
             x_tick_range_pdf = [0, 101, 20]
             comparison_sign = r''
-            ynumbin = 5
+            ynumbin = 4
             xnumbin = 6
             rounding = 0
             rounding_last_x = False
@@ -997,8 +1022,8 @@ def map_plotting_elev(
     # General arguments
     figsize = (25, 16)
 
-    # Inset arguments
-    inset_box_coords = [0.11, 0.73, 0.22, 0.169]
+    # # Inset arguments
+    # inset_box_coords = [0.11, 0.73, 0.22, 0.169]
     # As we do use background for density plot, because it occupies too much space
     # this line of code is commented
     # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
@@ -1008,11 +1033,14 @@ def map_plotting_elev(
     for each_stat in statistics:
         # Mean
         if each_stat == 'mean':
+            # Inset arguments
+            inset_box_coords = [0.09, 0.73, 0.25, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'mean'
 
             # Map arguments
-            map_range_size = 150
+            map_range_size = 200
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('terrain')
             # cmap_flood = plt.get_cmap('turbo')
@@ -1022,12 +1050,12 @@ def map_plotting_elev(
 
 
             # Inset arguments
-            clip_max = 26
+            clip_max = 24
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .0026 # 0.17/density_rate
+            density_rate = 1
+            density_y_limit = .26 # 0.17/density_rate
             pdf_xaxis_label = "Means (m)"
-            x_tick_range_pdf = [-1, 26.1, 9]
+            x_tick_range_pdf = [-1, 24.1, 5]
             comparison_sign = r'$\geq $'
             # comparison_sign = ''
             ynumbin = 4
@@ -1041,6 +1069,9 @@ def map_plotting_elev(
 
         # STANDARD DEVIATION
         elif each_stat == 'sd':
+            # Inset arguments
+            inset_box_coords = [0.065, 0.73, 0.28, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
             # General arguments
             name_statistics = 'sd'
 
@@ -1056,8 +1087,8 @@ def map_plotting_elev(
             # Inset arguments
             clip_max = 1
             bw_adjust = .2
-            density_rate = 100
-            density_y_limit = .07 # 5/density_rate
+            density_rate = 1
+            density_y_limit = 7 # 5/density_rate
             pdf_xaxis_label = "Sd (m)"
             x_tick_range_pdf = [0, 1.1, .2]
             # comparison_sign = r'$\geq $'
@@ -1084,7 +1115,7 @@ def map_plotting_elev(
 
             # Inset arguments
             clip_max = 200
-            bw_adjust = 1
+            bw_adjust = 'scott'
             density_rate = 10
             density_y_limit = 0.03 / density_rate
             pdf_xaxis_label = "CoV (%)"
@@ -1280,6 +1311,108 @@ def area_building_plotting(
     # Show the plot
     matplotlib.pyplot.show()
 
+def area_plotting_only(
+    figsize,
+    df,
+    text_box_location,
+    extract_name
+):
+    """
+    @Definition:
+                A function to plot distribution of areas
+    @References:
+                https://stackoverflow.com/questions/69524514/how-to-modify-the-kernel-density-estimate-line-in-a-sns-histplot
+                https://seaborn.pydata.org/generated/seaborn.distplot.html
+
+                https://stackoverflow.com/questions/65400669/how-to-generate-two-separate-y-axes-for-a-histogram-on-the-same-figure-in-seabor
+                https://stackoverflow.com/questions/26752464/how-do-i-align-gridlines-for-two-y-axis-scales-using-matplotlib
+                https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html#matplotlib.axes.Axes.hist
+                https://seaborn.pydata.org/generated/seaborn.kdeplot.html
+
+                https://seaborn.pydata.org/generated/seaborn.histplot.html#seaborn.histplot
+                https://seaborn.pydata.org/generated/seaborn.distplot.html
+                https://stackoverflow.com/questions/27671748/how-to-print-y-axis-label-horizontally-in-a-matplotlib-pylab-chart
+                https://stackoverflow.com/questions/24391892/printing-subscript-in-python
+
+                https://stackoverflow.com/questions/45037386/trouble-aligning-ticks-for-matplotlib-twinx-axes (best
+                answer for align two axis)
+                https://stackoverflow.com/questions/12608788/changing-the-tick-frequency-on-x-or-y-axis-in-matplotlib
+    @Arguments:
+                figsize (tuple):
+                            A tuple of figsize in matplotlib subplot (width, height)
+                df (pandas dataframe):
+                            Dataframe of simulations' areas
+                text_box_location (list):
+                            A list of text box coordinates [x, y]
+    @Returns:
+                None
+    """
+    # if extract_name == 'out.max':
+    #     raster_untransformation = wd_raster_untransformation
+    #     plot_untransformation = wd_plot_untransformation
+    # else:
+    #     raster_untransformation = wse_raster_untransformation
+    #     plot_untransformation = wse_plot_untransformation
+
+    raster_untransformation = wd_raster_untransformation
+    plot_untransformation = wd_plot_untransformation
+
+    # Set up axes
+    fig, parent_axis = plt.subplots(figsize=figsize)
+
+    # Get area's values under array format
+    values = df.iloc[0].to_numpy()
+
+    # Number of simulations
+    num_bin = len(values)
+
+
+    # AREA ---------------------------------------------------------
+    # Frequency plot
+    sns.histplot(values, bins=num_bin, stat='count',
+                 legend=False,
+                 edgecolor='darkgreen',
+                 facecolor='springgreen',
+                 ax=parent_axis)
+
+    # X label
+    x_label = f'Areas '
+    x_label += r'($\mathrm{m}^2$)'
+
+    # Set y label for 'Frequency'
+    parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=15)
+    # Ref: https://stackoverflow.com/questions/27496737/display-only-whole-numbers-on-the-y-axis
+    parent_axis.yaxis.set_major_locator(ticker.MaxNLocator(integer=True)) # Only integer for y axis
+
+    # Ticks, title, and y label
+    parent_axis.tick_params(direction='out', length=7, pad=5)
+    parent_axis.set_xlabel(x_label, fontsize=20, labelpad=15)
+    parent_axis.xaxis.set_major_locator(plt.MaxNLocator(5))
+    parent_axis.ticklabel_format(style='plain', axis='x')
+
+    for item in (parent_axis.get_xticklabels() + parent_axis.get_yticklabels()):  # For x, y ticks' labels
+        item.set_fontsize(16)
+
+    # Create text string
+    textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
+    textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
+
+    # place a text box in upper left in axes coords
+    # Refer here for more information
+    # https://stackoverflow.com/questions/50869424/increase-line-separation-in-matplotlib-annotation-text/50888491
+    parent_axis.text(text_box_location[0], text_box_location[1], textstr, transform=parent_axis.transAxes, fontsize=18,
+                     linespacing=1.5,
+                     fontweight='normal',
+                     fontstyle='italic',
+                     horizontalalignment='left',
+                     verticalalignment='top')
+
+    # Save fig
+    fig.savefig(
+        fr"{plot_untransformation}\\area_nodensity.png",
+        bbox_inches='tight', dpi=600
+    )
+
 
 def building_plotting_only(
     figsize,
@@ -1317,12 +1450,15 @@ def building_plotting_only(
     @Returns:
                 None
     """
-    if extract_name == 'out.max':
-        raster_untransformation = wd_raster_untransformation
-        plot_untransformation = wd_plot_untransformation
-    else:
-        raster_untransformation = wse_raster_untransformation
-        plot_untransformation = wse_plot_untransformation
+    # if extract_name == 'out.max':
+    #     raster_untransformation = wd_raster_untransformation
+    #     plot_untransformation = wd_plot_untransformation
+    # else:
+    #     raster_untransformation = wse_raster_untransformation
+    #     plot_untransformation = wse_plot_untransformation
+
+    raster_untransformation = wd_raster_untransformation
+    plot_untransformation = wd_plot_untransformation
 
     # Set up axes
     fig, parent_axis = plt.subplots(figsize=figsize)
@@ -1362,7 +1498,7 @@ def building_plotting_only(
     # place a text box in upper left in axes coords
     # Refer here for more information
     # https://stackoverflow.com/questions/50869424/increase-line-separation-in-matplotlib-annotation-text/50888491
-    parent_axis.text(text_box_location[0], text_box_location[1], textstr, transform=parent_axis.transAxes, fontsize=13,
+    parent_axis.text(text_box_location[0], text_box_location[1], textstr, transform=parent_axis.transAxes, fontsize=18,
                      linespacing=1.5,
                      fontweight='normal',
                      fontstyle='italic',

@@ -659,7 +659,8 @@ def map_plotting_wse(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # STANDARD DEVIATION
@@ -696,7 +697,8 @@ def map_plotting_wse(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -729,7 +731,8 @@ def map_plotting_wse(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -761,7 +764,8 @@ def map_plotting_wse(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         mapping(
@@ -861,7 +865,8 @@ def map_plotting_wd(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # STANDARD DEVIATION
@@ -894,7 +899,8 @@ def map_plotting_wd(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -927,7 +933,8 @@ def map_plotting_wd(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -962,7 +969,8 @@ def map_plotting_wd(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         mapping(
@@ -1044,7 +1052,7 @@ def map_plotting_elev(
             cmap_terrain = plt.get_cmap('gist_gray')
             # cmap_flood = plt.get_cmap('terrain')
             # cmap_flood = plt.get_cmap('turbo')
-            cmap_flood = get_gradient_cmap(hex_list177)
+            cmap_flood = get_gradient_cmap(hex_list131) #177
             # cmap_flood = plt.get_cmap('plasma')
             # cmap_flood = plt.get_cmap('rainbow')
 
@@ -1064,7 +1072,8 @@ def map_plotting_elev(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         # STANDARD DEVIATION
@@ -1081,7 +1090,7 @@ def map_plotting_elev(
             # cmap_flood = plt.get_cmap('gnuplot')
             # cmap_flood = plt.get_cmap('plasma')
             # cmap_flood = plt.get_cmap('autumn')
-            cmap_flood = get_gradient_cmap(hex_list177)
+            cmap_flood = get_gradient_cmap(hex_list131) # 177
             # cmap_flood = plt.get_cmap('brg')
 
             # Inset arguments
@@ -1099,7 +1108,8 @@ def map_plotting_elev(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
         else:
@@ -1127,7 +1137,8 @@ def map_plotting_elev(
             rounding_last_x = False
 
             # Zoom
-            zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
             zoom = True
 
 
@@ -1480,6 +1491,11 @@ def building_plotting_only(
 
     # Set y label for 'Frequency'
     parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=15)
+    # Ref: https://stackoverflow.com/questions/12050393/how-to-force-the-y-axis-to-only-use-integers
+    parent_axis.yaxis.get_major_locator().set_params(integer=True)
+    # parent_axis.set_ylabel('')
+    # parent_axis.set_yticks([])
+
 
     # X label
     x_label = f'Number of buildings'

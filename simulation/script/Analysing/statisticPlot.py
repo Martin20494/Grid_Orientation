@@ -587,7 +587,7 @@ def mapping(
     # Save fig
     fig.savefig(
         fr"{plot_untransformation}\\{name_statistics}.png",
-        bbox_inches='tight', dpi=600
+        bbox_inches='tight', dpi=450
     )
 
 
@@ -661,6 +661,7 @@ def map_plotting_wse(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # STANDARD DEVIATION
@@ -698,7 +699,8 @@ def map_plotting_wse(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -732,7 +734,8 @@ def map_plotting_wse(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -765,7 +768,8 @@ def map_plotting_wse(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         mapping(
@@ -866,7 +870,8 @@ def map_plotting_wd(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # STANDARD DEVIATION
@@ -900,7 +905,8 @@ def map_plotting_wd(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -934,7 +940,8 @@ def map_plotting_wd(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -970,7 +977,8 @@ def map_plotting_wd(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         mapping(
@@ -1073,7 +1081,8 @@ def map_plotting_elev(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         # STANDARD DEVIATION
@@ -1109,7 +1118,8 @@ def map_plotting_elev(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
         else:
@@ -1138,7 +1148,8 @@ def map_plotting_elev(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
             zoom = True
 
 
@@ -1421,7 +1432,7 @@ def area_plotting_only(
     # Save fig
     fig.savefig(
         fr"{plot_untransformation}\\area_nodensity.png",
-        bbox_inches='tight', dpi=600
+        bbox_inches='tight', dpi=450
     )
 
 
@@ -1524,7 +1535,7 @@ def building_plotting_only(
     # Save fig
     fig.savefig(
         fr"{plot_untransformation}\\building_nodensity.png",
-        bbox_inches='tight', dpi=600
+        bbox_inches='tight', dpi=450
     )
 
     # Show the plot

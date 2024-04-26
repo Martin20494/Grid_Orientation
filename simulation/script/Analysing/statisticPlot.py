@@ -468,7 +468,7 @@ def mapping(
     # Generate title and labels
     axins.set_title("Probability density\nfunction", pad=fsize-12, fontsize=fsize+6, fontweight='bold', color='white')
     axins.set_xlabel(pdf_xaxis_label, fontsize=fsize+8, labelpad=fsize-2, color='white')
-    axins.set_ylabel("Probability density", rotation=-270, fontsize=fsize+9, labelpad=fsize-9, color='white')
+    axins.set_ylabel("Probability density", rotation=-270, fontsize=fsize+9, labelpad=fsize-11, color='white')
 
     # Set tick values
     axins.locator_params(nbins=xnumbin, axis='x')
@@ -660,8 +660,8 @@ def map_plotting_wse(
 
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
-            zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # STANDARD DEVIATION
@@ -700,7 +700,7 @@ def map_plotting_wse(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -735,7 +735,7 @@ def map_plotting_wse(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -769,7 +769,7 @@ def map_plotting_wse(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         mapping(
@@ -871,7 +871,7 @@ def map_plotting_wd(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # STANDARD DEVIATION
@@ -906,7 +906,7 @@ def map_plotting_wd(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # COEFFICIENT OF VARIATION
@@ -941,7 +941,7 @@ def map_plotting_wd(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # PROPORTION OF SIMULATIONS OF EACH CELL BEING INUNDATED
@@ -978,7 +978,7 @@ def map_plotting_wd(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         mapping(
@@ -1082,7 +1082,7 @@ def map_plotting_elev(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         # STANDARD DEVIATION
@@ -1119,7 +1119,7 @@ def map_plotting_elev(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
         else:
@@ -1149,7 +1149,7 @@ def map_plotting_elev(
             # Zoom
             # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
             # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
-            zoomed_coordinates = [1770470 - 100, 1771070 + 100, 5472550 - 100, 5473200 + 100]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
             zoom = True
 
 
@@ -1418,6 +1418,7 @@ def area_plotting_only(
     # Create text string
     textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
     textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
+    textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0]/df.mean(axis=1)[0] * 100)
 
     # place a text box in upper left in axes coords
     # Refer here for more information
@@ -1521,6 +1522,7 @@ def building_plotting_only(
     # Create text string
     textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
     textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
+    textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0] / df.mean(axis=1)[0] * 100)
 
     # place a text box in upper left in axes coords
     # Refer here for more information

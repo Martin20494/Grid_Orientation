@@ -532,9 +532,15 @@ def comparison_calculation(stat_df, choice_calculation):
         elif choice_calculation == 'sd':
             # print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())))
             results.append(np.nanstd(stat_df[stat_df.columns[i]].to_numpy()))
+        elif choice_calculation == 'range':
+            results.append(
+                (stat_df.max(axis=0) - stat_df.min(axis=0))
+            )
         else:
             # print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
-            results.append(np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy()))
+            results.append(
+                np.nanstd(stat_df[stat_df.columns[i]].to_numpy()) / np.nanmean(stat_df[stat_df.columns[i]].to_numpy()) * 100
+            )
 
     return results
 

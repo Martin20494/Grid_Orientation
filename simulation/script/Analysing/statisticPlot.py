@@ -586,8 +586,8 @@ def mapping(
 
     # Save fig
     fig.savefig(
-        fr"{plot_untransformation}\\{name_statistics}.png",
-        bbox_inches='tight', dpi=450
+        fr"{plot_untransformation}\\{name_statistics}.jpg",
+        bbox_inches='tight', dpi=350
     )
 
 
@@ -1418,7 +1418,9 @@ def area_plotting_only(
     # Create text string
     textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
     textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
-    textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0]/df.mean(axis=1)[0] * 100)
+    textstr += "\nrange = {0:.0f}".format(df.max(axis=1)[0] - df.min(axis=1)[0])
+    # textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0]/df.mean(axis=1)[0] * 100)
+    # print('Areas range: ', df.max(axis=1)[0] - df.min(axis=1)[0])
 
     # place a text box in upper left in axes coords
     # Refer here for more information
@@ -1432,8 +1434,8 @@ def area_plotting_only(
 
     # Save fig
     fig.savefig(
-        fr"{plot_untransformation}\\area_nodensity.png",
-        bbox_inches='tight', dpi=450
+        fr"{plot_untransformation}\\area_nodensity.jpg",
+        bbox_inches='tight', dpi=350
     )
 
 
@@ -1522,7 +1524,9 @@ def building_plotting_only(
     # Create text string
     textstr = "mean = {0:.3f}".format(df.mean(axis=1)[0])
     textstr += "\nstdev = {0:.3f}".format(df.std(axis=1)[0])
-    textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0] / df.mean(axis=1)[0] * 100)
+    textstr += "\nrange = {0:.0f}".format(df.max(axis=1)[0] - df.min(axis=1)[0])
+    # textstr += "\ncv = {0:.3f}".format(df.std(axis=1)[0] / df.mean(axis=1)[0] * 100)
+    # print('Building range: ', df.max(axis=1)[0] - df.min(axis=1)[0])
 
     # place a text box in upper left in axes coords
     # Refer here for more information
@@ -1536,8 +1540,8 @@ def building_plotting_only(
 
     # Save fig
     fig.savefig(
-        fr"{plot_untransformation}\\building_nodensity.png",
-        bbox_inches='tight', dpi=450
+        fr"{plot_untransformation}\\building_nodensity.jpg",
+        bbox_inches='tight', dpi=350
     )
 
     # Show the plot

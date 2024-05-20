@@ -1,1 +1,6 @@
+other_files/data_forpublication/*.jpg filter=lfs diff=lfs merge=lfs -text
+other_files/data_forpublication/*.png filter=lfs diff=lfs merge=lfs -text
+other_files/data_forpublication/*.PNG filter=lfs diff=lfs merge=lfs -text
+other_files/data_forpublication/*.pptx filter=lfs diff=lfs merge=lfs -text
 
+.gitatributes filter=lfs diff=lfs merge=lfs -text

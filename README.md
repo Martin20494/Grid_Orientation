@@ -2,7 +2,7 @@
 
 Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
 
-Authors: M. Nguyen, M. D. Wilson, E. M. Lane, J. Brasington, and R. A. Pearson
+Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and Rose A. Pearson
 
 ## Summary
 

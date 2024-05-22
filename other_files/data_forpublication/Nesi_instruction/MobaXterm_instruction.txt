@@ -1,0 +1,5 @@
+This file is to instruct to use MobaXTerm to move the files between local computer and nesi computer. Follow the instruction here to set up environment in MobaXTerm https://support.nesi.org.nz/hc/en-gb/articles/360000624696-MobaXterm-Setup-Windows. After that to access:
+
+- Click on 'login.mahuika.nesi.org.nz (tmn52)'
+- Access through entering password twice and token once
+- Then type the link to uncertainty path /nesi/nobackup/niwa03440/tmn52/

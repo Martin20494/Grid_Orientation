@@ -1,0 +1,1 @@
+The file intial_install_from_geofabrics.yml was installed first following https://github.com/rosepearson/GeoFabrics/wiki/Package-Install-Instructions. The file grid_orientation_full_packages.txt contains all the files needed installing later.

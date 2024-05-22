@@ -1,0 +1,9 @@
+This file is used to instruct which commands to use to run simulations on nesi:
+
+- navigate to the files that have slurm file to run the command
+- to run that file type <sbatch slurm.sl> for example
+- to check type <squeue --me>
+- to cancel type <squeue jobid>
+
+The example of slurm file is slurm_grid_vers009.sl
+

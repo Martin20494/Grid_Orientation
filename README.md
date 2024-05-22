@@ -1,6 +1,6 @@
 # Grid_Orientation
 
-Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
+Title: Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
 
 Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and Rose A. Pearson
 
@@ -40,7 +40,7 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 ### Data
 
-The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) and instruction provided by Dr. [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Three files attached here were used to run the simulations.
+The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) provided by Dr. [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). This project includes 3 main folders as described below.
 
 #### 1. File validation_calibration
 
@@ -63,7 +63,7 @@ This file includes two big files - script and data.
 - Scripts file includes all the script used to create data file.
 
 ## Acknowledgement
-This study is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship is provided from this programme to M. Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).
+This project is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship was provided from this programme to Martin Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).
 
 ## Contacts
 

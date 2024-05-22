@@ -2,26 +2,37 @@
 
 Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
 
-Authors: M. Nguyen, M. D. Wilson, E. M. Lane, J. Brasington, and R. A. Pearson
+Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and Rose A. Pearson
 
 ## Summary
 
-Digital elevation models, or DEMs, are critical for generating reliable flood predictions. The most common method to generate DEMs involves sampling and interpolating LiDAR data onto a North-South square grid. However, the orientation of this grid, which can introduce variability in elevation data and thus influence flood predictions, is frequently overlooked. The below figure shows the difference in sampling an artificial LiDAR point cloud with all ground elevation values of 1 m and river elevation values of 0.5 m onto a North-South square grid versus a 45-degree rotated grid using 10-meter resolution. This resulted in significant differences in the representation of the river, as seen in the river profiles, which can create different waterways along its length. 
+Digital elevation models, or DEMs, are critical for generating reliable flood predictions. The most common method to generate DEMs involves sampling and interpolating LiDAR data onto a North-South square grid. However, the orientation of this grid, which can introduce variability in elevation data and thus influence flood predictions, is frequently overlooked.  
 
-![problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)
+<div align="center">
+	<img width = "65%" src="https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)](https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data_forpublication/Problem/problem_idea_003.jpg">
+</div>
 
-Due to its potential significant impacts on the flood modelling process, in this study, we quantify the uncertainty in flood model outputs caused by transforming this grid orientation. Using a Monte Carlo method, we produced multiple DEMs by randomly rotating and/or translating the square grid orientation to predict floods for uncertainty analysis. This Monte Carlo framework was also applied at various resolutions (2, 5, 10, and 20 meters) and flood return periods (5, 10, 20, 50, and 1000 years). 
-
-Results show that the highest uncertainty in flood predictions occurred predominantly at the flood extent boundaries and near the river. Rotating the grid orientation caused more uncertainty than translating. The highest uncertainty was found when both rotating and translating the grid. The variability in both flooded areas and the number of flooded buildings followed these patterns. Finer resolutions revealed fewer variations in flood predictions and less variability in flooded areas and the number of flooded buildings. These variations were also determined by the amount of river discharge. Significant variations occurred depending on whether the river discharge was insufficient to cover the floodplain surfaces. Also, the flooded areas and the number of flooded buildings could expand or contract based on whether the water reached new locations and these places included residential buildings.
-
-
-![S3_proportion_wd](https://github.com/Martin20494/Grid_Orientation/assets/55137629/840e5b4e-4801-43e2-80ff-0804d696ccbb)
-
-The above figure shows the proportions of times a location was predicted to be flooded in all simulations. It usggests that in some simulations, topopographic effects, caused by the changes in the grid orientation, prevented water from reaching some specific locations, such as the upper part of the blue zoomed-in image in the figure.
+The figure above shows the difference in sampling an artificial LiDAR point cloud, with ground elevation values of 1 m and river elevation values of 0.5 m, onto a North-South square grid versus a 45-degree rotated grid using a 10-meter resolution. This difference significantly affects the representation of the river, as seen in the river profiles, potentially creating varying waterways along its length. Due to its potential significant impact on flood modeling, this study quantifies the uncertainty in flood model outputs caused by grid orientation transformation. Using a traditional Monte Carlo method, we produced multiple DEMs by randomly rotating and/or translating the square grid orientation to predict floods for uncertainty analysis.
 
 ## Workflow
 
 ![transformation_process](https://github.com/Martin20494/Grid_Orientation/assets/55137629/4ecdd3b5-2e28-41b2-ae65-8ba4044b20d8)
+
+## Representative result
+
+The figure below demonstrates the effect of transforming the square grid orientation on the flood predictions. It shows the proportion of times a location/each pixel was predicted to be flooded across all simulations. The results suggest that in some simulations, topographic effects due to the changes in the grid orientation prevented water from reaching specific locations. This is evident in the upper part of the blue zoomed-in image in the figure.
+
+<div align="center">
+	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data_forpublication/Maps_result/S3_proportion_wd.jpg">
+</div>
+
+## Installation for reproducible work
+
+To reproduce the work, download the ```gri_orientaion_packages.yaml``` file and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
+
+```
+conda env create -n gridorientation -f gridorientation.yaml
+```
 
 ## Data
 

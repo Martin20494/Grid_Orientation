@@ -26,7 +26,7 @@ The figure below demonstrates the effect of transforming the square grid orienta
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/All_results/Results_representative/S3_proportion_wd.jpg">
 </div>
 
-## Reproducible work
+## Reproducibility
 
 The project was written under modules format and has not been updated to class format yet. Therefore, the users might need to download all the modules to reproduce this project. After the instruction here, please click on each folder for further guidelines. If further information is needed please contact with the Github author.
 

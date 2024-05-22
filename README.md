@@ -23,7 +23,7 @@ The figure above shows the difference in sampling an artificial LiDAR point clou
 The figure below demonstrates the effect of transforming the square grid orientation on the flood predictions. It shows the proportion of times a location/each pixel was predicted to be flooded across all simulations. The results suggest that in some simulations, topographic effects due to the changes in the grid orientation prevented water from reaching specific locations. This is evident in the upper part of the blue zoomed-in image in the figure.
 
 <div align="center">
-	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data_forpublication/Maps_result/S3_proportion_wd.jpg">
+	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/All_results/Results_representative/S3_proportion_wd.jpg">
 </div>
 
 ## Reproducible work

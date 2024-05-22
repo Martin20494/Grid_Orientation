@@ -9,7 +9,7 @@ Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and 
 Digital elevation models, or DEMs, are critical for generating reliable flood predictions. The most common method to generate DEMs involves sampling and interpolating LiDAR data onto a North-South square grid. However, the orientation of this grid, which can introduce variability in elevation data and thus influence flood predictions, is frequently overlooked.  
 
 <div align="center">
-	<img width = "33%" src=[problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)>
+	<img width = "33%" src="[problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)">
 </div>
 
 

@@ -10,7 +10,7 @@ Digital elevation models, or DEMs, are critical for generating reliable flood pr
 
 ![problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)
 
-The above figure shows the difference in sampling an artificial LiDAR point cloud with all ground elevation values of 1 m and river elevation values of 0.5 m onto a North-South square grid versus a 45-degree rotated grid using 10-meter resolution. This resulted in significant differences in the representation of the river, as seen in the river profiles, which can create different waterways along its length. Due to its potential significant impacts on the flood modelling process, in this study, we quantify the uncertainty in flood model outputs caused by transforming this grid orientation using a Monte Carlo method.
+The figure above shows the difference in sampling an artificial LiDAR point cloud, with ground elevation values of 1 m and river elevation values of 0.5 m, onto a North-South square grid versus a 45-degree rotated grid using a 10-meter resolution. This difference significantly affects the representation of the river, as seen in the river profiles, potentially creating varying waterways along its length. Due to its potential significant impact on flood modeling, this study quantifies the uncertainty in flood model outputs caused by grid orientation transformation using a traditional Monte Carlo method.
 
 ![S3_proportion_wd](https://github.com/Martin20494/Grid_Orientation/assets/55137629/840e5b4e-4801-43e2-80ff-0804d696ccbb)
 

@@ -587,7 +587,7 @@ def mapping(
     # Save fig
     fig.savefig(
         fr"{plot_untransformation}\\{name_statistics}.jpg",
-        bbox_inches='tight', dpi=350
+        bbox_inches='tight', dpi=350 # 600 only for elevation
     )
 
 

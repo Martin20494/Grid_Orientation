@@ -28,7 +28,7 @@ The figure below demonstrates the effect of transforming the square grid orienta
 
 ## Installation for reproducible work
 
-To reproduce the work, download the gri_orientaion_packages.yaml file and use the following command (reference from answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
+To reproduce the work, download the ```gri_orientaion_packages.yaml``` file and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
 
 ```
 conda env create -n gridorientation -f gridorientation.yaml

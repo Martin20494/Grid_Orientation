@@ -1,20 +1,63 @@
 # Grid_Orientation
-Uncertainty in the procedure of developing Digital Elevation Models from LiDAR data for flood modelling
+
+Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
+
+Authors: M. Nguyen, M. D. Wilson, E. M. Lane, J. Brasington, and R. A. Pearson
 
 ## Summary
 
-Computational models of flood inundation allow rainfall, river discharge and tide levels to be related to inundation extent, and are useful tools in flood risk management. A full understanding of the errors which stem from various sources such as model inputs is vital because of the important and sometimes life-critical decisions that are made based on such models. Research of Ozdemir et al. (2013) about the uncertainties in grid size and friction parameters using LISFLOOD FP model, or the uncertainties in boundary conditions using HEC RAS model (Pappenberger et al., 2005) are two typical examples.
+Digital elevation models, or DEMs, are critical for generating reliable flood predictions. The most common method to generate DEMs involves sampling and interpolating LiDAR data onto a North-South square grid. However, the orientation of this grid, which can introduce variability in elevation data and thus influence flood predictions, is frequently overlooked. The below figure shows the difference in sampling an artificial LiDAR point cloud with all ground elevation values of 1 m and river elevation values of 0.5 m onto a North-South square grid versus a 45-degree rotated grid using 10-meter resolution. This resulted in significant differences in the representation of the river, as seen in the river profiles, which can create different waterways along its length. 
 
-Accurate representations of topography are an important input for flood inundation model, and have not been widely studied. For flood hazard assessment, Airborne LiDAR point cloud data is sampled and interpolated onto a Cartesian grid (raster) to create a Digital Elevation Model (DEM) which is suitable for use in a flood model. Usually, grid alignment is not considered in the processing. However, considering orientation in sampling process may introduce variability in the resulting elevation model, leading to uncertainty that propagates through to flood model output. This may be particularly apparent for raster grid-based models, where the routing of water flow on the grid may not align with environmental features such as drainage channels.
+![problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)
 
-This project investigated the variation in the outputs of a flood model using a Monte-Carlo procedure, where multiple, equally likely DEMs are derived from LiDAR by adjusting the alignment (rotation) and point of origin of the model grid, and each used to predict flood inundation. LiDAR data for the Waikanae River area, New Zealand,  were rotated (0 - 90 degrees) and translated (0 - 5 meters north and east) to produce 684 10 m resolution DEMs. The hydraulic model LISFLOOD-FP (Bates et al. 2010) was then used to generate the outputs within the Monte-Carlo framework. Model results were then transformed back to their original positions so that the variability could be analysed statistically, allowing the sensitivity of model predictions to grid alignment to be assessed.
+Due to its potential significant impacts on the flood modelling process, in this study, we quantify the uncertainty in flood model outputs caused by transforming this grid orientation. Using a Monte Carlo method, we produced multiple DEMs by randomly rotating and/or translating the square grid orientation to predict floods for uncertainty analysis. This Monte Carlo framework was also applied at various resolutions (2, 5, 10, and 20 meters) and flood return periods (5, 10, 20, 50, and 1000 years). 
+
+Results show that the highest uncertainty in flood predictions occurred predominantly at the flood extent boundaries and near the river. Rotating the grid orientation caused more uncertainty than translating. The highest uncertainty was found when both rotating and translating the grid. The variability in both flooded areas and the number of flooded buildings followed these patterns. Finer resolutions revealed fewer variations in flood predictions and less variability in flooded areas and the number of flooded buildings. These variations were also determined by the amount of river discharge. Significant variations occurred depending on whether the river discharge was insufficient to cover the floodplain surfaces. Also, the flooded areas and the number of flooded buildings could expand or contract based on whether the water reached new locations and these places included residential buildings.
 
 
-## References
+![S3_proportion_wd](https://github.com/Martin20494/Grid_Orientation/assets/55137629/840e5b4e-4801-43e2-80ff-0804d696ccbb)
 
-Ozdemir, H., Sampson, C. C., de Almeida, G. A. M., & Bates, P. D. (2013). Evaluating scale and roughness effects in urban flood modelling using terrestrial LIDAR data. Hydrology and Earth System Sciences, 17(10), 4015–4030. https://doi.org/10.5194/hess-17-4015-2013
+The above figure shows the proportions of times a location was predicted to be flooded in all simulations. It usggests that in some simulations, topopographic effects, caused by the changes in the grid orientation, prevented water from reaching some specific locations, such as the upper part of the blue zoomed-in image in the figure.
 
-Pappenberger, F., Matgen, P., Beven, K. J., Henry, J. B., Pfister, L., & Fraipont, P. (2006). Influence of uncertain boundary conditions and model structure on flood inundation predictions. Advances in Water Resources, 29(10), 1430–1449. https://doi.org/10.1016/J.ADVWATRES.2005.11.012 
+## Workflow
 
-Bates, P. D., Horritt, M. S., & Fewtrell, T. J. (2010). A simple inertial formulation of the shallow water equations for efficient two-dimensional flood inundation modelling. Journal of Hydrology, 387(1-2), 33-45.
+![transformation_process](https://github.com/Martin20494/Grid_Orientation/assets/55137629/4ecdd3b5-2e28-41b2-ae65-8ba4044b20d8)
+
+## Data
+
+The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) and instruction provided by Dr. [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Four files attached here were used to run the simulations.
+
+#### 1. File validation_calibration
+
+This file includes three other files - data, results, and scripts. These files were used to validate and calibrate the LISFLOOD-FP flood model.
+- Data file includes all data that are necessary for validating and calibrating the flood model. Notice here the land (51559) and bathymetry (50554) were downloaded on 15/04/2024. The OpenStreetMap data was downloaded into cache file on 25/01/2023. Hence, the reproducible work could be different because the versions of these data could be changed.
+- Scripts file includes all scripts to validate and calibrate the LISFLOOD-FP flood model.
+- Results file includes the results from our work after running the scripts file.
+
+#### 2. File simulation
+
+This file includes two files - data and script.
+- Data file includes initial data which cannot be generated automatically from the script file.
+- Script file includes three other files - Modelling, Analysing, and Executing. The Modelling file includes all the modules used to create multiple DEMs and flood predictions by transforming the grid orientation. The Analysing file includes all the modules used to extract all uncertainties and analyse them. The Executing file includes all the scripts to run the Modelling and Analysing file.
+- The results for these scripts are very large (4TB). Please contact with the author if you would like to know more details.
+
+#### 3. File other_files
+
+This file includes two big files - script and data.
+- Data file includes all the files used for figures in the journal.
+- Script file includes all the script used to create data file.
+
+#### 4. File comparison
+
+- Comparison_script file is used to run the codes using to compare all transformation types, resolutions, and flood return periods.
+- Comparison_result files is the result after running the script.
+
+## Acknowledgement
+This study is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship is provided from this programme to M. Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).
+
+## Contacts
+
+Github author: Martin Nguyen martinnguyen20494@gmail.com
+
+
 

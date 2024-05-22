@@ -8,7 +8,9 @@ Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and 
 
 Digital elevation models, or DEMs, are critical for generating reliable flood predictions. The most common method to generate DEMs involves sampling and interpolating LiDAR data onto a North-South square grid. However, the orientation of this grid, which can introduce variability in elevation data and thus influence flood predictions, is frequently overlooked.  
 
-![problem_idea_003](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)
+<div align="center">
+	<img width = "33%" src="[https://i.imgur.com/8BgVXcY.png](https://github.com/Martin20494/Grid_Orientation/assets/55137629/65c5d839-0db1-4d79-aecd-7baa78c5b4a5)">
+</div>
 
 The figure above shows the difference in sampling an artificial LiDAR point cloud, with ground elevation values of 1 m and river elevation values of 0.5 m, onto a North-South square grid versus a 45-degree rotated grid using a 10-meter resolution. This difference significantly affects the representation of the river, as seen in the river profiles, potentially creating varying waterways along its length. Due to its potential significant impact on flood modeling, this study quantifies the uncertainty in flood model outputs caused by grid orientation transformation. Using a traditional Monte Carlo method, we produced multiple DEMs by randomly rotating and/or translating the square grid orientation to predict floods for uncertainty analysis.
 

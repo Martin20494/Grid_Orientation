@@ -1,5 +1,6 @@
 # Grid_Orientation
 Quantifying uncertainty in flood predictions caused by transforming square grid orientation in LiDAR-derived DEM process
+Authors: M. Nguyen, M. D. Wilson, E. M. Lane, J. Brasington, and R. A. Pearson
 
 ## Summary
 
@@ -10,6 +11,7 @@ Digital elevation datas, or DEMs, are critical for generating reliable flood pre
 Due to its potential significant impacts on the flood modelling process, in this study, we quantify the uncertainty in flood model outputs caused by transforming this grid orientation. Using a Monte Carlo method, we produced multiple DEMs by randomly rotating and/or translating the square grid orientation to predict floods for uncertainty analysis. This Monte Carlo framework was also applied at various resolutions (2, 5, 10, and 20 meters) and flood return periods (5, 10, 20, 50, and 1000 years). 
 
 Results show that the highest uncertainty in flood predictions occurred predominantly at the flood extent boundaries and near the river. Rotating the grid orientation caused more uncertainty than translating. The highest uncertainty was found when both rotating and translating the grid. The variability in both flooded areas and the number of flooded buildings followed these patterns. Finer resolutions revealed fewer variations in flood predictions and less variability in flooded areas and the number of flooded buildings. These variations were also determined by the amount of river discharge. Significant variations occurred depending on whether the river discharge was insufficient to cover the floodplain surfaces. Also, the flooded areas and the number of flooded buildings could expand or contract based on whether the water reached new locations and these places included residential buildings.
+
 
 ![S3_proportion_wd](https://github.com/Martin20494/Grid_Orientation/assets/55137629/840e5b4e-4801-43e2-80ff-0804d696ccbb)
 
@@ -50,7 +52,6 @@ This file includes two big files - script and data.
 
 ## Acknowledgement
 This study is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship is provided from this programme to M. Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0)
-
 
 ## Contacts
 

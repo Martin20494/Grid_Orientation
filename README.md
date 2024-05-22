@@ -42,15 +42,11 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) provided by [Dr. Rose A. Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). This project includes 3 main folders as described below.
 
-- ```validation_calibration```: Data, scripts, and results sub-folders in this folder were used to validate and calibrate the LISFLOOD-FP flood model. 
+[validation_calibration](https://github.com/Martin20494/Grid_Orientation/tree/main/validation_calibration): Data, scripts, and results sub-folders in this folder were used to validate and calibrate the LISFLOOD-FP flood model. 
 
-#### 2. File simulation
+[simulation](https://github.com/Martin20494/Grid_Orientation/tree/main/simulation): Data and scripts sub-folders in this folder were used to generate simulations.
 
-Data and scripts sub-folders in this folder were used to generate simulations.
-
-#### 3. File other_files
-
-Data and scripts sub-folders in this folder were used to store all results from this project, figures for manuscript, and data sources.
+[other_files](https://github.com/Martin20494/Grid_Orientation/tree/main/other_files): Data and scripts sub-folders in this folder were used to store all results from this project, figures for manuscript, and data sources.
 
 ## Acknowledgement
 This project is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship was provided from this programme to Martin Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).

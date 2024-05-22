@@ -25,7 +25,7 @@ The above figure shows the proportions of times a location was predicted to be f
 
 ## Data
 
-The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) and instruction provided by [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Four files attached here were used to run the simulations.
+The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) and instruction provided by Dr. [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Four files attached here were used to run the simulations.
 
 #### 1. File validation_calibration
 

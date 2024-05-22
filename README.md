@@ -13,5 +13,9 @@ Results show that the highest uncertainty in flood predictions occurred predomin
 ![transformation_process](https://github.com/Martin20494/Grid_Orientation/assets/55137629/4ecdd3b5-2e28-41b2-ae65-8ba4044b20d8)
 
 
+## Contacts
+
+Github author: Martin Nguyen martinnguyen20494@gmail.com
+
 
 

@@ -28,7 +28,7 @@ The figure below demonstrates the effect of transforming the square grid orienta
 
 ## Reproducible work
 
-The instruction below is for reproducing this project. It will take 1-2 days to generate a version but some might take more than a week (e.g: 2-meter resolution). Please contact with the Github author if further information is needed.
+The project was written under modules format and has not been updated to class format yet. Therefore, the users might need to download all the modules to reproduce this project. After following the instruction here, please click on each profiles for further instructions. Also, please contact with the Github author if further information is needed.
 
 ### Environment installation
 

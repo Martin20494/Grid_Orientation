@@ -42,9 +42,7 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) provided by [Dr. Rose A. Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). This project includes 3 main folders as described below.
 
-#### 1. File validation_calibration
-
-Data, scripts, and results sub-folders in this folder were used to validate and calibrate the LISFLOOD-FP flood model. 
+- ```validation_calibration```: Data, scripts, and results sub-folders in this folder were used to validate and calibrate the LISFLOOD-FP flood model. 
 
 #### 2. File simulation
 

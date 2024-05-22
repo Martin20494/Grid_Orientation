@@ -48,7 +48,7 @@ Data, scripts, and results sub-folders in this folder were used to validate and 
 
 #### 2. File simulation
 
-Data and scripts sub-folders in this folder were used to generate simulations. The results were stored in each version folder, so there is no sub-folder results here.
+Data and scripts sub-folders in this folder were used to generate simulations.
 
 #### 3. File other_files
 

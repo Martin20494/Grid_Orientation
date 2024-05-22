@@ -44,23 +44,15 @@ The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.
 
 #### 1. File validation_calibration
 
-This file includes three other files - data, results, and scripts. These files were used to validate and calibrate the LISFLOOD-FP flood model.
-- Data file includes all data that are necessary for validating and calibrating the flood model. Notice here the land (51559) and bathymetry (50554) were downloaded on 15/04/2024. The OpenStreetMap data was downloaded into cache file on 25/01/2023. Hence, the reproducible work could be different because the versions of these data could be changed.
-- Scripts file includes all scripts to validate and calibrate the LISFLOOD-FP flood model.
-- Results file includes the results from our work after running the scripts file.
+Data, scripts, and results sub-folders in this folder were used to validate and calibrate the LISFLOOD-FP flood model. 
 
 #### 2. File simulation
 
-This file includes two files - data and script.
-- Data file includes initial data which cannot be generated automatically from the script file.
-- Scripts file includes three other files - Modelling, Analysing, and Executing. The Modelling file includes all the modules used to create multiple DEMs and flood predictions by transforming the grid orientation. The Analysing file includes all the modules used to extract all uncertainties and analyse them. The Executing file includes all the scripts to run the Modelling and Analysing file.
-- The results for these scripts are very large (4TB). Please contact with the author if you would like to know more details.
+Data and scripts sub-folders in this folder were used to generate simulations. The results were stored in each version folder, so there is no sub-folder results here.
 
 #### 3. File other_files
 
-This file includes two big files - script and data.
-- Data file includes all the files used for figures in the journal.
-- Scripts file includes all the script used to create data file.
+Data and scripts sub-folders in this folder were used to store all results from this project, figures for manuscript, and data sources.
 
 ## Acknowledgement
 This project is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship was provided from this programme to Martin Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).

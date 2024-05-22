@@ -19,6 +19,39 @@ The above figure shows the proportions of times a location was predicted to be f
 
 ![transformation_process](https://github.com/Martin20494/Grid_Orientation/assets/55137629/4ecdd3b5-2e28-41b2-ae65-8ba4044b20d8)
 
+## Data
+
+The DEMs in this work is created thanks to the GeoFabrics package and instruction provided by [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Four files attached here were used to run the simulations.
+
+1. File validation_calibration
+
+This file includes three other files - data, results, and scripts. These files were used to validate and calibrate the LISFLOOD-FP flood model.
+- Data file includes all data that are necessary for validating and calibrating the flood model. Notice here the land (51559) and bathymetry (50554) were downloaded on 15/04/2024. The OpenStreetMap data was downloaded into cache file on 25/01/2023. Hence, the reproducible work could be different because the versions of these data could be changed.
+- Scripts file includes all scripts to validate and calibrate the models.
+- Results file includes the results from our work after running the scripts file.
+
+2. File simulation
+
+This file includes two files - data and script.
+- Data file includes initial data which cannot be generated automatically from the script file.
+- Script file includes three other files - Modelling, Analysing, and Executing. The Modelling file includes all the modules used to create multiple DEMs and flood predictions by transforming the grid orientation. The Analysing file includes all the modules used to extract all uncertainties and analyse them. The Executing file includes all the scripts to run the Modelling and Analysing file.
+- The results for these scripts are very large (4TB). Please contact with the author if you would like to know more details.
+
+3. File other_files
+
+This file includes two big files - script and data.
+- Data file includes all the files used for figures in the journal.
+- Script file includes all the script used to create data file.
+
+4. File comparison
+
+- Comparison_script file is used to run the codes using to compare all transformation types, resolutions, and flood return periods.
+- Comparison_result files is the result after running the script.
+
+## Acknowledgement
+This study is part of the NIWA-led national flood hazard assessment programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship is provided from this programme to M. Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0)
+
+
 ## Contacts
 
 Github author: Martin Nguyen martinnguyen20494@gmail.com

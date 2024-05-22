@@ -31,7 +31,7 @@ The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.
 
 This file includes three other files - data, results, and scripts. These files were used to validate and calibrate the LISFLOOD-FP flood model.
 - Data file includes all data that are necessary for validating and calibrating the flood model. Notice here the land (51559) and bathymetry (50554) were downloaded on 15/04/2024. The OpenStreetMap data was downloaded into cache file on 25/01/2023. Hence, the reproducible work could be different because the versions of these data could be changed.
-- Scripts file includes all scripts to validate and calibrate the models.
+- Scripts file includes all scripts to validate and calibrate the LISFLOOD-FP flood model.
 - Results file includes the results from our work after running the scripts file.
 
 #### 2. File simulation

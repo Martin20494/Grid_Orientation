@@ -26,15 +26,19 @@ The figure below demonstrates the effect of transforming the square grid orienta
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data_forpublication/Maps_result/S3_proportion_wd.jpg">
 </div>
 
-## Installation for reproducible work
+## Reproducible work
 
-To reproduce the work, download the ```gri_orientaion_packages.yaml``` file and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
+The instruction below is for reproducing my work. It might take more than 2 weeks to obtain the results. Please contact with the Github author if further information is needed.
+
+### Environment installation
+
+Download file ```gri_orientaion_packages.yaml``` and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
 
 ```
 conda env create -n gridorientation -f gridorientation.yaml
 ```
 
-## Data
+### Data
 
 The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) and instruction provided by Dr. [R.A.Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work was published and can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). Three files attached here were used to run the simulations.
 

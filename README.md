@@ -40,7 +40,7 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 ### Data
 
-The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) provided by [Dr, Rose A. Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). This project includes 3 main folders as described below.
+The DEMs in this work are created thanks to the GeoFabrics package (version 0.9.4) provided by [Dr. Rose A. Pearson](https://github.com/rosepearson/GeoFabrics/wiki) her work can be read [here](https://www.sciencedirect.com/science/article/pii/S1364815223002281). This project includes 3 main folders as described below.
 
 #### 1. File validation_calibration
 

@@ -1,1 +1,2 @@
-In progress
+Download ```data``` and ```scripts``` into your local computer.
+

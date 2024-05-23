@@ -16,4 +16,6 @@ The ```scripts``` file includes ```Analysing```, ```Modelling```, and ```Executi
 
 **_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different ```size_of_processor``` and ```size_of_chunk``` in ```Modelling``` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g: 2-meter resolution). To make the work faster, the Github author used [Nesi computers](https://www.nesi.org.nz/services/high-performance-computing-and-data-analytics) to generate multiple simulations of flood predictions at the same time after creating DEMs, if you would like to proceed the same please visit [other_files](https://github.com/Martin20494/Grid_Orientation/tree/main/other_files) for more information. Please contact with the Github author if further information is needed. The image below shows how 13 versions and files in a version looks like.
 
-https://github.com/Martin20494/Grid_Orientation/blob/main/simulation/folder_example/folders_examples.jpg
+<div align="center">
+	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/simulation/folder_example/folders_examples.jpg">
+</div>

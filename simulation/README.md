@@ -1,4 +1,4 @@
-Download ```data``` and ```scripts``` folders into your local folder. 
+Download ```data``` and ```scripts``` folders into your local computer. 
 
 #### 1. File data
 

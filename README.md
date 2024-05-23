@@ -20,6 +20,14 @@ We used a traditional Monte Carlo framework to generate multiple DEMs by rotatin
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/Simulation_process/transformation_process.jpg">
 </div>
 
+## Site study
+
+The Waikanae river, situated on the West Coast of the Wellington Region in New Zealand, was selected for this project. In tha figure below, images A and B depict the area of interest in this paper, selected from the vicinity of the Waikanae Water Treatment Plant gauge and extending approximately 5 km toward the Waikanae coastal region. In the image B, the bright blue line represents the Waikanae river. Image C presents a DEM with a hillshade effect, representing Waikanae topographic features.
+
+<div align="center">
+	<img width = "75%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/DEM_hillshade/site_river.jpg">
+</div>
+
 ## Representative result
 
 The figure below demonstrates the effect of transforming the square grid orientation on the flood predictions. It shows the proportion of times a location/each pixel was predicted to be flooded across all simulations. The results suggest that in some simulations, topographic effects due to the changes in the grid orientation prevented water from reaching specific locations. This is evident in the upper part of the blue zoomed-in image or at the flood extent boundaries in the figure.

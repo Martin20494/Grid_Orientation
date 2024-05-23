@@ -32,7 +32,7 @@ The project was written under modules format and has not been updated to class f
 
 ### Environment installation
 
-Download file ```gri_orientaion_packages.yaml``` and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
+Download file ```grid_orientaion_packages.yaml``` and use the following command (reference from the answer of [@merv](https://stackoverflow.com/questions/76800978/conda-invalidversionspec-invalid-version-error-when-tryin-to-install-from-requi)) to recreate the anaconda environment (only support Windows at the moment).
 
 ```
 conda env create -n gridorientation -f gridorientation.yaml

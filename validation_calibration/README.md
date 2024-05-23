@@ -9,7 +9,7 @@ These folders are used to validate and calibrate the LISFLOOD-FP flood model. Do
 7. Run ```Calibration_otherfiles.ipynb```, it will create necessary files to calibrate the data.
 8. Run ```Evaluationfor_validation_calibration.ipynb```, it will create the plots to visualise validation and calibration results.
 
-The results were shown as below
+The results are shown as below.
 
 <div align="center">
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/validation_calibration/results/validation_calibration.jpg">

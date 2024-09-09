@@ -26,7 +26,6 @@ We used LISFLOOD-FP flood model within a Monte Carlo framework to generate multi
 
 <div align="center">
 	<img width = "50%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/Simulation_process/transformation_list.jpg">
-	
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/Simulation_process/transformation_process.jpg">
 </div>
 

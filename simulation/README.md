@@ -2,7 +2,7 @@ Download `data` and `scripts` folders into your local computer.
 
 #### 1. File data
 
-The `data` folder: Includes `0_lidar_data` and `other_data` sub-folders. These files should be put into a simulation version folder (e.g: Put them into folder version_001 used to generate simulations of rotation and North-East translation).
+The `data` folder: Includes `0_lidar_data` and `other_data` sub-folders. These files should be put into a simulation version folder (e.g: Put them into folder version_001 used to generate simulations of rotation and translation).
 
 - `0_lidar_data`: Includes `flow_and_friction.csv.gz` and `rec2_3.geojson` files (river features) provided by NIWA to estimate the river bathymetry. These data can be found [here](https://data-niwa.opendata.arcgis.com/apps/NIWA::new-zealand-river-flood-statistics-app/explore).
 
@@ -12,7 +12,7 @@ The `data` folder: Includes `0_lidar_data` and `other_data` sub-folders. These f
 
 The `scripts` folder includes `Analysing`, `Modelling`, and `Executing` sub-folders. These sub-folders are used for generating simulations. 
 
-- `Modelling` and `Analysing`: Includes two separate groups of modules to generate and then analyse the simulations. `Modelling` will create multiple DEMs from LiDAR data downloaded from the [OpenTopography](https://portal.opentopography.org/datasets). These DEMs will then be used in LISFLOOD-FP model to produce multiple water depths and water surfaces. These data will then be analysed in `Analysing`. Please change the `versionModule` to the name of the simulation version you are running. For example, I named `version_001` for rotation and North-Eastranslation simulation. Also change the `MAIN_DIR` to your own path.
+- `Modelling` and `Analysing`: Includes two separate groups of modules to generate and then analyse the simulations. `Modelling` will create multiple DEMs from LiDAR data downloaded from the [OpenTopography](https://portal.opentopography.org/datasets). These DEMs will then be used in LISFLOOD-FP model to produce multiple water depths and water surfaces. These data will then be analysed in `Analysing`. Please change the `versionModule` to the name of the simulation version you are running. For example, I named `version_001` for rotation and simulation. Also change the `MAIN_DIR` to your own path.
 
 - `Executing`: Includes `Analysing`, `Comparing`, and `Modelling` files used to run modules in `Analysing` and `Modelling` folders to generate and compare simulations. These files were written in jupyter notebook format. Therefore, we suggest to also use jupyter notebook with the environment installed earlier. Please follow the instructions for generating each simulation version for different transformation types, resolutions, and flood return periods written in the script. There are 13 version of these different scenrios applied on this uncertainty in total. Please change the `os.chdir` in each file into the folder containing `Analysing` or `Modelling` folders.
 

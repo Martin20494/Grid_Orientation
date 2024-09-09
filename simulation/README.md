@@ -16,6 +16,10 @@ The `scripts` folder includes `Analysing`, `Modelling`, and `Executing` sub-fold
 
 - `Executing`: Includes `Analysing`, `Comparing`, and `Modelling` files used to run modules in `Analysing` and `Modelling` folders to generate and compare simulations. These files were written in jupyter notebook format. Therefore, we suggest to also use jupyter notebook with the environment installed earlier. Please follow the instructions for generating each simulation version for different transformation types, resolutions, and flood return periods written in the script. There are 13 version of these different scenrios applied on this uncertainty in total. Please change the `os.chdir` in each file into the folder containing `Analysing` or `Modelling` folders.
 
+#### 3. Usage
+
+After [installation](https://github.com/Martin20494/Grid_Orientation?tab=readme-ov-file#environment-installation), downloading these subfolders to a local folder. Change the  
+
 **_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g: 2-meter resolution). Please contact with the Github author if further information is needed. The image below shows how 13 versions and files in a version look like after running these files.
 
 <div align="center">

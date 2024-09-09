@@ -25,6 +25,7 @@ The Waikanae river, situated on the West Coast of the Wellington Region in New Z
 We used LISFLOOD-FP flood model within a Monte Carlo framework to generate multiple flood predictions based on the January-2005 Waikanae River flood event for analysis. This approach was applied to five transformation types (East translation, North translation, translation, rotation, and a combination of rotation and translation), four resolutions (2, 5, 10, and 20 meters), and six flood scenarios (with return periods of 5, 10, 20, 50, 80, and 1000 years).
 
 <div align="center">
+	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/Simulation_process/transformation_list.jpg">
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/other_files/data/Simulation_process/transformation_process.jpg">
 </div>
 

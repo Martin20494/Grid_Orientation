@@ -53,13 +53,14 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 This project includes 3 main folders as described below.
 
-- [validation_calibration](https://github.com/Martin20494/Grid_Orientation/tree/main/validation_calibration): Including data, scripts, and results sub-folders used to validate and calibrate the LISFLOOD-FP flood model. 
+- [calibration](https://github.com/Martin20494/Grid_Orientation/tree/main/validation_calibration): Including `data`, `scripts`, and `results` sub-folders used to calibrate the LISFLOOD-FP flood model. 
 
-- [simulation](https://github.com/Martin20494/Grid_Orientation/tree/main/simulation): Including data and scripts sub-folders used to generate simulations.
+- [simulation](https://github.com/Martin20494/Grid_Orientation/tree/main/simulation): Including `data` and `scripts` sub-folders used to generate simulations.
 
-- [other_files](https://github.com/Martin20494/Grid_Orientation/tree/main/other_files): Including data and scripts sub-folders used to store all results from this project, figures for manuscript, and data sources.
+- [other_files](https://github.com/Martin20494/Grid_Orientation/tree/main/other_files): Including `data` and `scripts` sub-folders used to store all results from this project, figures for manuscript, and data sources.
 
 ## Acknowledgement
+
 This project is part of the NIWA-led national programme, ["Reducing flood inundation hazard and risk across Aotearoa - New Zealand"](https://niwa.co.nz/hazards/ma-te-haumaru-o-nga-puna-wai-o-rakaihautu-ka-ora-mo-ake-tonu-increasing-flood), funded by the Ministry for Business, Innovation and Employment (MBIE) Endeavour Programme. A PhD scholarship was provided from this programme to Martin Nguyen. The LISFLOOD-FP flood model was developed at the University of Bristol and is available [here](https://www.seamlesswave.com/LISFLOOD8.0).
 
 ## Contacts

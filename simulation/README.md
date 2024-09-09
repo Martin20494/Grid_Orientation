@@ -12,13 +12,15 @@ The `data` folder: Includes `0_lidar_data` and `other_data` sub-folders. These f
 
 The `scripts` folder includes `Analysing`, `Modelling`, and `Executing` sub-folders. These sub-folders are used for generating simulations. 
 
-- `Modelling` and `Analysing`: Includes two separate groups of modules to generate and then analyse the simulations. `Modelling` will create multiple DEMs from LiDAR data downloaded from the [OpenTopography](https://portal.opentopography.org/datasets). These DEMs will then be used in LISFLOOD-FP model to produce multiple water depths and water surfaces. These data will then be analysed in `Analysing`. Please change the `versionModule` to the name of the simulation version you are running. For example, I named `version_001` for rotation and simulation. Also change the `MAIN_DIR` to your own path.
+- `Modelling` and `Analysing`: Includes two separate groups of modules to generate and then analyse the simulations. `Modelling` will create multiple DEMs from LiDAR data downloaded from the [OpenTopography](https://portal.opentopography.org/datasets). These DEMs will then be used in LISFLOOD-FP model to produce multiple water depths and water surfaces. These data will then be analysed in `Analysing`.
 
 - `Executing`: Includes `Analysing`, `Comparing`, and `Modelling` files used to run modules in `Analysing` and `Modelling` folders to generate and compare simulations. These files were written in jupyter notebook format. Therefore, we suggest to also use jupyter notebook with the environment installed earlier. Please follow the instructions for generating each simulation version for different transformation types, resolutions, and flood return periods written in the script. There are 13 version of these different scenrios applied on this uncertainty in total. Please change the `os.chdir` in each file into the folder containing `Analysing` or `Modelling` folders.
 
 #### 3. Usage
 
-After [installation](https://github.com/Martin20494/Grid_Orientation?tab=readme-ov-file#environment-installation), downloading these subfolders to a local folder. Change the  
+After [installation](https://github.com/Martin20494/Grid_Orientation?tab=readme-ov-file#environment-installation), download these subfolders to a local folder. In `Modelling` and `Analysing`, change the `MAIN_DIR` (path to your local folder) in module `folder.py`, change the name of simulation version in module `versionModule`. For example, I named `version_001` for rotation and translation with 10-m grid and using January-2015 event. You might also want to change the [API key](https://www.linz.govt.nz/guidance/data-service/linz-data-service-guide/web-services/creating-api-key) to crawl data from LINZ in `dataPreparation.py` in `Modelling`.
+
+There are 13 simulation versions, each of them represents for a set of 50 transformation values, a resolution, and a flood event. To create each version, 
 
 **_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g: 2-meter resolution). Please contact with the Github author if further information is needed. The image below shows how 13 versions and files in a version look like after running these files.
 

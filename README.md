@@ -1,8 +1,12 @@
 # Grid Alignment
 
-Title: Quantifying uncertainty in flood predictions LISFLOOD-FP due to arbitrary conventions in grid alignment in LiDAR-derived digital elevation models
+#### Title
 
-Authors: Martin Nguyen, Matthew D. Wilson, Emily M. Lane, James Brasington, and Rose A. Pearson
+Quantifying uncertainty in flood predictions LISFLOOD-FP due to arbitrary conventions in grid alignment in LiDAR-derived digital elevation models
+
+#### Authors
+
+Martin Nguyen, Prof. Matthew D. Wilson, Dr. Emily M. Lane, Rrof. James Brasington, and Dr. Rose A. Pearson
 
 ## Introduction
 

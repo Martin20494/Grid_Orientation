@@ -1,9 +1,0 @@
-<PAMDataset>
-  <Metadata>
-    <MDI key="long_name">idw</MDI>
-    <MDI key="units">metre</MDI>
-  </Metadata>
-  <PAMRasterBand band="1">
-    <Description>idw</Description>
-  </PAMRasterBand>
-</PAMDataset>

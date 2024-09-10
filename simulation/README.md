@@ -103,3 +103,5 @@ Each version includes 6 folders as explained below:
 - `cache`: Storing history of used data
 
 - `other_data`: Other necessary data to generate and evaluate the simulations
+
+**_Notice_**: There is a small version of these 13 subsets that only includes results for analysis. Please contact the author for more information.

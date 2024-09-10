@@ -48,8 +48,58 @@ After generating all (13) subsets, to compare, in `Executing` folder, access to 
 
   	- Change the paths to store all the results, they are in cells with the last line of codes with comment line `# Save fig`.
 
-**_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g. 2-meter resolution). Please contact with the Github author if further information is needed. The image below shows how 13 versions and files in a version look like after running these files.
+**_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g. 2-meter resolution). Please contact with the Github author if further information is needed. 
+
+#### 4. Result files explaining
+
+The image below shows how files look like after running these modules.
 
 <div align="center">
 	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/simulation/folder_example/folders_examples.jpg">
 </div>
+
+There are 13 folders representing for 13 simulation versions of five transformation types, four resolutions, and six flood peak return periods as explained below:
+
+- `vers001`: rotation and translation, 10-m resolution, and January-2005 event
+
+- `vers002`: rotation, 10-m resolution, and January-2005 event
+
+- `vers003`: East translation, 10-m resolution, and January-2005 event
+
+- `vers004`: North translation, 10-m resolution, and January-2005 event
+
+- `vers005`: North-East translation (translation), 10-m resolution, and January-2005 event
+
+- `vers006`: rotation and translation, 5-m resolution, and January-2005 event
+
+- `vers007`: rotation and translation, 2-m resolution, and January-2005 event
+
+- `vers008`: rotation and translation, 20-m resolution, and January-2005 event
+
+- `vers009`: rotation and translation, 10-m resolution, and 5-year event
+
+- `vers010`: rotation and translation, 10-m resolution, and 10-year event
+
+- `vers011`: rotation and translation, 10-m resolution, and 20-year event
+
+- `vers012`: rotation and translation, 10-m resolution, and 50-year event
+
+- `vers013`: rotation and translation, 10-m resolution, and 1000-year event
+
+Each version includes 6 folders as explained below:
+
+- `0_lidar_data`: Storing original LiDAR data and DEM
+
+- `1_transformation`: Storing transformed LiDAR
+
+- `2_raster`: Storing transformed DEMs and roughness length as well as Manning's n
+
+- `3_LISFLOODD_FP`: Storing inputs and outputs of flood modelling using LISFLOOD-FP
+
+- `4_untransformation`: Storing reversed outputs
+
+- `5_analysis`: Storing analysis results
+
+- `cache`: Storing history of used data
+
+- `other_data`: Other necessary data to generate and evaluate the simulations

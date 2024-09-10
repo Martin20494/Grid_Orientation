@@ -34,19 +34,19 @@ There are 13 simulation versions, each of them represents for a set of 50 transf
 
 To generate analysis result, in `Executing` folder, access to jupyter notebook `Analysis.ipynb`, change things as following bullet points before running all cells:
 
-	- Change the parth in `0. Change directory` for cell directing to where the `Analysis.ipynb` is stored in your local computer.
+- Change the parth in `0. Change directory` for cell directing to where the `Analysis.ipynb` is stored in your local computer.
 
- 	- Change the `2. Data preparation` (probably the resolution) to the simulation version you want to run.
+- Change the `2. Data preparation` (probably the resolution) to the simulation version you want to run.
 
-  	- Change the number of processors in all cells of `3. Generate csv files` to suit your machine.
+- Change the number of processors in all cells of `3. Generate csv files` to suit your machine.
 
 After generating all (13) subsets, to compare, in `Executing` folder, access to jupyter notebook `Comparison.ipynb`, change things as following bullet points before running all cells:
 
-	- Change the parth in the very first cell to let it direct to where the `Analysis.ipynb` is stored in your local computer.
+- Change the parth in the very first cell to let it direct to where the `Analysis.ipynb` is stored in your local computer.
 
- 	- Change the paths in variables `trans_list_filename`, `res_list_filename`, and `events_list_filename` into your local paths where you store all the subsets. Their orders should be according to the `trans_name`, `res_name`, and `event_name`.
+- Change the paths in variables `trans_list_filename`, `res_list_filename`, and `events_list_filename` into your local paths where you store all the subsets. Their orders should be according to the `trans_name`, `res_name`, and `event_name`.
 
-  	- Change the paths to store all the results, they are in cells with the last line of codes with comment line `# Save fig`.
+- Change the paths to store all the results, they are in cells with the last line of codes with comment line `# Save fig`.
 
 **_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g. 2-meter resolution). Please contact with the Github author if further information is needed. 
 

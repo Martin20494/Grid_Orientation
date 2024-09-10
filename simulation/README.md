@@ -22,7 +22,7 @@ After [installation](https://github.com/Martin20494/Grid_Orientation?tab=readme-
 
 There are 13 simulation versions, each of them represents for a set of 50 transformation values, a resolution, and a flood event. To create 50 simulations for each version, open `Executing` folder and access to jupyter notebook `Modelling.ipynb`, change things as following bullet points befor running all cells:
 
-	- Change the path in `0. Change directory` for cell directing to where the `Modelling.ipynb` is stored in your local computer.
+	- Change the path in ```0. Change directory``` for cell directing to where the `Modelling.ipynb` is stored in your local computer.
  
  	- Change the `2. Necessary variables` to the simulation version you want to run.
 

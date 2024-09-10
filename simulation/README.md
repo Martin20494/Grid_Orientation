@@ -20,7 +20,18 @@ The `scripts` folder includes `Analysing`, `Modelling`, and `Executing` sub-fold
 
 After [installation](https://github.com/Martin20494/Grid_Orientation?tab=readme-ov-file#environment-installation), download these subfolders to a local folder. In `Modelling` and `Analysing`, change the `MAIN_DIR` (path to your local folder) in module `folder.py`, change the name of simulation version in module `versionModule`. For example, I named `version_001` for rotation and translation with 10-m grid and using January-2015 event. You might also want to change the [API key](https://www.linz.govt.nz/guidance/data-service/linz-data-service-guide/web-services/creating-api-key) to crawl data from LINZ in `dataPreparation.py` in `Modelling`.
 
-There are 13 simulation versions, each of them represents for a set of 50 transformation values, a resolution, and a flood event. To create each version, 
+There are 13 simulation versions, each of them represents for a set of 50 transformation values, a resolution, and a flood event. To create 50 simulations for each version, open `Executing` folder and access to jupyter notebook `Modelling.ipynb`, change things as following bullet points befor running all cells:
+
+	- Change the path in `0. Change directory` for cell directing to where the `Modelling.ipynb` is stored in your local computer.
+ 
+ 	- Change the `2. Necessary variables` to the simulation version you want to run.
+
+	- Change the `2.2. Other basic variables` (probably the second cell) and `2.4. Preparing some flood model inputs` to the size and chunk to suit your machine.
+
+	- Change the `2.5. Random transformations` to the simulation version you want to run.
+
+ 	- Change the number of processors in all cells of `3. Execution` to suit your machine.
+  
 
 **_Notice_**: This project was run on CPU machine with 8 cores and 64GB memory, you might want to choose different `size_of_processor` and `size_of_chunk` in `Modelling` files according to your machine features. It will take 1-2 days to generate a version but some might take more than a week (e.g: 2-meter resolution). Please contact with the Github author if further information is needed. The image below shows how 13 versions and files in a version look like after running these files.
 

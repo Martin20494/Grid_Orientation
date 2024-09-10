@@ -14,7 +14,7 @@ The `scripts` folder includes `Analysing`, `Modelling`, and `Executing` sub-fold
 
 - `Modelling` and `Analysing`: Includes two separate groups of modules to generate and then analyse the simulations. `Modelling` will create multiple DEMs from LiDAR data downloaded from the [OpenTopography](https://portal.opentopography.org/datasets). These DEMs will then be used in LISFLOOD-FP model to produce multiple water depths and water surfaces. These data will then be analysed in `Analysing`.
 
-- `Executing`: Includes `Analysing`, `Comparing`, and `Modelling` files used to run modules in `Analysing` and `Modelling` folders to generate and compare simulations. These files were written in jupyter notebook format. Therefore, we suggest to also use jupyter notebook with the environment installed earlier. Please follow the instructions for generating each simulation version for different transformation types, resolutions, and flood return periods written in the script. There are 13 version of these different scenrios applied on this uncertainty in total. Please change the `os.chdir` in each file into the folder containing `Analysing` or `Modelling` folders.
+- `Executing`: Includes `Analysing`, `Comparing`, and `Modelling` files used to run modules in `Analysing` and `Modelling` folders to generate and compare simulations. These files were written in jupyter notebook format. Therefore, we suggest to also use jupyter notebook with the environment installed earlier. Please follow the instructions for generating each simulation version for different transformation types, resolutions, and flood return periods written in the script. Please change the `os.chdir` in each file into the folder containing `Analysing` or `Modelling` folders.
 
 #### 3. Usage
 

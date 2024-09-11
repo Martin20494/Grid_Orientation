@@ -104,4 +104,4 @@ Each version includes 6 folders as explained below:
 
 - `other_data`: Other necessary data to generate and evaluate the simulations
 
-**_Notice_**: There is a small version of these 13 subsets that only includes results for analysis. Please contact the author for more information.
+**_Notice_**: There is a small version of these 13 subsets that only includes results for analysis [here](https://doi.org/10.26021/canterburynz.26973250.v1)

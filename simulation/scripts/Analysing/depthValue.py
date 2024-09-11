@@ -460,9 +460,12 @@ def get_water_parallelism(
     elif extract_name == 'out.mxe':
         untransformed_water = untransformed_wse
         csv_untransformation = wse_csv_untransformation
-    else:
+    elif extract_name == 'elev':
         untransformed_water = untransformed_elev
         csv_untransformation = elev_csv_untransformation
+    else:
+        untransformed_water = untransformed_n
+        csv_untransformation = n_csv_untransformation
 
     # Get point sample dataframe
     point_sample_df = point_sample_generation(False)

@@ -195,7 +195,8 @@ def padding_combination(coordinates_func, addition):
 
 def dem_raster_reference(resolution_func,
                          chunk_size_func, processor_func,
-                         padding_func, lidar_dataset_name, element_name):
+                         padding_func, lidar_dataset_name, element_name,
+                         roughness=False):
     """
     @Definition:
                 A function to create a reference raster file from a las/laz file used for center calculation and
@@ -239,223 +240,298 @@ def dem_raster_reference(resolution_func,
     catchment = catchment.set_crs(h_crs)
     catchment.to_file(basepath / result_folder / "catchment_boundary.geojson", crs="EPSG:2193", driver="GeoJSON")
 
-    # Design JSON instructions
-    instruction_json = {}
+    if roughness == False:
+        # Design JSON instructions
+        instruction_json = {}
 
-    # DRAINS
-    instruction_json['drains'] = {
-        # drain - output
-        "output": {
-            "crs": {
-                "horizontal": h_crs,
-                "vertical": v_crs
-            },
-            "grid_params": {
-                "resolution": 1
-            }
-        },
-
-        # drain - processing
-        "processing": {
-            "chunk_size": 1000,
-            "number_of_cores": 4
-        },
-
-        # drain - data_paths
-        "data_paths": {
-            "local_cache": str(basepath),
-            "subfolder": result_folder,
-            "catchment_boundary": "catchment_boundary.geojson"
-        },
-
-        # drain - apis
-        "apis": {
-            "open_topography": {
-                "Wellington_2013": {
-                    "crs": {
-                        "horizontal": h_crs,
-                        "vertical": v_crs
-                    }
-                }
-            },
-            "linz": {
-                "key": "857413f41ce446ed8961e2f1e960a24b",
-                "land": {
-                    "layers": [51559]
-                }
-            }
-        },
-
-        # drain - general
-        "general": {
-            "lidar_classifications_to_keep": [2, 9]
-        },
-
-        # drain - drains
-        "drains": {
-            "width": 5
-        }
-    }
-
-    # RIVERS
-    instruction_json['rivers'] = {
-        # river - output
-        "output": {
-            "crs": {
-                "horizontal": h_crs,
-                "vertical": v_crs
-            },
-            "grid_params": {
-                "resolution": 1
-            }
-        },
-
-        # river - processing
-        "processing": {
-            "chunk_size": 1000,
-            "number_of_cores": 4
-        },
-
-        # river - data_paths
-        "data_paths": {
-            "local_cache": str(basepath),
-            "subfolder": result_folder,
-        },
-
-        # river - apis
-        "apis": {
-            "open_topography": {
-                "Wellington_2013": {
-                    "crs": {
-                        "horizontal": h_crs,
-                        "vertical": v_crs
-                    }
-                }
-            },
-            "linz": {
-                "key": "857413f41ce446ed8961e2f1e960a24b",
-                "land": {
-                    "layers": [51559]
+        # DRAINS
+        instruction_json['drains'] = {
+            # drain - output
+            "output": {
+                "crs": {
+                    "horizontal": h_crs,
+                    "vertical": v_crs
                 },
-                "bathymetry_contours": {
-                    "layers": [50554]
+                "grid_params": {
+                    "resolution": 1
                 }
-            }
-        },
-
-        # river - general
-        "general": {
-            "set_dem_shoreline": True,
-            "bathymetry_contours_z_label": "valdco",
-            "drop_offshore_lidar": False,
-            "lidar_classifications_to_keep": [2, 9],
-            "interpolate_missing_values": True
-        },
-
-        # river - rivers
-        "rivers": {
-            "osm_id": 132793862,
-            "veg_lidar_classifications_to_keep": [2, 3, 4, 5, 9],
-            "max_channel_width": 120,
-            "min_channel_width": 10,
-            "max_bank_height": 2,
-            "rec_alignment_tolerance": 65,
-            "width_centre_smoothing": 10,
-            "channel_area_threshold": 121000000,
-            "channel_rec_id": 9253579,
-            "cross_section_spacing": 10,
-            "min_bank_height": 0.75,
-            "rec_file": str(basepath / "rec2_3.geojson"),
-            "flow_file": str(basepath / "flow_and_friction.csv.gz")
-        }
-    }
-
-
-    # DEM
-    instruction_json['dem'] = {
-        # outputs
-        "output": {
-            "crs": {
-                "horizontal": h_crs,
-                "vertical": v_crs
             },
-            "grid_params": {
-                "resolution": resolution_func
-            }
-        },
 
-        # processing
-        "processing": {
-            "chunk_size": chunk_size_func,
-            "number_of_cores": processor_func
-        },
+            # drain - processing
+            "processing": {
+                "chunk_size": 1000,
+                "number_of_cores": 4
+            },
 
-        # apis
-        "apis": {
-            "open_topography": {
-                f"{lidar_dataset_name}": {
-                    "crs": {
-                        "horizontal": h_crs,
-                        "vertical": v_crs
+            # drain - data_paths
+            "data_paths": {
+                "local_cache": str(basepath),
+                "subfolder": result_folder,
+                "catchment_boundary": "catchment_boundary.geojson"
+            },
+
+            # drain - apis
+            "apis": {
+                "open_topography": {
+                    "Wellington_2013": {
+                        "crs": {
+                            "horizontal": h_crs,
+                            "vertical": v_crs
+                        }
+                    }
+                },
+                "linz": {
+                    "key": "857413f41ce446ed8961e2f1e960a24b",
+                    "land": {
+                        "layers": [51559]
                     }
                 }
             },
-            "linz": {
-                "key": "857413f41ce446ed8961e2f1e960a24b",
-                "land": {
-                    "layers": [51559]
-                },
-                "bathymetry_contours": {
-                    "layers": [50554]
-                }
+
+            # drain - general
+            "general": {
+                "lidar_classifications_to_keep": [2, 9]
+            },
+
+            # drain - drains
+            "drains": {
+                "width": 5
             }
-        },
-
-        # data paths
-        "data_paths": {
-            "local_cache": str(basepath),
-            "subfolder": result_folder,
-            "catchment_boundary": "catchment_boundary.geojson",
-            "raw_dem": "raw_dem.nc",
-
-            # For bathymetry
-            "river_bathymetry": ["river_bathymetry.geojson", "fan_bathymetry.geojson",
-                                 "open_drain_elevation_5m_width.geojson", "closed_drain_elevation_5m_width.geojson"],
-            "river_polygons": ["river_polygon.geojson", "fan_polygon.geojson",
-                               "open_drain_polygon_5m_width.geojson", "closed_drain_polygon_5m_width.geojson"],
-            # Result
-            "result_dem": f"{element_name}.nc"
-        },
-
-        # general
-        "general": {
-            # For lidar
-            "set_dem_shoreline": True,
-            "drop_offshore_lidar": False,
-            "lidar_classification_to_keep": [2, 9],
-            "interpolation_method": "nearest",
-            "lidar_interpolation_method": "idw",
-
-            # For bathymetry
-            "bathymetry_contours_z_label": "valdco",
-            "bathymetry_points_type": ['rivers', 'rivers', 'drains', 'drains'],
-            "bathymetry_points_z_label": ['bed_elevation_Rupp_and_Smart', "depths", "elevation", "elevation"]
         }
-    }
 
-    # Save the instructions
-    with open(basepath/ result_folder / "instructions.json", "w") as instruction:
-        json.dump(instruction_json, instruction)
+        # RIVERS
+        instruction_json['rivers'] = {
+            # river - output
+            "output": {
+                "crs": {
+                    "horizontal": h_crs,
+                    "vertical": v_crs
+                },
+                "grid_params": {
+                    "resolution": 1
+                }
+            },
 
-    # Create DEM raster
-    runner = processor.RiverBathymetryGenerator(instruction_json['rivers'])
-    runner.run()
-    runner = processor.DrainBathymetryGenerator(instruction_json['drains'])
-    runner.run()
-    runner = processor.RawLidarDemGenerator(instruction_json['dem'])
-    runner.run()
-    runner = processor.HydrologicDemGenerator(instruction_json['dem'])
-    runner.run()
+            # river - processing
+            "processing": {
+                "chunk_size": 1000,
+                "number_of_cores": 4
+            },
+
+            # river - data_paths
+            "data_paths": {
+                "local_cache": str(basepath),
+                "subfolder": result_folder,
+            },
+
+            # river - apis
+            "apis": {
+                "open_topography": {
+                    "Wellington_2013": {
+                        "crs": {
+                            "horizontal": h_crs,
+                            "vertical": v_crs
+                        }
+                    }
+                },
+                "linz": {
+                    "key": "857413f41ce446ed8961e2f1e960a24b",
+                    "land": {
+                        "layers": [51559]
+                    },
+                    "bathymetry_contours": {
+                        "layers": [50554]
+                    }
+                }
+            },
+
+            # river - general
+            "general": {
+                "set_dem_shoreline": True,
+                "bathymetry_contours_z_label": "valdco",
+                "drop_offshore_lidar": False,
+                "lidar_classifications_to_keep": [2, 9],
+                "interpolate_missing_values": True
+            },
+
+            # river - rivers
+            "rivers": {
+                "osm_id": 132793862,
+                "veg_lidar_classifications_to_keep": [2, 3, 4, 5, 9],
+                "max_channel_width": 120,
+                "min_channel_width": 10,
+                "max_bank_height": 2,
+                "rec_alignment_tolerance": 65,
+                "width_centre_smoothing": 10,
+                "channel_area_threshold": 19000000,
+                "channel_rec_id": 9253579,
+                "cross_section_spacing": 10,
+                "min_bank_height": 0.75,
+                "rec_file": str(basepath / "rec2_3.geojson"),
+                "flow_file": str(basepath / "flow_and_friction.csv.gz")
+            }
+        }
+
+
+        # DEM
+        instruction_json['dem'] = {
+            # outputs
+            "output": {
+                "crs": {
+                    "horizontal": h_crs,
+                    "vertical": v_crs
+                },
+                "grid_params": {
+                    "resolution": resolution_func
+                }
+            },
+
+            # processing
+            "processing": {
+                "chunk_size": chunk_size_func,
+                "number_of_cores": processor_func
+            },
+
+            # apis
+            "apis": {
+                "open_topography": {
+                    f"{lidar_dataset_name}": {
+                        "crs": {
+                            "horizontal": h_crs,
+                            "vertical": v_crs
+                        }
+                    }
+                },
+                "linz": {
+                    "key": "857413f41ce446ed8961e2f1e960a24b",
+                    "land": {
+                        "layers": [51559]
+                    },
+                    "bathymetry_contours": {
+                        "layers": [50554]
+                    }
+                }
+            },
+
+            # data paths
+            "data_paths": {
+                "local_cache": str(basepath),
+                "subfolder": result_folder,
+                "catchment_boundary": "catchment_boundary.geojson",
+                "raw_dem": "raw_dem.nc",
+
+                # For bathymetry
+                "river_bathymetry": ["river_bathymetry.geojson", "fan_bathymetry.geojson",
+                                     "open_drain_elevation_5m_width.geojson", "closed_drain_elevation_5m_width.geojson"],
+                "river_polygons": ["river_polygon.geojson", "fan_polygon.geojson",
+                                   "open_drain_polygon_5m_width.geojson", "closed_drain_polygon_5m_width.geojson"],
+                # Result
+                "result_dem": f"{element_name}.nc"
+            },
+
+            # general
+            "general": {
+                # For lidar
+                "set_dem_shoreline": True,
+                "drop_offshore_lidar": False,
+                "lidar_classification_to_keep": [2, 9],
+                "interpolation_method": "nearest",
+                "lidar_interpolation_method": "idw",
+
+                # For bathymetry
+                "bathymetry_contours_z_label": "valdco",
+                "bathymetry_points_type": ['rivers', 'rivers', 'drains', 'drains'],
+                "bathymetry_points_z_label": ['bed_elevation_Rupp_and_Smart', "depths", "elevation", "elevation"]
+            }
+        }
+
+        # Save the instructions
+        with open(basepath/ result_folder / "instructions.json", "w") as instruction:
+            json.dump(instruction_json, instruction)
+
+        # Create DEM raster
+        runner = processor.RiverBathymetryGenerator(instruction_json['rivers'])
+        runner.run()
+        runner = processor.DrainBathymetryGenerator(instruction_json['drains'])
+        runner.run()
+        runner = processor.RawLidarDemGenerator(instruction_json['dem'])
+        runner.run()
+        runner = processor.HydrologicDemGenerator(instruction_json['dem'])
+        runner.run()
+
+    else:
+        # Roughness
+        instruction_roughness = {
+            # roughness - output
+            "output": {
+                "crs": {
+                    "horizontal": h_crs,
+                    "vertical": v_crs
+                },
+                "grid_params": {
+                    "resolution": resolution_func
+                }
+            },
+
+            # roughness - apis
+            "apis": {
+                "open_topography": {
+                    f"{lidar_dataset_name}": {
+                        "crs": {
+                            "horizontal": h_crs,
+                            "vertical": v_crs
+                        }
+                    }
+                },
+                "linz": {
+                    "key": "857413f41ce446ed8961e2f1e960a24b",
+                    "land": {
+                        "layers": [51559]
+                    },
+                    "bathymetry_contours": {
+                        "layers": [50554]
+                    }
+                }
+            },
+
+            # roughness - processing
+            "processing": {
+                "chunk_size": chunk_size_func,
+                "number_of_cores": processor_func
+            },
+
+            # roughness - data_paths
+            "data_paths": {
+                "local_cache": str(basepath),
+                "subfolder": result_folder,
+                "catchment_boundary": "catchment_boundary.geojson",
+                "result_dem": f"{element_name}.nc",
+                "result_geofabric": f"{element_name}_roughness.nc"
+            },
+
+            # roughness - general
+            "general": {
+                "set_dem_shoreline": True,
+                "drop_offshore_lidar": False,
+                "lidar_classifications_to_keep": [1, 2, 4, 9],
+                "interpolation_method": "nearest",
+                "lidar_interpolation_method": "idw"
+            },
+
+            # roughness - rivers
+            "drains": {
+                "width": 5
+            }
+        }
+
+        # Save the instructions
+        with open(basepath / result_folder / "instructions_roughness.json", "w") as instruction:
+            json.dump(instruction_roughness, instruction)
+
+        # Create ROUGHNESS raster
+        runner = processor.RoughnessLengthGenerator(instruction_roughness)
+        runner.run()
+
 
 
 def terrain_shading(

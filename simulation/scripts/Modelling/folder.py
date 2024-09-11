@@ -7,7 +7,8 @@ from versionModule import version          # For changing version
 
 # Set up PATH -------------------------------------------------------------------------------
 # Assign the path to the variable
-MAIN_DIR = fr"S:\\for\GRID\\versions\\{version}"
+# MAIN_DIR = fr"S:\for\GRID\versions\\{version}"
+MAIN_DIR = fr"S:\new_versions_006_forpublication\{version}"
 
 # Create header path
 pathlib.Path(f"{MAIN_DIR}").mkdir(parents=True, exist_ok=True)
@@ -81,6 +82,9 @@ untransformed_wse= f"{MAIN_DIR}\\4_untransformation\\untransformed_wse"
 # Elevation
 untransformed_elev = f"{MAIN_DIR}\\4_untransformation\\untransformed_elev"
 
+# Manning's n
+untransformed_n = f"{MAIN_DIR}\\4_untransformation\\untransformed_n"
+
 
 
 # ----------------------------------------- This is for ANALYSIS PART -----------------------
@@ -102,6 +106,9 @@ wse_oneraster_untransformation = f"{MAIN_DIR}\\5_analysis\\wse\\untransformed_im
 
 # Elevation
 elev_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\elev\\untransformed_csv"
+
+# Manning's n
+n_csv_untransformation = f"{MAIN_DIR}\\5_analysis\\n\\untranfromed_csv"
 
 
 # -------------------------------------------------------------------------------------------
@@ -150,6 +157,8 @@ necessary_files = [
     untransformed_wse,
     # Elevation
     untransformed_elev,
+    # Manning's n
+    untransformed_n,
 
     # 5_results
     # Variation
@@ -163,6 +172,8 @@ necessary_files = [
     wse_plot_untransformation,
     # Elevation
     elev_csv_untransformation,
+    # Manning's n
+    n_csv_untransformation,
 
     # Impact
     # Water depth

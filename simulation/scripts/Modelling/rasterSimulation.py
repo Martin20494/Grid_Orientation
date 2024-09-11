@@ -495,40 +495,40 @@ def raster_generation(
     y_val = ran_trans_i[2]
     number_simulation = f"angle_{angle_val}_x_{x_val}_y_{y_val}"
 
-    # # Write out necessary files
-    # necessary_files(ran_trans_i)
-    #
-    # # Create DEM
-    # dem_raster(
-    #     resolution_func,
-    #     chunk_size_func,
-    #     processor_func,
-    #     number_simulation,
-    #     padding_func,
-    #     lidar_dataset_name
-    # )
-    #
-    # # Create MANNING'S N
-    # # Roughness
-    # roughness_raster(
-    #     resolution_func,
-    #     chunk_size_func,
-    #     processor_func,
-    #     number_simulation,
-    #     padding_func,
-    #     lidar_dataset_name
-    # )
-    # # Manning's n
-    # zo_to_n(
-    #     number_simulation,
-    #     1
-    # )
-    #
-    # # Create STARTDEPTH
-    # startdepth_generation(
-    #     fr"{transformed_dem_nc_path}\\generated_dem_transformed_{number_simulation}.nc",
-    #     number_simulation
-    # )
+    # Write out necessary files
+    necessary_files(ran_trans_i)
+
+    # Create DEM
+    dem_raster(
+        resolution_func,
+        chunk_size_func,
+        processor_func,
+        number_simulation,
+        padding_func,
+        lidar_dataset_name
+    )
+
+    # Create MANNING'S N
+    # Roughness
+    roughness_raster(
+        resolution_func,
+        chunk_size_func,
+        processor_func,
+        number_simulation,
+        padding_func,
+        lidar_dataset_name
+    )
+    # Manning's n
+    zo_to_n(
+        number_simulation,
+        1
+    )
+
+    # Create STARTDEPTH
+    startdepth_generation(
+        fr"{transformed_dem_nc_path}\\generated_dem_transformed_{number_simulation}.nc",
+        number_simulation
+    )
 
     # Change value of padding
     value_padding_change(

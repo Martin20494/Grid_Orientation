@@ -93,9 +93,12 @@ def polygon_untransformation(
     elif extract_name == 'out.mxe':
         extracted_water = extracted_wse
         untransformed_water = untransformed_wse
-    else:
+    elif extract_name == 'elev':
         extracted_water = transformed_dem_nc_path
         untransformed_water = untransformed_elev
+    else:
+        extracted_water = transformed_n_nc_path
+        untransformed_water = untransformed_n
 
 
     # Get new values for translation
@@ -108,6 +111,12 @@ def polygon_untransformation(
         raster_array = raster_poly.z.values
         raster_transform = raster_poly.z.rio.transform()
         raster_crs = raster_poly.z.rio.crs
+
+    elif extract_name == 'n':
+        raster_poly = rxr.open_rasterio(fr"{extracted_water}\\generated_n_transformed_{number_simulation}.nc")
+        raster_array = raster_poly.values
+        raster_transform = raster_poly.rio.transform()
+        raster_crs = raster_poly.rio.crs
 
     else:
         raster_poly = rasterio.open(fr"{extracted_water}\\untransformed_{extract_name}_{number_simulation}.nc")
@@ -187,6 +196,14 @@ def untransformation_simulation(
     number_simulation = f"angle_{angle_val}_x_{x_val}_y_{y_val}"
 
     if extract_name == 'elev':
+        # Convert to and untransform polygons
+        polygon_untransformation(
+            angle_val, x_val, y_val,
+            number_simulation,
+            extract_name
+        )
+
+    elif extract_name == 'n':
         # Convert to and untransform polygons
         polygon_untransformation(
             angle_val, x_val, y_val,

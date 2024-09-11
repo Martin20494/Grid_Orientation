@@ -321,9 +321,12 @@ def mapping(
     elif extract_name == 'out.mxe':
         raster_untransformation = wse_raster_untransformation
         plot_untransformation = wse_plot_untransformation
-    else:
+    elif extract_name == 'elev':
         raster_untransformation = elev_raster_untransformation
         plot_untransformation = elev_plot_untransformation
+    else:
+        raster_untransformation = n_raster_untransformation
+        plot_untransformation = n_plot_untransformation
 
     # Raster
     raster = xr.open_dataset(fr"{raster_untransformation}\\{name_statistics}_water.nc")
@@ -1184,6 +1187,179 @@ def map_plotting_elev(
             zoomed_coordinates,
             zoom
         )
+
+
+def map_plotting_n(
+    statistics,
+    building_data,
+    terrain_data,
+    extract_name
+):
+    """
+    @Definition:
+                A function to execute mapping
+    @Arguments:
+                statistics (list):
+                            A list of string includes the name of each statistics ['mean', 'sd', 'cv', 'cell']
+                building_data (shapefile read by geopandas):
+                            Polygons of building data
+                terrain_data (raster read by xarray):
+                            Raster of terrain shading
+                extract_name (string):
+                            Name of a specific output among all flood model outputs
+    @Returns:
+                None
+    """
+    # GENERAL --------------------------------------------------------------------
+    # General arguments
+    figsize = (25, 16)
+
+    # # Inset arguments
+    # inset_box_coords = [0.11, 0.73, 0.22, 0.169]
+    # As we do use background for density plot, because it occupies too much space
+    # this line of code is commented
+    # background_inset_box_coords = [0.02, 0.66, 0.28, 0.32]
+
+
+    # EACH STATISTIC -------------------------------------------------------------
+    for each_stat in statistics:
+        # Mean
+        if each_stat == 'mean':
+            # Inset arguments
+            inset_box_coords = [0.09, 0.73, 0.25, 0.17] # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
+            # General arguments
+            name_statistics = 'mean'
+
+            # Map arguments
+            map_range_size = 200
+            cmap_terrain = plt.get_cmap('gist_gray')
+            # cmap_flood = plt.get_cmap('terrain')
+            # cmap_flood = plt.get_cmap('turbo')
+            cmap_flood = get_gradient_cmap(hex_list131) #177
+            # cmap_flood = plt.get_cmap('plasma')
+            # cmap_flood = plt.get_cmap('rainbow')
+
+
+            # Inset arguments
+            clip_max = .4
+            bw_adjust = .2
+            density_rate = 1
+            density_y_limit = 30 # 0.17/density_rate
+            pdf_xaxis_label = "Means (m)"
+            x_tick_range_pdf = [0, .41, .1]
+            comparison_sign = r'$\geq $'
+            # comparison_sign = ''
+            ynumbin = 4
+            xnumbin = 4
+            rounding = 1
+            rounding_last_x = False
+
+            # Zoom
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
+            zoom = True
+
+        # STANDARD DEVIATION
+        elif each_stat == 'sd':
+            # Inset arguments
+            inset_box_coords = [0.065, 0.73, 0.28, 0.17]  # x0, y0, width, height - 0.11, 0.73, 0.22, 0.169
+
+            # General arguments
+            name_statistics = 'sd'
+
+            # Map arguments
+            map_range_size = 200
+            cmap_terrain = plt.get_cmap('gist_gray')
+            # cmap_flood = plt.get_cmap('gnuplot')
+            # cmap_flood = plt.get_cmap('plasma')
+            # cmap_flood = plt.get_cmap('autumn')
+            cmap_flood = get_gradient_cmap(hex_list131) # 177
+            # cmap_flood = plt.get_cmap('brg')
+
+            # Inset arguments
+            clip_max = .08
+            bw_adjust = .2
+            density_rate = 1
+            density_y_limit = 80 # 5/density_rate
+            pdf_xaxis_label = "Sd (m)"
+            x_tick_range_pdf = [0, .081, .02]
+            # comparison_sign = r'$\geq $'
+            comparison_sign = r'$\geq $'
+            ynumbin = 4
+            xnumbin = 5
+            rounding = 3
+            rounding_last_x = False
+
+            # Zoom
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
+            zoom = True
+
+        else:
+            # General arguments
+            name_statistics = 'cv'
+
+            # Map arguments
+            map_range_size = 200
+            cmap_terrain = plt.get_cmap('gist_gray')
+            # cmap_flood = plt.get_cmap('gnuplot')
+            # cmap_flood = get_gradient_cmap(hex_list165)
+            # cmap_flood = get_gradient_cmap(hex_list175)
+
+            # Inset arguments
+            clip_max = 200
+            bw_adjust = 'scott'
+            density_rate = 10
+            density_y_limit = 0.03 / density_rate
+            pdf_xaxis_label = "CoV (%)"
+            x_tick_range_pdf = [0, 200.1, 50]
+            comparison_sign = r'$\geq $'
+            ynumbin = 4
+            xnumbin = 5
+            rounding = 0
+            rounding_last_x = False
+
+            # Zoom
+            # zoomed_coordinates = [1771700, 1772300, 5472550, 5473200]
+            # zoomed_coordinates = [1770470, 1771070, 5472550, 5473200]
+            zoomed_coordinates = [1770470 - 130, 1771070 + 130, 5472550 - 130 + 50, 5473200 + 130 + 50]
+            zoom = True
+
+
+        mapping(
+            # General arguments
+            figsize,
+            name_statistics,
+            building_data,
+            terrain_data,
+            # Map arguments
+            map_range_size,
+            cmap_terrain,
+            cmap_flood,
+            # Inset arguments
+            inset_box_coords,
+            # As we do use background for density plot, because it occupies too much space
+            # this line of code is commented
+            # background_inset_box_coords,
+            clip_max,
+            bw_adjust,
+            density_rate,
+            density_y_limit,
+            pdf_xaxis_label,
+            x_tick_range_pdf,
+            comparison_sign,
+            ynumbin, xnumbin,
+            rounding,
+            rounding_last_x,
+            # Extract name
+            extract_name,
+            # Zoom arguments
+            zoomed_coordinates,
+            zoom
+        )
 # END VARIATION MAP PLOTTING ###########################################################################################
 
 
@@ -1253,7 +1429,7 @@ def area_building_plotting(
         sns.kdeplot(values / 100, ax=axis_density, color="r", linewidth=2)
 
         # X label
-        x_label = f'Areas (x100 '
+        x_label = f'Total flooded areas (x100 '
         x_label += r'$\mathrm{m}^2$)'
 
     # BUILDING ----------------------------------------------------
@@ -1272,7 +1448,7 @@ def area_building_plotting(
         parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=38)
 
         # X label
-        x_label = f'Number of buildings'
+        x_label = f'Total umber of buildings'
 
     # Set y label for 'Frequency'
     parent_axis.set_ylabel("Number of simulations", fontsize=20, labelpad=38)
@@ -1398,7 +1574,7 @@ def area_plotting_only(
                  ax=parent_axis)
 
     # X label
-    x_label = f'Areas '
+    x_label = f'Total flooded areas '
     x_label += r'($\mathrm{m}^2$)'
 
     # Set y label for 'Frequency'
@@ -1512,7 +1688,7 @@ def building_plotting_only(
 
 
     # X label
-    x_label = f'Number of buildings'
+    x_label = f'Total number of buildings'
 
     # Ticks, title, and y label
     parent_axis.tick_params(direction='out', length=7, pad=5)

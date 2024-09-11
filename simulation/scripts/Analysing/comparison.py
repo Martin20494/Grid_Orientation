@@ -536,6 +536,10 @@ def comparison_calculation(stat_df, choice_calculation):
             results.append(
                 (stat_df.max(axis=0) - stat_df.min(axis=0))
             )
+        elif choice_calculation == 'median':
+            results.append(
+                stat_df.median(axis=0)
+            )
         else:
             # print(text.format(stat_df.columns[i], np.nanstd(stat_df[stat_df.columns[i]].to_numpy())/np.nanmean(stat_df[stat_df.columns[i]].to_numpy())))
             results.append(

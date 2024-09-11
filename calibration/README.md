@@ -12,7 +12,7 @@ These folders are used to validate and calibrate the LISFLOOD-FP flood model. Do
 The results are shown as below.
 
 <div align="center">
-	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/validation_calibration/results/calibration_noconnectedline2.jpg">
+	<img width = "90%" src="https://github.com/Martin20494/Grid_Orientation/blob/main/calibration/results/calibration_noconnectedline2.jpg">
 </div>
 
 

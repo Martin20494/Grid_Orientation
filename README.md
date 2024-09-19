@@ -6,7 +6,7 @@ Quantifying uncertainty in flood predictions LISFLOOD-FP due to arbitrary conven
 
 ### Authors
 
-Martin Nguyen, Prof. Matthew D. Wilson, Dr. Emily M. Lane, Rrof. James Brasington, and Dr. Rose A. Pearson
+Martin Nguyen, Prof. Matthew D. Wilson, Dr. Emily M. Lane, Prof. James Brasington, and Dr. Rose A. Pearson
 
 ## Overview
 

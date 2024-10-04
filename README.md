@@ -33,7 +33,7 @@ conda env create -n gridorientation -f gridorientation.yaml
 
 This project includes 3 main folders as described below.
 
-- [calibration](https://github.com/Martin20494/Grid_Orientation/tree/main/validation_calibration): Including `data`, `scripts`, and `results` sub-folders used to calibrate the LISFLOOD-FP flood model. 
+- [calibration](https://github.com/Martin20494/Grid_Orientation/tree/main/calibration): Including `data`, `scripts`, and `results` sub-folders used to calibrate the LISFLOOD-FP flood model. 
 
 - [simulation](https://github.com/Martin20494/Grid_Orientation/tree/main/simulation): Including `data` and `scripts` sub-folders used to generate simulations.
 

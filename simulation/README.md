@@ -34,7 +34,7 @@ There are 13 simulation versions, each of them represents for a set of 50 transf
 
 To generate analysis result, in `Executing` folder, access to jupyter notebook `Analysis.ipynb`, change things as following bullet points before running all cells:
 
-- Change the parth in `0. Change directory` for cell directing to where the `Analysis.ipynb` is stored in your local computer.
+- Change the path in `0. Change directory` for cell directing to where the `Analysis.ipynb` is stored in your local computer.
 
 - Change the `2. Data preparation` (probably the resolution) to the simulation version you want to run.
 

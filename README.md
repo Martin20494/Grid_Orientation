@@ -2,7 +2,7 @@
 
 ### Title
 
-Quantifying uncertainty in flood predictions LISFLOOD-FP due to arbitrary conventions in grid alignment in LiDAR-derived digital elevation models
+Quantifying uncertainty in flood predictions in LISFLOOD-FP due to arbitrary conventions in grid alignment in LiDAR-derived digital elevation models
 
 ### Authors
 
